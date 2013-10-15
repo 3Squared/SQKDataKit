@@ -25,7 +25,7 @@
 + (NSArray *)executeFetchRequestWithPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
 // Find a single MO based on a key and value or inserts one if one does not exist
-]+ (instancetype)findOrInsertByKey:(NSString *)key value:(id)value inContext:(NSManagedObjectContext *)context;
++ (instancetype)findOrInsertByKey:(NSString *)key value:(id)value inContext:(NSManagedObjectContext *)context;
 + (instancetype)findOrInsertByKey:(NSString *)key value:(id)value inContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
 // Batch find or update
