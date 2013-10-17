@@ -8,7 +8,7 @@
 + (NSEntityDescription *)entityWithContext:(NSManagedObjectContext *)context;
 
 // Insert a single MO
-+ (instancetype)insertInContext:(NSManagedObjectContext*)context;
++ (instancetype)insertInContext:(NSManagedObjectContext *)context;
 
 // Returns a fetch request configured for the entity.
 + (NSFetchRequest *)fetchRequest;
@@ -16,27 +16,27 @@
 // Find a single MO based on a key and value or inserts one if one does not exist
 + (instancetype)findOrInsertByKey:(NSString *)key
                             value:(id)value
-                        inContext:(NSManagedObjectContext *)context
+                        context:(NSManagedObjectContext *)context
                             error:(NSError **)error;
 
 // Batch find or update
 typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, NSManagedObject *managedObject);
 + (void)insertOrUpdate:(NSArray *)dictArray
           uniqueModelKey:(NSString *)modelKey
-   uniqueRemoteDataKey:(NSString *)remoteDataKey
+         uniqueRemoteKey:(NSString *)remoteDataKey
    propertySetterBlock:(SQKPropertySetterBlock *)propertySetterBlock
-             inContext:(NSManagedObjectContext *)context
-                 error:(NSError *)error;
+             context:(NSManagedObjectContext *)context
+                 error:(NSError **)error;
 
 
 // Deletes the MO from the context it is currently in
-- (BOOL)deleteObjectWithError:(NSError *)error;
+- (BOOL)deleteObject:(NSError **)error;
 
 // Deletes the MOs in the given context
 + (BOOL)deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
 // Convenience method for retrieving an NSPropertyDescription.
-+ (NSPropertyDescription*)propertyDescriptionForName:(NSString* )name
-                                           inContext:(NSManagedObjectContext *)context;
++ (NSPropertyDescription*)propertyDescriptionForName:(NSString *)name
+                                           context:(NSManagedObjectContext *)context;
 
 @end
