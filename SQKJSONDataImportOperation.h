@@ -3,9 +3,9 @@
 @property (nonatomic, strong) NSManagedObjectContext *privateContext;
 @property (nonatomic, strong) id json;
 
-- (id)initWithPrivateContext:(NSManagedObjectContext *)context json:(id)json;
+- (id)initWithJSON:(id)json privateContext:(NSManagedObjectContext *)context;
 
 // Must overide in subclass
-- (void)importJSON:(id) intoContext:(NSManagedObjectContext *)context;
+- (void)importJSON:(id)json privateContext:(NSManagedObjectContext *)context;
 
 @end
