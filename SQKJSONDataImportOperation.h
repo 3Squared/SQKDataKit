@@ -1,11 +1,11 @@
 // An NSOperation for you to subclass when you need to import JSON data off of the main thread.
 @interface SQKJSONDataImportOperation : NSOperation
-@property (nonatomic, strong) NSManagedObjectContext *privateContext;
-@property (nonatomic, strong) id json;
+@property (nonatomic, readonly) NSManagedObjectContext *privateContext;
+@property (nonatomic, readonly) id json;
 
-- (id)initWithJSON:(id)json privateContext:(NSManagedObjectContext *)context;
+- (instancetype)initWithPrivateContext:(NSManagedObjectContext *)context json:(id)json;
 
 // Must overide in subclass
-- (void)importJSON:(id)json privateContext:(NSManagedObjectContext *)context;
+- (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json;
 
 @end
