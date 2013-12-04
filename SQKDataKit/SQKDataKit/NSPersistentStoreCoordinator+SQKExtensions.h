@@ -10,6 +10,6 @@
 
 @interface NSPersistentStoreCoordinator (SQKExtensions)
 
-+ (instancetype)SQK_storeCoordinatorWithManagedObjectModel:(NSManagedObjectModel *)managedObjectModel;
++ (instancetype)SQK_storeCoordinatorWithManagedObjectModel:(NSManagedObjectModel *)managedObjectModel storeType:(NSString *)storeType;
 
 @end

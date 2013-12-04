@@ -149,9 +149,9 @@
 		A34BF3C2184F41D400F2E3B4 /* SQKDataKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				A34BF3C3184F41D500F2E3B4 /* Supporting Files */,
 				A34BF3D3184F456B00F2E3B4 /* SQKContextManagerTests.m */,
 				A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinator+SQKExtensionsTests.m */,
+				A34BF3C3184F41D500F2E3B4 /* Supporting Files */,
 			);
 			path = SQKDataKitTests;
 			sourceTree = "<group>";
