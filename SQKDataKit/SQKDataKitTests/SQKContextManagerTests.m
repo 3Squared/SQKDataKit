@@ -15,10 +15,9 @@
 
 @implementation SQKContextManagerTests
 
-- (void)testInitialisesWithAStoreType {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
-    XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
+- (void)tearDown {
+    [super tearDown];
+    _sut = nil;
 }
 
 - (void)testInitialisesWithDefaultStoreType {
@@ -26,5 +25,20 @@
     XCTAssertNotNil(_sut, @"");
     XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
 }
+
+- (void)testInitialisesWithAStoreType {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+    XCTAssertNotNil(_sut, @"");
+    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
+}
+
+- (void)testInitialisesWithStoreTypeAndMangedObjectModel {
+    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] init];
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:managedObjectModel];
+    XCTAssertNotNil(_sut, @"");
+    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
+    XCTAssertEqualObjects(_sut.managedObjectModel, managedObjectModel, @"");
+}
+
 
 @end

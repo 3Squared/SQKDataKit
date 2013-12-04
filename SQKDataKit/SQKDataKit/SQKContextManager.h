@@ -12,7 +12,9 @@
 @interface SQKContextManager : NSObject
 
 @property (nonatomic, readonly) NSString *storeType;
+@property (nonatomic, readonly) NSManagedObjectModel *managedObjectModel;
 
 - (instancetype)initWithStoreType:(NSString *)storeType;
+- (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
 
 @end
