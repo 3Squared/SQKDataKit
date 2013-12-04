@@ -15,10 +15,7 @@
 
 @implementation SQKContextManagerTests
 
-- (void)tearDown {
-    [super tearDown];
-    _sut = nil;
-}
+#pragma mark - Initialisation
 
 - (void)testInitialisesWithDefaultStoreType {
     _sut = [[SQKContextManager alloc] init];
@@ -44,6 +41,21 @@
     XCTAssertNotNil(_sut, @"");
     XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
     XCTAssertEqualObjects(_sut.managedObjectModel, managedObjectModel, @"");
+}
+
+
+#pragma mark - Contexts
+
+- (void)testProvidesMainContext {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+    XCTAssertNotNil([_sut mainContext], @"");
+}
+
+- (void)testProvidesSameMainContext {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+    NSManagedObjectContext *firstContext = [_sut mainContext];
+    NSManagedObjectContext *secondContext = [_sut mainContext];
+    XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
 

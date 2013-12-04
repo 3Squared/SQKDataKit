@@ -11,6 +11,8 @@
 @interface SQKContextManager ()
 @property (nonatomic, strong, readwrite) NSString *storeType;
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong, readwrite) NSManagedObjectContext* mainContext;
+@property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator* persistentStoreCoordinator;
 @end
 
 @implementation SQKContextManager
@@ -34,6 +36,16 @@
     }
     return self;
 }
+
+- (NSManagedObjectContext *)mainContext {
+    if (_mainContext != nil) {
+        return _mainContext;
+    }
+    
+    _mainContext = [[NSManagedObjectContext alloc] init];
+    return _mainContext;
+}
+
 
 
 @end
