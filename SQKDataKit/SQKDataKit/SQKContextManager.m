@@ -46,6 +46,11 @@
     return _mainContext;
 }
 
+- (NSManagedObjectContext*) newPrivateContext {
+    NSManagedObjectContext* context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    return context;
+}
+
 
 
 @end

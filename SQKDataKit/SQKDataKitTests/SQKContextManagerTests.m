@@ -59,5 +59,12 @@
     XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
+- (void)testProvidesANewPrivateContext {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+    NSManagedObjectContext *privateContext = [_sut newPrivateContext];
+    XCTAssertNotNil(privateContext, @"");
+    XCTAssertEqual((NSInteger)privateContext.concurrencyType, (NSInteger)NSPrivateQueueConcurrencyType, @"");
+}
+
 
 @end

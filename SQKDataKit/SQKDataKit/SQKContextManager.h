@@ -18,5 +18,6 @@
 - (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
 
 - (NSManagedObjectContext *)mainContext;
+- (NSManagedObjectContext*) newPrivateContext;
 
 @end
