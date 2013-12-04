@@ -10,6 +10,7 @@
 #import "SQKContextManager.h"
 
 @interface SQKContextManagerTests : XCTestCase
+// sut is the "System Under Tets"
 @property (nonatomic, retain) SQKContextManager *sut;
 @end
 
