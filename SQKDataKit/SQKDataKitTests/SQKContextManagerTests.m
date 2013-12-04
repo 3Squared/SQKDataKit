@@ -32,6 +32,12 @@
     XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
 }
 
+- (void)testInitialisesWithDefaultStoreTypeWhenNilStoreTypeSpecified {
+    _sut = [[SQKContextManager alloc] initWithStoreType:nil];
+    XCTAssertNotNil(_sut, @"");
+    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
+}
+
 - (void)testInitialisesWithStoreTypeAndMangedObjectModel {
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] init];
     _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:managedObjectModel];

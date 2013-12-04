@@ -20,6 +20,9 @@
 }
 
 - (instancetype)initWithStoreType:(NSString *)storeType {
+    if (storeType) {
+        return [self initWithStoreType:storeType managedObjectModel:nil];
+    }
     return [self initWithStoreType:NSSQLiteStoreType managedObjectModel:nil];
 }
 
