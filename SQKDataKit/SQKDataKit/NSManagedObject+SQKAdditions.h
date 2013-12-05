@@ -12,4 +12,6 @@
 
 + (NSString *)SQK_entityName;
 
++ (NSEntityDescription *)SQK_entityDescriptionInContext:(NSManagedObjectContext *)context;
+
 @end

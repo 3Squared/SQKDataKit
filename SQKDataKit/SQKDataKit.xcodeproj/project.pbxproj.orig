@@ -180,8 +180,11 @@
 				A328BAC31850922800267F2E /* NSManagedObject+SQKAdditions.m */,
 				A34BF427184F6CB700F2E3B4 /* NSPersistentStoreCoordinator+SQKAdditions.h */,
 				A34BF428184F6CB700F2E3B4 /* NSPersistentStoreCoordinator+SQKAdditions.m */,
+<<<<<<< Updated upstream
 				A38979FA1850C7C000E5676B /* Bundle.h */,
+=======
 				A34BF3D2184F421400F2E3B4 /* App */,
+>>>>>>> Stashed changes
 			);
 			path = SQKDataKit;
 			sourceTree = "<group>";

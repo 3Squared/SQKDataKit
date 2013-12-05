@@ -14,4 +14,8 @@
     return NSStringFromClass([self class]);
 }
 
++ (NSEntityDescription *)SQK_entityDescriptionInContext:(NSManagedObjectContext *)context {
+    return [NSEntityDescription entityForName:[self SQK_entityName] inManagedObjectContext:context];
+}
+
 @end

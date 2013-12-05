@@ -9,11 +9,8 @@
 #import <XCTest/XCTest.h>
 #import <CoreData/NSManagedObject.h>
 #import "NSManagedObject+SQKAdditions.h"
-
-@interface TestEntity : NSManagedObject
-@end
-@implementation TestEntity
-@end
+#import "Entity.h"
+#import "SQKContextManager.h"
 
 @interface NSManagedObjectTests : XCTestCase
 
@@ -22,7 +19,18 @@
 @implementation NSManagedObjectTests
 
 - (void)testEntityName {
-    XCTAssertEqualObjects([TestEntity SQK_entityName], @"TestEntity", @"");
+    XCTAssertEqualObjects([Entity SQK_entityName], @"Entity", @"");
+}
+
+- (void)testEntityDescriptionInContext {
+    
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:model];
+    NSManagedObjectContext *context = [contextManager mainContext];
+    
+    NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:context];
+    
+    XCTAssertEqualObjects(entityDescription.name, @"Entity", @"");
 }
 
 @end
