@@ -7,6 +7,7 @@
 //
 
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
+#import "Bundle.h"
 
 @implementation NSPersistentStoreCoordinator (SQKAdditions)
 
@@ -26,7 +27,7 @@
                                                        URL:storeURL
                                                    options:options
                                                      error:&error];
-    if (error) {
+    if (error && isRunningFromProductionBundle()) {
         [self abortWithError:error];
     }
     return persistentStoreCoordinator;
