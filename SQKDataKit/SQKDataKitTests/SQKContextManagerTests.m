@@ -74,24 +74,27 @@
 }
 
 - (void)testProvidesSameMainContext {
-
     NSManagedObjectContext *firstContext = [_sut mainContext];
     NSManagedObjectContext *secondContext = [_sut mainContext];
     XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
 - (void)testProvidesANewPrivateContext {
-
     NSManagedObjectContext *privateContext = [_sut newPrivateContext];
     XCTAssertNotNil(privateContext, @"");
     XCTAssertEqual((NSInteger)privateContext.concurrencyType, (NSInteger)NSPrivateQueueConcurrencyType, @"");
 }
 
+- (void)testMainContextAndPrivateContextUseSamePersitentStoreCoordinator {
+    NSManagedObjectContext *mainContext = [_sut mainContext];
+    NSManagedObjectContext *privateContext = [_sut newPrivateContext];
+    XCTAssertEqualObjects(mainContext.persistentStoreCoordinator, privateContext.persistentStoreCoordinator, @"");
+
+}
 
 #pragma mark - Saving
 
 - (void)testSavesWhenThereAreChanges {
-
     id sutMock = [OCMockObject partialMockForObject:_sut];
     [[[sutMock stub] andCall:@selector(mockMainContextWithChanges) onObject:self] mainContext];
     
@@ -105,7 +108,6 @@
 }
 
 - (void)testDoesNotSaveWhenNoChanges {
-
     id sutMock = [OCMockObject partialMockForObject:_sut];
     [[[sutMock stub] andCall:@selector(mockMainContextWithoutChanges) onObject:self] mainContext];
     

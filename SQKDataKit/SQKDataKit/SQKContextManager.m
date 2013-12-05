@@ -39,11 +39,13 @@
     }
     
     _mainContext = [[NSManagedObjectContext alloc] init];
+    _mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return _mainContext;
 }
 
 - (NSManagedObjectContext*)newPrivateContext {
     NSManagedObjectContext* context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    context.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return context;
 }
 

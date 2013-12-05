@@ -18,7 +18,7 @@
 
 - (void)setUp {
     [super setUp];
-    _managedObjectModel = [[NSManagedObjectModel alloc] init];
+    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
 }
 
 - (void)testCorrectManagedObjectModel {
