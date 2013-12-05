@@ -19,6 +19,10 @@
 @implementation SQKContextManager
 
 - (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel {
+    if (!storeType || !managedObjectModel) {
+        return nil;
+    }
+    
     self = [super init];
     if (self) {
         self.storeType = storeType;

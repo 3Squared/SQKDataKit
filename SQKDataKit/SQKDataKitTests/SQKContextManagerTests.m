@@ -51,9 +51,20 @@
 #pragma mark - Initialisation
 
 - (void)testInitialisesWithAStoreTypeAndMangedObjectModel {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
     XCTAssertNotNil(_sut, @"");
     XCTAssertEqualObjects(_sut.storeType, NSInMemoryStoreType, @"");
     XCTAssertEqualObjects(_sut.managedObjectModel, _managedObjectModel, @"");
+}
+
+- (void)testReturnsNilWithNoStoreType {
+    _sut = [[SQKContextManager alloc] initWithStoreType:nil managedObjectModel:_managedObjectModel];
+    XCTAssertNil(_sut, @"");
+}
+
+- (void)testReturnsNilWithNoManagedObjectModel {
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:nil];
+    XCTAssertNil(_sut, @"");
 }
 
 #pragma mark - Contexts
