@@ -7,6 +7,7 @@
 //
 
 #import "SQKContextManager.h"
+#import "NSPersistentStoreCoordinator+SQKAdditions.h"
 
 @interface SQKContextManager ()
 @property (nonatomic, strong, readwrite) NSString *storeType;
@@ -33,6 +34,8 @@
     if (self) {
         self.storeType = storeType;
         self.managedObjectModel = managedObjectModel;
+        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithManagedObjectModel:managedObjectModel
+                                                                                                         storeType:storeType];
     }
     return self;
 }
@@ -58,7 +61,5 @@
     }
     return NO;
 }
-
-
 
 @end
