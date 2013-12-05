@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "NSPersistentStoreCoordinator+SQKExtensions.h"
+#import "NSPersistentStoreCoordinator+SQKAdditions.h"
 
-@implementation NSPersistentStoreCoordinator (SQKExtensions)
+@implementation NSPersistentStoreCoordinator (SQKAdditions)
 
 + (instancetype)SQK_storeCoordinatorWithManagedObjectModel:(NSManagedObjectModel *)managedObjectModel storeType:(NSString *)storeType {
     

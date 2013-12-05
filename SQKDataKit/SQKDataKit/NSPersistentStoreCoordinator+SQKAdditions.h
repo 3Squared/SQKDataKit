@@ -8,7 +8,7 @@
 
 #import <CoreData/CoreData.h>
 
-@interface NSPersistentStoreCoordinator (SQKExtensions)
+@interface NSPersistentStoreCoordinator (SQKAdditions)
 
 + (instancetype)SQK_storeCoordinatorWithManagedObjectModel:(NSManagedObjectModel *)managedObjectModel storeType:(NSString *)storeType;
 

@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "NSPersistentStoreCoordinator+SQKExtensions.h"
+#import "NSPersistentStoreCoordinator+SQKAdditions.h"
 #import <CoreData/CoreData.h>
 
 @interface NSPersistentStoreCoordinatorTests : XCTestCase
