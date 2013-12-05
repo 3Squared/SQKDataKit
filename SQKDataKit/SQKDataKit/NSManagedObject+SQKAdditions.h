@@ -18,5 +18,10 @@
 
 + (NSFetchRequest *)SQK_fetchRequest;
 
++ (instancetype)SQK_findOrInsertByKey:(NSString *)key
+                                value:(id)value
+                              context:(NSManagedObjectContext *)context
+                                error:(NSError **)error;
+
 
 @end

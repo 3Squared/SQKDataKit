@@ -25,6 +25,33 @@
     self.mainContext = [contextManager mainContext];
 }
 
+- (void)tearDown {
+    [self deleteAllEntityObjects];
+}
+
+- (void)deleteAllEntityObjects {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+     // Only fetch the managedObjectID
+    [request setIncludesPropertyValues:NO];
+    
+    NSError *error = nil;
+    NSArray *entities = [_mainContext executeFetchRequest:request error:&error];
+    if (error) {
+        abort();
+    }
+    
+    for (NSManagedObject *entity in entities) {
+        [_mainContext deleteObject:entity];
+    }
+    
+    error = nil;
+    [_mainContext save:&error];
+    if (error) {
+        abort();
+    }
+}
+
 - (void)testEntityName {
     XCTAssertEqualObjects([Entity SQK_entityName], @"Entity", @"");
 }
@@ -59,6 +86,27 @@
     XCTAssertNotNil(fetchRequest, @"");
     XCTAssertEqualObjects(fetchRequest.entityName, @"Entity", @"");
     
+}
+
+- (void)testInsertsNewEntityWhenUniqe {
+    NSError *error = nil;
+    Entity *entity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"abcd" context:_mainContext error:&error];
+    
+    XCTAssertNil(error, @"");
+    XCTAssertNotNil(entity, @"");
+    XCTAssertEqualObjects(entity.uniqueID, @"abcd", @"");
+}
+
+- (void)testFindsExistingWhenNotUnique {
+    Entity *existingEntity = [Entity SQK_insertInContext:_mainContext];
+    existingEntity.uniqueID = @"wxyz";
+    
+    NSError *error = nil;
+    Entity *newEntity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"wxyz" context:_mainContext error:&error];
+    XCTAssertNil(error, @"");
+    XCTAssertNotNil(newEntity, @"");
+    XCTAssertEqualObjects(newEntity.uniqueID, @"wxyz", @"");
+    XCTAssertEqualObjects(newEntity.objectID, existingEntity.objectID, @"");
 }
 
 @end

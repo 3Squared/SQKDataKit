@@ -17,8 +17,6 @@ static BOOL isRunningFromTestBundle(void) {
 }
 
 static BOOL isRunningFromProductionBundle(void) {
-    NSDictionary* environment = [[NSProcessInfo processInfo] environment];
-    NSString* injectBundle = environment[@"XCInjectBundle"];
     return !isRunningFromTestBundle();
 }
 

@@ -26,4 +26,23 @@
     return [NSFetchRequest fetchRequestWithEntityName:[self SQK_entityName]];
 }
 
++ (instancetype)SQK_findOrInsertByKey:(NSString *)key
+                                value:(id)value
+                              context:(NSManagedObjectContext *)context
+                                error:(NSError **)error {
+    NSFetchRequest *request = [self SQK_fetchRequest];
+    [request setFetchLimit:1];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", key, value];
+    [request setPredicate:predicate];
+    NSArray *objects = [context executeFetchRequest:request error:error];
+    
+    id managedObject = [objects lastObject];
+    if (!managedObject) {
+        managedObject = [self SQK_insertInContext:context];
+        [managedObject setValue:value forKey:key];
+    }
+    
+    return managedObject;
+}
+
 @end
