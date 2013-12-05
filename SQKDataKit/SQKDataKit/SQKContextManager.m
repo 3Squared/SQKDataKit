@@ -46,9 +46,17 @@
     return _mainContext;
 }
 
-- (NSManagedObjectContext*) newPrivateContext {
+- (NSManagedObjectContext*)newPrivateContext {
     NSManagedObjectContext* context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     return context;
+}
+
+- (BOOL)saveMainContext:(NSError **)error {
+    if ([self.mainContext hasChanges]) {
+        [self.mainContext save:error];
+        return YES;
+    }
+    return NO;
 }
 
 

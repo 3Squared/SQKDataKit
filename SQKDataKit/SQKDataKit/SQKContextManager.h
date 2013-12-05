@@ -20,4 +20,6 @@
 - (NSManagedObjectContext *)mainContext;
 - (NSManagedObjectContext*) newPrivateContext;
 
+- (BOOL)saveMainContext:(NSError **)error;
+
 @end
