@@ -18,17 +18,6 @@
 
 @implementation SQKContextManager
 
-- (instancetype)init {
-    return [self initWithStoreType:NSSQLiteStoreType];
-}
-
-- (instancetype)initWithStoreType:(NSString *)storeType {
-    if (storeType) {
-        return [self initWithStoreType:storeType managedObjectModel:nil];
-    }
-    return [self initWithStoreType:NSSQLiteStoreType managedObjectModel:nil];
-}
-
 - (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel {
     self = [super init];
     if (self) {

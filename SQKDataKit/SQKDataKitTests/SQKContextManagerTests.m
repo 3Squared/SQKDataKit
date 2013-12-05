@@ -15,11 +15,18 @@
 @property (nonatomic, retain) SQKContextManager *sut;
 @property (nonatomic, retain) id mockMainContextWithChanges;
 @property (nonatomic, retain) id mockMainContextWithoutChanges;
+@property (nonatomic, retain) NSManagedObjectModel *managedObjectModel;
 @end
 
 @implementation SQKContextManagerTests
 
 #pragma mark - Helpers
+
+- (void)setUp {
+    [super setUp];
+    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
+}
 
 - (id)mockMainContextWithChanges {
     if (!_mockMainContextWithChanges) {
@@ -43,49 +50,27 @@
 
 #pragma mark - Initialisation
 
-- (void)testInitialisesWithDefaultStoreType {
-    _sut = [[SQKContextManager alloc] init];
+- (void)testInitialisesWithAStoreTypeAndMangedObjectModel {
     XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
+    XCTAssertEqualObjects(_sut.storeType, NSInMemoryStoreType, @"");
+    XCTAssertEqualObjects(_sut.managedObjectModel, _managedObjectModel, @"");
 }
-
-- (void)testInitialisesWithAStoreType {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
-    XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
-}
-
-- (void)testInitialisesWithDefaultStoreTypeWhenNilStoreTypeSpecified {
-    _sut = [[SQKContextManager alloc] initWithStoreType:nil];
-    XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
-}
-
-- (void)testInitialisesWithStoreTypeAndMangedObjectModel {
-    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] init];
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:managedObjectModel];
-    XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSSQLiteStoreType, @"");
-    XCTAssertEqualObjects(_sut.managedObjectModel, managedObjectModel, @"");
-}
-
 
 #pragma mark - Contexts
 
 - (void)testProvidesMainContext {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
     XCTAssertNotNil([_sut mainContext], @"");
 }
 
 - (void)testProvidesSameMainContext {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+
     NSManagedObjectContext *firstContext = [_sut mainContext];
     NSManagedObjectContext *secondContext = [_sut mainContext];
     XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
 - (void)testProvidesANewPrivateContext {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+
     NSManagedObjectContext *privateContext = [_sut newPrivateContext];
     XCTAssertNotNil(privateContext, @"");
     XCTAssertEqual((NSInteger)privateContext.concurrencyType, (NSInteger)NSPrivateQueueConcurrencyType, @"");
@@ -95,7 +80,7 @@
 #pragma mark - Saving
 
 - (void)testSavesWhenThereAreChanges {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+
     id sutMock = [OCMockObject partialMockForObject:_sut];
     [[[sutMock stub] andCall:@selector(mockMainContextWithChanges) onObject:self] mainContext];
     
@@ -109,7 +94,7 @@
 }
 
 - (void)testDoesNotSaveWhenNoChanges {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType];
+
     id sutMock = [OCMockObject partialMockForObject:_sut];
     [[[sutMock stub] andCall:@selector(mockMainContextWithoutChanges) onObject:self] mainContext];
     
