@@ -22,4 +22,8 @@
     return [NSEntityDescription insertNewObjectForEntityForName:[self SQK_entityName] inManagedObjectContext:context];
 }
 
++ (NSFetchRequest *)SQK_fetchRequest {
+    return [NSFetchRequest fetchRequestWithEntityName:[self SQK_entityName]];
+}
+
 @end

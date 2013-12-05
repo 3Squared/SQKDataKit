@@ -16,5 +16,7 @@
 
 + (instancetype)SQK_insertInContext:(NSManagedObjectContext *)context;
 
++ (NSFetchRequest *)SQK_fetchRequest;
+
 
 @end

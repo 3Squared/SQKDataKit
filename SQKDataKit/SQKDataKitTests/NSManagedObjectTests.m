@@ -36,7 +36,6 @@
 }
 
 - (void)testInsetsIntoContext {
-    
     Entity *entity = [Entity SQK_insertInContext:_mainContext];
     XCTAssertNotNil(entity, @"");
     
@@ -53,7 +52,13 @@
     
     Entity *fetchedEntity = array[0];
     XCTAssertEqualObjects(fetchedEntity.uniqueID, @"1234", @"");
+}
 
+- (void)testFetchRequest {
+    NSFetchRequest *fetchRequest = [Entity SQK_fetchRequest];
+    XCTAssertNotNil(fetchRequest, @"");
+    XCTAssertEqualObjects(fetchRequest.entityName, @"Entity", @"");
+    
 }
 
 @end
