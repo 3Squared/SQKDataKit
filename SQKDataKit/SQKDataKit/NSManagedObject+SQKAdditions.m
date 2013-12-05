@@ -18,4 +18,8 @@
     return [NSEntityDescription entityForName:[self SQK_entityName] inManagedObjectContext:context];
 }
 
++ (instancetype)SQK_insertInContext:(NSManagedObjectContext *)context {
+    return [NSEntityDescription insertNewObjectForEntityForName:[self SQK_entityName] inManagedObjectContext:context];
+}
+
 @end

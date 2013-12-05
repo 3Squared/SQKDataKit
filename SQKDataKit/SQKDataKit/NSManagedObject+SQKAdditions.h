@@ -14,4 +14,7 @@
 
 + (NSEntityDescription *)SQK_entityDescriptionInContext:(NSManagedObjectContext *)context;
 
++ (instancetype)SQK_insertInContext:(NSManagedObjectContext *)context;
+
+
 @end
