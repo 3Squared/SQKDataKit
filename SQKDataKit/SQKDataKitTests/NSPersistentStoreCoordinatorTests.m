@@ -10,11 +10,11 @@
 #import "NSPersistentStoreCoordinator+SQKExtensions.h"
 #import <CoreData/CoreData.h>
 
-@interface NSPersistentStoreCoordinator_SQKExtensionsTests : XCTestCase
+@interface NSPersistentStoreCoordinatorTests : XCTestCase
 @property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @end
 
-@implementation NSPersistentStoreCoordinator_SQKExtensionsTests
+@implementation NSPersistentStoreCoordinatorTests
 
 - (void)setUp {
     [super setUp];
