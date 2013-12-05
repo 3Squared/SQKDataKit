@@ -20,13 +20,13 @@
 
 @implementation SQKContextManagerTests
 
-#pragma mark - Helpers
-
 - (void)setUp {
     [super setUp];
     _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
 }
+
+#pragma mark - Helpers
 
 - (id)mockMainContextWithChanges {
     if (!_mockMainContextWithChanges) {
