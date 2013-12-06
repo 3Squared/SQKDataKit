@@ -72,7 +72,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
-    NSError *error;
+    NSError *error = nil;
     NSArray *array = [_mainContext executeFetchRequest:fetchRequest error:&error];
     XCTAssertNil(error, @"");
     XCTAssertTrue(array.count == 1, @"");
@@ -107,6 +107,39 @@
     XCTAssertNotNil(newEntity, @"");
     XCTAssertEqualObjects(newEntity.uniqueID, @"wxyz", @"");
     XCTAssertEqualObjects(newEntity.objectID, existingEntity.objectID, @"");
+}
+
+- (void)testDeletesObject {
+    Entity *entity = [Entity SQK_insertInContext:_mainContext];
+    id objectID = entity.objectID;
+    
+    [entity SQK_deleteObject];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"objectID == %@", objectID]];
+    NSError *error;
+    NSArray *objects = [_mainContext executeFetchRequest:request error:&error];
+    XCTAssertNil(error, @"");
+    XCTAssertTrue(objects.count == 0, @"");
+}
+
+- (void)testDeleteAllObjectsInContext {
+    for (NSInteger i = 0; i < 10; ++i) {
+        [Entity SQK_insertInContext:_mainContext];
+    }
+    
+    NSError *deleteError = nil;
+    [Entity SQK_deleteAllObjectsInContext:_mainContext error:&deleteError];
+    XCTAssertNil(deleteError, @"");
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    
+    NSError *fetchError = nil;
+    NSArray *objects = [_mainContext executeFetchRequest:request error:&fetchError];
+    XCTAssertNil(fetchError, @"");
+    XCTAssertEqual((NSInteger)objects.count, (NSInteger)0, @"");
 }
 
 @end

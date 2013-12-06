@@ -34,7 +34,11 @@
     [request setFetchLimit:1];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", key, value];
     [request setPredicate:predicate];
-    NSArray *objects = [context executeFetchRequest:request error:error];
+    
+    NSError *localError = nil;
+    NSArray *objects = [context executeFetchRequest:request error:&localError];
+    
+    // TODO return error
     
     id managedObject = [objects lastObject];
     if (!managedObject) {
@@ -43,6 +47,21 @@
     }
     
     return managedObject;
+}
+
+- (void)SQK_deleteObject {
+    [self.managedObjectContext deleteObject:self];
+}
+
++ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error {
+    NSError *localError = nil;
+    NSFetchRequest *fetchRequest = [self SQK_fetchRequest];
+    NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
+    if (localError) {
+        *error = localError;
+        return;
+    }
+    [objects makeObjectsPerformSelector:@selector(SQK_deleteObject)];
 }
 
 @end

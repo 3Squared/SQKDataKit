@@ -23,5 +23,9 @@
                               context:(NSManagedObjectContext *)context
                                 error:(NSError **)error;
 
+- (void)SQK_deleteObject;
+
++ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
+
 
 @end
