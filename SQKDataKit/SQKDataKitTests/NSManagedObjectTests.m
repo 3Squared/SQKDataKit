@@ -32,7 +32,7 @@
 - (void)deleteAllEntityObjects {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
-     // Only fetch the managedObjectID
+    // Only fetch the managedObjectID
     [request setIncludesPropertyValues:NO];
     
     NSError *error = nil;
@@ -85,7 +85,6 @@
     NSFetchRequest *fetchRequest = [Entity SQK_fetchRequest];
     XCTAssertNotNil(fetchRequest, @"");
     XCTAssertEqualObjects(fetchRequest.entityName, @"Entity", @"");
-    
 }
 
 - (void)testInsertsNewEntityWhenUniqe {
@@ -141,5 +140,102 @@
     XCTAssertNil(fetchError, @"");
     XCTAssertEqual((NSInteger)objects.count, (NSInteger)0, @"");
 }
+
+- (void)testInsertOrUpdateCallsPropertySetterBlockForEach {
+    __block NSInteger blockCallCount = 0;
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary* dictionary, NSManagedObject *managedObject) {
+        ++blockCallCount;
+    };
+    
+    NSArray *dictArray = @[@{@"uniqueID" : @"123"}, @{@"uniqueID" : @"456"}, @{@"uniqueID" : @"789"}];
+    NSError *error = nil;
+    [Entity SQK_insertOrUpdate:dictArray
+                uniqueModelKey:@"uniqueID"
+               uniqueRemoteKey:@"uniqueID"
+           propertySetterBlock:propertySetterBlock
+                       context:_mainContext
+                         error:&error];
+    
+    XCTAssertNil(error, @"");
+    XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
+}
+
+- (void)testInserOrUpdateCallsPropertyBlockWithDictionaryAndManagedObject {
+    __block NSDictionary *capturedDictionary = nil;
+    __block NSManagedObject *capturedManagedObject;
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary* dictionary, NSManagedObject *managedObject) {
+        capturedDictionary = dictionary;
+        capturedManagedObject = managedObject;
+    };
+    
+    NSDictionary *propertyDictionary = @{@"uniqueID" : @"123"};
+    NSArray *dictArray = @[propertyDictionary];
+    
+    NSError *error = nil;
+    [Entity SQK_insertOrUpdate:dictArray
+                uniqueModelKey:@"uniqueID"
+               uniqueRemoteKey:@"uniqueID"
+           propertySetterBlock:propertySetterBlock
+                       context:_mainContext
+                         error:&error];
+    
+    XCTAssertNil(error, @"");
+    XCTAssertEqual(capturedDictionary, propertyDictionary, @"");
+    XCTAssertTrue([capturedManagedObject isKindOfClass:[Entity class]], @"");
+}
+
+- (void)testInsertsAllNewObjectsInInsertOrUpdate {
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary* dictionary, Entity *entity) {
+        entity.uniqueID = dictionary[@"uniqueID"];
+    };
+    
+    NSArray *dictArray = @[@{@"uniqueID" : @"123"}, @{@"uniqueID" : @"456"}, @{@"uniqueID" : @"789"}];
+    NSError *insertOrUpdateError = nil;
+    [Entity SQK_insertOrUpdate:dictArray
+                uniqueModelKey:@"uniqueID"
+               uniqueRemoteKey:@"uniqueID"
+           propertySetterBlock:propertySetterBlock
+                       context:_mainContext
+                         error:&insertOrUpdateError];
+    
+    XCTAssertNil(insertOrUpdateError, @"");
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    NSError *fetchError;
+    NSArray *objects = [_mainContext executeFetchRequest:request error:&fetchError];
+    XCTAssertNil(fetchError, @"");
+    XCTAssertTrue(objects.count == 3, @"");
+}
+
+- (void)testUpdatesExistingObjects {
+    Entity *existingEntity = [Entity SQK_insertInContext:_mainContext];
+    existingEntity.uniqueID = @"123";
+    existingEntity.title = @"existing";
+    
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary* dictionary, Entity *entity) {
+        entity.uniqueID = dictionary[@"uniqueID"];
+        entity.title = dictionary[@"title"];
+    };
+    
+    NSArray *dictArray =@[
+                          @{@"uniqueID" : @"123", @"title" : @"updated"},
+                          @{@"uniqueID" : @"456", @"title" : @"abc"},
+                          @{@"uniqueID" : @"789", @"title" : @"def"}
+                          ];
+    NSError *insertOrUpdateError = nil;
+    [Entity SQK_insertOrUpdate:dictArray
+                uniqueModelKey:@"uniqueID"
+               uniqueRemoteKey:@"uniqueID"
+           propertySetterBlock:propertySetterBlock
+                       context:_mainContext
+                         error:&insertOrUpdateError];
+    
+    XCTAssertNil(insertOrUpdateError, @"");
+    
+    [_mainContext refreshObject:existingEntity mergeChanges:YES];
+    XCTAssertEqualObjects(existingEntity.title, @"updated", @"");
+}
+
 
 @end

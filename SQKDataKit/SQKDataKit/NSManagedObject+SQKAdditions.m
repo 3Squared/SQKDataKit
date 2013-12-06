@@ -64,4 +64,20 @@
     [objects makeObjectsPerformSelector:@selector(SQK_deleteObject)];
 }
 
++ (void)SQK_insertOrUpdate:(NSArray *)dictArray
+            uniqueModelKey:(NSString *)modelKey
+           uniqueRemoteKey:(NSString *)remoteDataKey
+       propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
+                   context:(NSManagedObjectContext *)context
+                     error:(NSError **)error {
+    for (NSDictionary *dict in dictArray) {
+        NSError *findOrInsertError = nil;
+        id managedObject = [self SQK_findOrInsertByKey:modelKey
+                                                 value:dict[remoteDataKey]
+                                               context:context
+                                                 error:&findOrInsertError];
+        propertySetterBlock(dict, managedObject);
+    }
+}
+
 @end

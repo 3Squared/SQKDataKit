@@ -2,7 +2,7 @@
 //  Entity.m
 //  SQKDataKit
 //
-//  Created by Luke Stringer on 05/12/2013.
+//  Created by Luke Stringer on 06/12/2013.
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
@@ -12,5 +12,6 @@
 @implementation Entity
 
 @dynamic uniqueID;
+@dynamic title;
 
 @end

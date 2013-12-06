@@ -27,5 +27,13 @@
 
 + (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
+typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObject);
++ (void)SQK_insertOrUpdate:(NSArray *)dictArray
+            uniqueModelKey:(NSString *)modelKey
+           uniqueRemoteKey:(NSString *)remoteDataKey
+       propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
+                   context:(NSManagedObjectContext *)context
+                     error:(NSError **)error;
+
 
 @end
