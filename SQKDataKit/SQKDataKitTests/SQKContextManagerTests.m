@@ -89,7 +89,18 @@
     NSManagedObjectContext *mainContext = [_sut mainContext];
     NSManagedObjectContext *privateContext = [_sut newPrivateContext];
     XCTAssertEqualObjects(mainContext.persistentStoreCoordinator, privateContext.persistentStoreCoordinator, @"");
+}
 
+- (void)testMainContextHasAStoreCoordinator {
+    XCTAssertNotNil([_sut mainContext].persistentStoreCoordinator, @"");
+}
+
+- (void)testPrivateContextHasAStoreCoordinator {
+    XCTAssertNotNil([_sut newPrivateContext].persistentStoreCoordinator, @"");
+}
+
+- (void)testStoreCoordinatorHasASingleStore {
+    XCTAssertTrue([_sut mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
 }
 
 #pragma mark - Saving
