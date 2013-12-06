@@ -21,7 +21,7 @@
 - (void)setUp {
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:model];
+    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:model];
     self.mainContext = [contextManager mainContext];
 }
 
