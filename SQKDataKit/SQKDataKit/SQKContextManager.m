@@ -23,6 +23,12 @@
         return nil;
     }
     
+    NSArray *validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
+    if (![validStoreTypes containsObject:storeType]) {
+        return nil;
+    }
+    
+    
     self = [super init];
     if (self) {
         self.storeType = storeType;
@@ -51,6 +57,7 @@
 
 - (BOOL)saveMainContext:(NSError **)error {
     if ([self.mainContext hasChanges]) {
+        // TODO: Perform on main thread?
         [self.mainContext save:error];
         return YES;
     }

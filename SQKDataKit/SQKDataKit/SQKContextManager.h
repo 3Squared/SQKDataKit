@@ -17,7 +17,7 @@
 - (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
 
 - (NSManagedObjectContext *)mainContext;
-- (NSManagedObjectContext*) newPrivateContext;
+- (NSManagedObjectContext *)newPrivateContext;
 
 - (BOOL)saveMainContext:(NSError **)error;
 

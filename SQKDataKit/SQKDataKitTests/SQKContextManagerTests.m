@@ -20,11 +20,13 @@
 
 @implementation SQKContextManagerTests
 
+
 - (void)setUp {
     [super setUp];
     _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
 }
+
 
 #pragma mark - Helpers
 
@@ -64,6 +66,11 @@
 
 - (void)testReturnsNilWithNoManagedObjectModel {
     _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:nil];
+    XCTAssertNil(_sut, @"");
+}
+
+- (void)testReturnsNilWhenUsingIncorrectStoreTypeString {
+    _sut = [[SQKContextManager alloc] initWithStoreType:@"unsupported" managedObjectModel:_managedObjectModel];
     XCTAssertNil(_sut, @"");
 }
 

@@ -13,6 +13,10 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
 @implementation NSManagedObject (SQKAdditions)
 
 + (NSString *)SQK_entityName {
+    
+    if ([self class]== [NSManagedObject class]) {
+        return nil;
+    }
     return NSStringFromClass([self class]);
 }
 
@@ -28,7 +32,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     return [NSFetchRequest fetchRequestWithEntityName:[self SQK_entityName]];
 }
 
-+ (instancetype)SQK_insertOrUpdateWithKey:(NSString *)key
++ (instancetype)SQK_insertOrFetchWithKey:(NSString *)key
                                 value:(id)value
                               context:(NSManagedObjectContext *)context
                                 error:(NSError **)error {
@@ -103,7 +107,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         id object = [objectEnumerator nextObject];
         
         while (dictionary = [dictionaryEnumerator nextObject]) {
-            if (object != nil && [[object valueForKey:modelKey] isEqualToString:dictionary[remoteDataKey]]) {
+            if (object && [[object valueForKey:modelKey] isEqualToString:dictionary[remoteDataKey]]) {
                 if (propertySetterBlock) {
                     propertySetterBlock(dictionary, object);
                 }
