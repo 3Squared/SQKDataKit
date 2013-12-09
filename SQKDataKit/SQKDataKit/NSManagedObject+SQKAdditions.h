@@ -8,6 +8,12 @@
 
 #import <CoreData/CoreData.h>
 
+extern NSString * const SQKDataKitErrorDomain;
+
+typedef NS_ENUM(NSInteger, SQKDataKitError) {
+    SQKDataKitErrorUnsupportedQueueConcurencyType
+};
+
 @interface NSManagedObject (SQKAdditions)
 
 + (NSString *)SQK_entityName;

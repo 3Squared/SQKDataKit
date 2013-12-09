@@ -239,5 +239,19 @@
     XCTAssertEqualObjects(existingEntity.title, @"updated", @"");
 }
 
+- (void)testInsertOrUpdateFailsWithError {
+    NSError *insertOrUpdateError = nil;
+    [Entity SQK_insertOrUpdate:@[]
+                uniqueModelKey:@"unusedKey"
+               uniqueRemoteKey:@"unusedKey"
+           propertySetterBlock:nil
+                privateContext:self.mainContext
+                         error:&insertOrUpdateError];
+    
+    XCTAssertNotNil(insertOrUpdateError, @"");
+    XCTAssertEqualObjects(insertOrUpdateError.domain, SQKDataKitErrorDomain, @"");
+    XCTAssertEqual(insertOrUpdateError.code, (NSInteger)SQKDataKitErrorUnsupportedQueueConcurencyType, @"");
+}
+
 
 @end

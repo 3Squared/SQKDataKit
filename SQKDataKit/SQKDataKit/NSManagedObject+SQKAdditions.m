@@ -8,6 +8,8 @@
 
 #import "NSManagedObject+SQKAdditions.h"
 
+NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
+
 @implementation NSManagedObject (SQKAdditions)
 
 + (NSString *)SQK_entityName {
@@ -68,8 +70,13 @@
             uniqueModelKey:(NSString *)modelKey
            uniqueRemoteKey:(NSString *)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
-                   privateContext:(NSManagedObjectContext *)context
+            privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
+    
+    if (!(context.concurrencyType == NSPrivateQueueConcurrencyType || context.concurrencyType ==  NSMainQueueConcurrencyType)) {        
+        *error = [self errorForUnsupportedQueueConcurencyType];
+        return;
+    }
     
     [context performBlockAndWait:^{
         NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
@@ -110,8 +117,19 @@
                 }
             }
         }
- 
+        
     }];
+}
+
++ (NSError *)errorForUnsupportedQueueConcurencyType {
+    NSDictionary *userInfo = @{
+                               NSLocalizedDescriptionKey: NSLocalizedString(@"Insert or update operation failed due to unsupported concurrency type of the NSManagedObjectContext", nil),
+                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Use an NSManagedObjectContext with concurency type either NSPrivateQueueConcurrencyType or NSMainQueueConcurrencyType.", nil),
+                               };
+    
+    return [NSError errorWithDomain:SQKDataKitErrorDomain
+                               code:SQKDataKitErrorUnsupportedQueueConcurencyType
+                           userInfo:userInfo];
 }
 
 @end
