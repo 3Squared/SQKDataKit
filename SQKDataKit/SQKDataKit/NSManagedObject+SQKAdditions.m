@@ -73,23 +73,22 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
     
-    if (!(context.concurrencyType == NSPrivateQueueConcurrencyType || context.concurrencyType ==  NSMainQueueConcurrencyType)) {        
+    if (!(context.concurrencyType == NSPrivateQueueConcurrencyType || context.concurrencyType ==  NSMainQueueConcurrencyType)) {
         *error = [self errorForUnsupportedQueueConcurencyType];
         return;
     }
     
     [context performBlockAndWait:^{
-        NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-        NSArray* sortedResponse = [dictArray sortedArrayUsingDescriptors:@[sortDescriptor]];
+        NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+        NSArray *sortedDictArray = [dictArray sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
+        NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
         
-        NSArray* fetchedValues = [sortedResponse valueForKeyPath:modelKey];
-        
-        // Create the fetch request to get all objects matching the unique key.
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[self SQK_entityDescriptionInContext:context]];
-        [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedValues]];
+        [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
         
-        [fetchRequest setSortDescriptors: @[sortDescriptor]];
+        NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
+        [fetchRequest setSortDescriptors: @[localDataSortDescriptor]];
         
         NSError *localError = nil;
         NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
@@ -97,14 +96,14 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             return;
         }
         
-        NSEnumerator* objectEnumerator = [objectsMatchingKey objectEnumerator];
-        NSEnumerator* dictionaryEnumerator = [sortedResponse objectEnumerator];
+        NSEnumerator *objectEnumerator = [objectsMatchingKey objectEnumerator];
+        NSEnumerator *dictionaryEnumerator = [sortedDictArray objectEnumerator];
         
         NSDictionary* dictionary;
         id object = [objectEnumerator nextObject];
         
         while (dictionary = [dictionaryEnumerator nextObject]) {
-            if (object != nil && [[object valueForKey:modelKey] isEqualToString:dictionary[modelKey]]) {
+            if (object != nil && [[object valueForKey:modelKey] isEqualToString:dictionary[remoteDataKey]]) {
                 if (propertySetterBlock) {
                     propertySetterBlock(dictionary, object);
                 }
@@ -117,7 +116,6 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
                 }
             }
         }
-        
     }];
 }
 
