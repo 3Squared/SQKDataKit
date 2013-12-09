@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
 
 + (NSFetchRequest *)SQK_fetchRequest;
 
-+ (instancetype)SQK_findOrInsertByKey:(NSString *)key
++ (instancetype)SQK_insertOrUpdateWithKey:(NSString *)key
                                 value:(id)value
                               context:(NSManagedObjectContext *)context
                                 error:(NSError **)error;

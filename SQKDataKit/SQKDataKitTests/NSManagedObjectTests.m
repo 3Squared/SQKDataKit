@@ -101,7 +101,7 @@
 
 - (void)testInsertsNewEntityWhenUniqe {
     NSError *error = nil;
-    Entity *entity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"abcd" context:self.mainContext error:&error];
+    Entity *entity = [Entity SQK_insertOrUpdateWithKey:@"uniqueID" value:@"abcd" context:self.mainContext error:&error];
     
     XCTAssertNil(error, @"");
     XCTAssertNotNil(entity, @"");
@@ -115,7 +115,7 @@
     existingEntity.uniqueID = @"wxyz";
     
     NSError *error = nil;
-    Entity *newEntity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"wxyz" context:self.mainContext error:&error];
+    Entity *newEntity = [Entity SQK_insertOrUpdateWithKey:@"uniqueID" value:@"wxyz" context:self.mainContext error:&error];
     XCTAssertNil(error, @"");
     XCTAssertNotNil(newEntity, @"");
     XCTAssertEqualObjects(newEntity.uniqueID, @"wxyz", @"");
