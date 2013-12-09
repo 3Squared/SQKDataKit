@@ -326,7 +326,6 @@
     XCTAssertNotNil(insertOrUpdateError, @"");
     XCTAssertEqualObjects(insertOrUpdateError.domain, SQKDataKitErrorDomain, @"");
     XCTAssertEqual(insertOrUpdateError.code, (NSInteger)SQKDataKitErrorUnsupportedQueueConcurencyType, @"");
-}
-
+} 
 
 @end

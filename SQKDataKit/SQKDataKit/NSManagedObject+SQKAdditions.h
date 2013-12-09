@@ -29,10 +29,6 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
                               context:(NSManagedObjectContext *)context
                                 error:(NSError **)error;
 
-- (void)SQK_deleteObject;
-
-+ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
-
 typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObject);
 + (void)SQK_insertOrUpdate:(NSArray *)dictArray
             uniqueModelKey:(NSString *)modelKey
@@ -41,7 +37,10 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
                    privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error;
 
-+ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context;
+- (void)SQK_deleteObject;
 
++ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
+
++ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context;
 
 @end
