@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <OCMock/OCMock.h>
 #import "SQKJSONDataImportOperation.h"
 #import "SQKContextManager.h"
 
@@ -18,10 +19,11 @@
 @interface ConcreteDataImportOperation : SQKJSONDataImportOperation
 @end
 @implementation ConcreteDataImportOperation
+- (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+}
 @end
 
 @interface SQKJSONDataImportOperationTests : XCTestCase
-@property (nonatomic, strong) SQKJSONDataImportOperation *sut;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @end
 
@@ -36,24 +38,35 @@
 }
 
 - (void)testInitialisesWithContextAndJSON {
-    
     NSDictionary *json = @{};
-    self.sut = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    SQKJSONDataImportOperation *dataImportOperation = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
     
-    XCTAssertNotNil(self.sut, @"");
+    XCTAssertNotNil(dataImportOperation, @"");
 }
 
 - (void)testStoresConstructorParamtersInProperties {
     NSDictionary *json = @{};
-    self.sut = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    SQKJSONDataImportOperation *dataImportOperation = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
     
-    XCTAssertEqual(self.sut.privateContext, self.context, @"");
-    XCTAssertEqual(self.sut.json, json, @"");
+    XCTAssertEqual(dataImportOperation.privateContext, self.context, @"");
+    XCTAssertEqual(dataImportOperation.json, json, @"");
 }
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
     ConcreteDataImportOperationWithouOveride *dataImportOperation = [[ConcreteDataImportOperationWithouOveride alloc] initWithPrivateContext:self.context json:@{}];
     XCTAssertThrowsSpecificNamed([dataImportOperation updatePrivateContext:self.context usingJSON:@{}], NSException, NSInternalInconsistencyException, @"");
+}
+
+- (void)testCallsUpdateWhenOperationIsStarted {
+    id json = @{@"key" : @"value"};
+    
+    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
+    [[dataImportOperationPartialMock expect] updatePrivateContext:self.context usingJSON:json];
+    
+    [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
+    
+    [dataImportOperationPartialMock verify];
 }
 
 @end
