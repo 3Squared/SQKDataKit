@@ -33,7 +33,7 @@
     [self deleteAllEntityObjects];
 }
 
-#pragma mark - Herlps
+#pragma mark - Helpers
 
 - (void)deleteAllEntityObjects {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -58,11 +58,13 @@
     }
 }
 
-#pragma mark - Testing entity name / description
+#pragma mark - Testing entity name
 
 - (void)testEntityName {
     XCTAssertEqualObjects([Entity SQK_entityName], @"Entity", @"");
 }
+
+#pragma mark - Testing entity description
 
 - (void)testEntityDescriptionInContext {
     NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:self.mainContext];
@@ -70,7 +72,14 @@
     XCTAssertEqualObjects(entityDescription.name, @"Entity", @"");
 }
 
-#pragma mark - Test feth request
+#pragma mark - Testing property descrition
+
+- (void)testPropertyDescription {
+    NSPropertyDescription *propertyDescription = [Entity SQK_propertyDescriptionForName:@"title" context:self.mainContext];
+    XCTAssertEqualObjects(propertyDescription.name, @"title", @"");
+}
+
+#pragma mark - Test fetch request
 
 - (void)testFetchRequest {
     NSFetchRequest *fetchRequest = [Entity SQK_fetchRequest];

@@ -41,5 +41,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
                    privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error;
 
++ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context;
+
 
 @end

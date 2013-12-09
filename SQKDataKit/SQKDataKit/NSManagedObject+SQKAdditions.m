@@ -119,10 +119,16 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     }];
 }
 
++ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context {
+    return [[[[self class] SQK_entityDescriptionInContext:context] propertiesByName] objectForKey:name];
+}
+
+#pragma mark - Private
+
 + (NSError *)errorForUnsupportedQueueConcurencyType {
     NSDictionary *userInfo = @{
                                NSLocalizedDescriptionKey: NSLocalizedString(@"Insert or update operation failed due to unsupported concurrency type of the NSManagedObjectContext", nil),
-                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Use an NSManagedObjectContext with concurency type either NSPrivateQueueConcurrencyType or NSMainQueueConcurrencyType.", nil),
+                               NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Use an NSManagedObjectContext with a concurency type of either NSPrivateQueueConcurrencyType or NSMainQueueConcurrencyType.", nil),
                                };
     
     return [NSError errorWithDomain:SQKDataKitErrorDomain
