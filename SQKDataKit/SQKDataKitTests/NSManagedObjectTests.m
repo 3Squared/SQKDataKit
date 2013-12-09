@@ -19,6 +19,8 @@
 
 @implementation NSManagedObjectTests
 
+#pragma mark - setUp / tearDown
+
 - (void)setUp {
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
@@ -30,6 +32,8 @@
 - (void)tearDown {
     [self deleteAllEntityObjects];
 }
+
+#pragma mark - Herlps
 
 - (void)deleteAllEntityObjects {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -54,6 +58,8 @@
     }
 }
 
+#pragma mark - Testing entity name / description
+
 - (void)testEntityName {
     XCTAssertEqualObjects([Entity SQK_entityName], @"Entity", @"");
 }
@@ -63,6 +69,16 @@
     
     XCTAssertEqualObjects(entityDescription.name, @"Entity", @"");
 }
+
+#pragma mark - Test feth request
+
+- (void)testFetchRequest {
+    NSFetchRequest *fetchRequest = [Entity SQK_fetchRequest];
+    XCTAssertNotNil(fetchRequest, @"");
+    XCTAssertEqualObjects(fetchRequest.entityName, @"Entity", @"");
+}
+
+#pragma mark - Test basic insertion
 
 - (void)testInsetsIntoContext {
     Entity *entity = [Entity SQK_insertInContext:self.mainContext];
@@ -83,12 +99,6 @@
     XCTAssertEqualObjects(fetchedEntity.uniqueID, @"1234", @"");
 }
 
-- (void)testFetchRequest {
-    NSFetchRequest *fetchRequest = [Entity SQK_fetchRequest];
-    XCTAssertNotNil(fetchRequest, @"");
-    XCTAssertEqualObjects(fetchRequest.entityName, @"Entity", @"");
-}
-
 - (void)testInsertsNewEntityWhenUniqe {
     NSError *error = nil;
     Entity *entity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"abcd" context:self.mainContext error:&error];
@@ -97,6 +107,8 @@
     XCTAssertNotNil(entity, @"");
     XCTAssertEqualObjects(entity.uniqueID, @"abcd", @"");
 }
+
+#pragma mark - Test find or insert
 
 - (void)testFindsExistingWhenNotUnique {
     Entity *existingEntity = [Entity SQK_insertInContext:self.mainContext];
@@ -109,6 +121,8 @@
     XCTAssertEqualObjects(newEntity.uniqueID, @"wxyz", @"");
     XCTAssertEqualObjects(newEntity.objectID, existingEntity.objectID, @"");
 }
+
+#pragma mark - Test deletion
 
 - (void)testDeletesObject {
     Entity *entity = [Entity SQK_insertInContext:self.mainContext];
@@ -142,6 +156,8 @@
     XCTAssertNil(fetchError, @"");
     XCTAssertEqual((NSInteger)objects.count, (NSInteger)0, @"");
 }
+
+#pragma mark - Test batch insert or update
 
 - (void)testInsertOrUpdateCallsPropertySetterBlockForEach {
     __block NSInteger blockCallCount = 0;
@@ -289,7 +305,7 @@
     XCTAssertEqualObjects(existingEntity.title, @"updated", @"");
 }
 
-- (void)testInsertOrUpdateFailsWithError {
+- (void)testInsertOrUpdateFailsWithUnsupportedConcurencyTypeError {
     NSError *insertOrUpdateError = nil;
     [Entity SQK_insertOrUpdate:@[]
                 uniqueModelKey:@"unusedKey"
