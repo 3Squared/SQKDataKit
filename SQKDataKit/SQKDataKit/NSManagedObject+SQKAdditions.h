@@ -32,7 +32,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
             uniqueModelKey:(NSString *)modelKey
            uniqueRemoteKey:(NSString *)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
-                   context:(NSManagedObjectContext *)context
+                   privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error;
 
 

@@ -14,6 +14,7 @@
 
 @interface NSManagedObjectTests : XCTestCase
 @property (nonatomic, strong) NSManagedObjectContext *mainContext;
+@property (nonatomic, strong) NSManagedObjectContext *privateContext;
 @end
 
 @implementation NSManagedObjectTests
@@ -22,6 +23,7 @@
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
     SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:model];
+    self.privateContext = [contextManager newPrivateContext];
     self.mainContext = [contextManager mainContext];
 }
 
@@ -31,22 +33,22 @@
 
 - (void)deleteAllEntityObjects {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:self.mainContext]];
     // Only fetch the managedObjectID
     [request setIncludesPropertyValues:NO];
     
     NSError *error = nil;
-    NSArray *entities = [_mainContext executeFetchRequest:request error:&error];
+    NSArray *entities = [self.mainContext executeFetchRequest:request error:&error];
     if (error) {
         abort();
     }
     
     for (NSManagedObject *entity in entities) {
-        [_mainContext deleteObject:entity];
+        [self.mainContext deleteObject:entity];
     }
     
     error = nil;
-    [_mainContext save:&error];
+    [self.mainContext save:&error];
     if (error) {
         abort();
     }
@@ -57,23 +59,23 @@
 }
 
 - (void)testEntityDescriptionInContext {
-    NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:_mainContext];
+    NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:self.mainContext];
     
     XCTAssertEqualObjects(entityDescription.name, @"Entity", @"");
 }
 
 - (void)testInsetsIntoContext {
-    Entity *entity = [Entity SQK_insertInContext:_mainContext];
+    Entity *entity = [Entity SQK_insertInContext:self.mainContext];
     XCTAssertNotNil(entity, @"");
     
     entity.uniqueID = @"1234";
     
-    NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:_mainContext];
+    NSEntityDescription *entityDescription = [Entity SQK_entityDescriptionInContext:self.mainContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
     NSError *error = nil;
-    NSArray *array = [_mainContext executeFetchRequest:fetchRequest error:&error];
+    NSArray *array = [self.mainContext executeFetchRequest:fetchRequest error:&error];
     XCTAssertNil(error, @"");
     XCTAssertTrue(array.count == 1, @"");
     
@@ -89,7 +91,7 @@
 
 - (void)testInsertsNewEntityWhenUniqe {
     NSError *error = nil;
-    Entity *entity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"abcd" context:_mainContext error:&error];
+    Entity *entity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"abcd" context:self.mainContext error:&error];
     
     XCTAssertNil(error, @"");
     XCTAssertNotNil(entity, @"");
@@ -97,11 +99,11 @@
 }
 
 - (void)testFindsExistingWhenNotUnique {
-    Entity *existingEntity = [Entity SQK_insertInContext:_mainContext];
+    Entity *existingEntity = [Entity SQK_insertInContext:self.mainContext];
     existingEntity.uniqueID = @"wxyz";
     
     NSError *error = nil;
-    Entity *newEntity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"wxyz" context:_mainContext error:&error];
+    Entity *newEntity = [Entity SQK_findOrInsertByKey:@"uniqueID" value:@"wxyz" context:self.mainContext error:&error];
     XCTAssertNil(error, @"");
     XCTAssertNotNil(newEntity, @"");
     XCTAssertEqualObjects(newEntity.uniqueID, @"wxyz", @"");
@@ -109,34 +111,34 @@
 }
 
 - (void)testDeletesObject {
-    Entity *entity = [Entity SQK_insertInContext:_mainContext];
+    Entity *entity = [Entity SQK_insertInContext:self.mainContext];
     id objectID = entity.objectID;
     
     [entity SQK_deleteObject];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:self.mainContext]];
     [request setPredicate:[NSPredicate predicateWithFormat:@"objectID == %@", objectID]];
     NSError *error;
-    NSArray *objects = [_mainContext executeFetchRequest:request error:&error];
+    NSArray *objects = [self.mainContext executeFetchRequest:request error:&error];
     XCTAssertNil(error, @"");
     XCTAssertTrue(objects.count == 0, @"");
 }
 
 - (void)testDeleteAllObjectsInContext {
     for (NSInteger i = 0; i < 10; ++i) {
-        [Entity SQK_insertInContext:_mainContext];
+        [Entity SQK_insertInContext:self.mainContext];
     }
     
     NSError *deleteError = nil;
-    [Entity SQK_deleteAllObjectsInContext:_mainContext error:&deleteError];
+    [Entity SQK_deleteAllObjectsInContext:self.mainContext error:&deleteError];
     XCTAssertNil(deleteError, @"");
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:self.mainContext]];
     
     NSError *fetchError = nil;
-    NSArray *objects = [_mainContext executeFetchRequest:request error:&fetchError];
+    NSArray *objects = [self.mainContext executeFetchRequest:request error:&fetchError];
     XCTAssertNil(fetchError, @"");
     XCTAssertEqual((NSInteger)objects.count, (NSInteger)0, @"");
 }
@@ -153,7 +155,7 @@
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       context:_mainContext
+                       privateContext:self.privateContext
                          error:&error];
     
     XCTAssertNil(error, @"");
@@ -176,7 +178,7 @@
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       context:_mainContext
+                       privateContext:self.privateContext
                          error:&error];
     
     XCTAssertNil(error, @"");
@@ -195,21 +197,21 @@
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       context:_mainContext
+                       privateContext:self.privateContext
                          error:&insertOrUpdateError];
     
     XCTAssertNil(insertOrUpdateError, @"");
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:_mainContext]];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:self.mainContext]];
     NSError *fetchError;
-    NSArray *objects = [_mainContext executeFetchRequest:request error:&fetchError];
+    NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
     XCTAssertNil(fetchError, @"");
     XCTAssertTrue(objects.count == 3, @"");
 }
 
 - (void)testUpdatesExistingObjects {
-    Entity *existingEntity = [Entity SQK_insertInContext:_mainContext];
+    Entity *existingEntity = [Entity SQK_insertInContext:self.privateContext];
     existingEntity.uniqueID = @"123";
     existingEntity.title = @"existing";
     
@@ -228,12 +230,12 @@
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       context:_mainContext
+                       privateContext:self.privateContext
                          error:&insertOrUpdateError];
     
     XCTAssertNil(insertOrUpdateError, @"");
     
-    [_mainContext refreshObject:existingEntity mergeChanges:YES];
+    [self.privateContext refreshObject:existingEntity mergeChanges:YES];
     XCTAssertEqualObjects(existingEntity.title, @"updated", @"");
 }
 

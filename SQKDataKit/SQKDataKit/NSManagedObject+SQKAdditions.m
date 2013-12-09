@@ -68,50 +68,50 @@
             uniqueModelKey:(NSString *)modelKey
            uniqueRemoteKey:(NSString *)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
-                   context:(NSManagedObjectContext *)context
+                   privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
     
-    // TODO: Perform and wait
-    
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-    NSArray* sortedResponse = [dictArray sortedArrayUsingDescriptors:@[sortDescriptor]];
-    
-    NSArray* fetchedValues = [sortedResponse valueForKeyPath:modelKey];
-    
-    // Create the fetch request to get all objects matching the unique key.
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[self SQK_entityDescriptionInContext:context]];
-    [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedValues]];
-    
-    [fetchRequest setSortDescriptors: @[sortDescriptor]];
-    
-    NSError *localError = nil;
-    NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
-    if (localError) {
-        return;
-    }
-    
-    NSEnumerator* objectEnumerator = [objectsMatchingKey objectEnumerator];
-    NSEnumerator* dictionaryEnumerator = [sortedResponse objectEnumerator];
-    
-    NSDictionary* dictionary;
-    id object = [objectEnumerator nextObject];
-    
-    while (dictionary = [dictionaryEnumerator nextObject]) {
-        if (object != nil && [[object valueForKey:modelKey] isEqualToString:dictionary[modelKey]]) {
-            if (propertySetterBlock) {
-                propertySetterBlock(dictionary, object);
-            }
-            object = [objectEnumerator nextObject];
+    [context performBlockAndWait:^{
+        NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+        NSArray* sortedResponse = [dictArray sortedArrayUsingDescriptors:@[sortDescriptor]];
+        
+        NSArray* fetchedValues = [sortedResponse valueForKeyPath:modelKey];
+        
+        // Create the fetch request to get all objects matching the unique key.
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:[self SQK_entityDescriptionInContext:context]];
+        [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedValues]];
+        
+        [fetchRequest setSortDescriptors: @[sortDescriptor]];
+        
+        NSError *localError = nil;
+        NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
+        if (localError) {
+            return;
         }
-        else {
-            id newObject = [[self class] SQK_insertInContext:context];
-            if (propertySetterBlock) {
-                propertySetterBlock(dictionary, newObject);
+        
+        NSEnumerator* objectEnumerator = [objectsMatchingKey objectEnumerator];
+        NSEnumerator* dictionaryEnumerator = [sortedResponse objectEnumerator];
+        
+        NSDictionary* dictionary;
+        id object = [objectEnumerator nextObject];
+        
+        while (dictionary = [dictionaryEnumerator nextObject]) {
+            if (object != nil && [[object valueForKey:modelKey] isEqualToString:dictionary[modelKey]]) {
+                if (propertySetterBlock) {
+                    propertySetterBlock(dictionary, object);
+                }
+                object = [objectEnumerator nextObject];
+            }
+            else {
+                id newObject = [[self class] SQK_insertInContext:context];
+                if (propertySetterBlock) {
+                    propertySetterBlock(dictionary, newObject);
+                }
             }
         }
-    }
-
+ 
+    }];
 }
 
 @end
