@@ -11,8 +11,9 @@
 #import <CoreData/CoreData.h>
 
 @interface NSPersistentStoreCoordinatorTests : XCTestCase
-@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
+// sut is the "System Under Test"
 @property (nonatomic, strong) NSPersistentStoreCoordinator *sut;
+@property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @end
 
 @implementation NSPersistentStoreCoordinatorTests

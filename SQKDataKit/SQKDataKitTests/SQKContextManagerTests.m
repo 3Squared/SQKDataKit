@@ -11,7 +11,7 @@
 #import "SQKContextManager.h"
 
 @interface SQKContextManagerTests : XCTestCase
-// sut is the "System Under Tets"
+// sut is the "System Under Test"
 @property (nonatomic, retain) SQKContextManager *sut;
 @property (nonatomic, retain) id mockMainContextWithChanges;
 @property (nonatomic, retain) id mockMainContextWithoutChanges;
@@ -23,8 +23,8 @@
 
 - (void)setUp {
     [super setUp];
-    _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
+    self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    self.sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:self.managedObjectModel];
 }
 
 
@@ -53,14 +53,14 @@
 #pragma mark - Initialisation
 
 - (void)testInitialisesWithAStoreTypeAndMangedObjectModel {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:_managedObjectModel];
+    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:self.managedObjectModel];
     XCTAssertNotNil(_sut, @"");
     XCTAssertEqualObjects(_sut.storeType, NSInMemoryStoreType, @"");
-    XCTAssertEqualObjects(_sut.managedObjectModel, _managedObjectModel, @"");
+    XCTAssertEqualObjects(_sut.managedObjectModel, self.managedObjectModel, @"");
 }
 
 - (void)testReturnsNilWithNoStoreType {
-    _sut = [[SQKContextManager alloc] initWithStoreType:nil managedObjectModel:_managedObjectModel];
+    _sut = [[SQKContextManager alloc] initWithStoreType:nil managedObjectModel:self.managedObjectModel];
     XCTAssertNil(_sut, @"");
 }
 
@@ -70,7 +70,7 @@
 }
 
 - (void)testReturnsNilWhenUsingIncorrectStoreTypeString {
-    _sut = [[SQKContextManager alloc] initWithStoreType:@"unsupported" managedObjectModel:_managedObjectModel];
+    _sut = [[SQKContextManager alloc] initWithStoreType:@"unsupported" managedObjectModel:self.managedObjectModel];
     XCTAssertNil(_sut, @"");
 }
 
