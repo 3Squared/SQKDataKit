@@ -1,0 +1,4 @@
+target "SQKDataKitTests" do
+	pod 'OCMock', '~> 2.2.1'
+end
+
