@@ -33,8 +33,7 @@
     if (self) {
         self.storeType = storeType;
         self.managedObjectModel = managedObjectModel;
-        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithManagedObjectModel:managedObjectModel
-                                                                                                         storeType:storeType];
+        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
     }
     return self;
 }
