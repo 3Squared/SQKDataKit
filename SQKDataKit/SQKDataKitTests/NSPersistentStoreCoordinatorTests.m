@@ -29,7 +29,7 @@
     XCTAssertEqualObjects(self.sut.managedObjectModel, _managedObjectModel, @"");
 }
 
-- (void)testHasOnePersistentStoreWithCorrectStoreType {
+- (void)testHasOnePersistentStore {
     XCTAssertNotNil(self.sut, @"");
     XCTAssertTrue([self.sut persistentStores].count == 1, @"");
 }

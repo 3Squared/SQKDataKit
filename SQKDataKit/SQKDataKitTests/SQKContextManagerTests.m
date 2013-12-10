@@ -44,61 +44,61 @@
 #pragma mark - Initialisation
 
 - (void)testInitialisesWithAStoreTypeAndMangedObjectModel {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:self.managedObjectModel];
-    XCTAssertNotNil(_sut, @"");
-    XCTAssertEqualObjects(_sut.storeType, NSInMemoryStoreType, @"");
-    XCTAssertEqualObjects(_sut.managedObjectModel, self.managedObjectModel, @"");
+    self.sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:self.managedObjectModel];
+    XCTAssertNotNil(self.sut, @"");
+    XCTAssertEqualObjects(self.sut.storeType, NSInMemoryStoreType, @"");
+    XCTAssertEqualObjects(self.sut.managedObjectModel, self.managedObjectModel, @"");
 }
 
 - (void)testReturnsNilWithNoStoreType {
-    _sut = [[SQKContextManager alloc] initWithStoreType:nil managedObjectModel:self.managedObjectModel];
-    XCTAssertNil(_sut, @"");
+    self.sut = [[SQKContextManager alloc] initWithStoreType:nil managedObjectModel:self.managedObjectModel];
+    XCTAssertNil(self.sut, @"");
 }
 
 - (void)testReturnsNilWithNoManagedObjectModel {
-    _sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:nil];
-    XCTAssertNil(_sut, @"");
+    self.sut = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:nil];
+    XCTAssertNil(self.sut, @"");
 }
 
 - (void)testReturnsNilWhenUsingIncorrectStoreTypeString {
-    _sut = [[SQKContextManager alloc] initWithStoreType:@"unsupported" managedObjectModel:self.managedObjectModel];
-    XCTAssertNil(_sut, @"");
+    self.sut = [[SQKContextManager alloc] initWithStoreType:@"unsupported" managedObjectModel:self.managedObjectModel];
+    XCTAssertNil(self.sut, @"");
 }
 
 #pragma mark - Contexts
 
 - (void)testProvidesMainContext {
-    XCTAssertNotNil([_sut mainContext], @"");
+    XCTAssertNotNil([self.sut mainContext], @"");
 }
 
 - (void)testProvidesSameMainContext {
-    NSManagedObjectContext *firstContext = [_sut mainContext];
-    NSManagedObjectContext *secondContext = [_sut mainContext];
+    NSManagedObjectContext *firstContext = [self.sut mainContext];
+    NSManagedObjectContext *secondContext = [self.sut mainContext];
     XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
 - (void)testProvidesANewPrivateContext {
-    NSManagedObjectContext *privateContext = [_sut newPrivateContext];
+    NSManagedObjectContext *privateContext = [self.sut newPrivateContext];
     XCTAssertNotNil(privateContext, @"");
     XCTAssertEqual((NSInteger)privateContext.concurrencyType, (NSInteger)NSPrivateQueueConcurrencyType, @"");
 }
 
-- (void)testMainContextAndPrivateContextUseSamePersitentStoreCoordinator {
-    NSManagedObjectContext *mainContext = [_sut mainContext];
-    NSManagedObjectContext *privateContext = [_sut newPrivateContext];
+- (void)testMainContextAndPrivateContextUseSamePersistentStoreCoordinator {
+    NSManagedObjectContext *mainContext = [self.sut mainContext];
+    NSManagedObjectContext *privateContext = [self.sut newPrivateContext];
     XCTAssertEqualObjects(mainContext.persistentStoreCoordinator, privateContext.persistentStoreCoordinator, @"");
 }
 
 - (void)testMainContextHasAStoreCoordinator {
-    XCTAssertNotNil([_sut mainContext].persistentStoreCoordinator, @"");
+    XCTAssertNotNil([self.sut mainContext].persistentStoreCoordinator, @"");
 }
 
 - (void)testPrivateContextHasAStoreCoordinator {
-    XCTAssertNotNil([_sut newPrivateContext].persistentStoreCoordinator, @"");
+    XCTAssertNotNil([self.sut newPrivateContext].persistentStoreCoordinator, @"");
 }
 
 - (void)testStoreCoordinatorHasASingleStore {
-    XCTAssertTrue([_sut mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
+    XCTAssertTrue([self.sut mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
 }
 
 #pragma mark - Saving
@@ -116,7 +116,7 @@
     [contextWithChanges verify];
 }
 
-- (void)testDoesNotSaveWhenNoChanges {
+- (void)testDoesNotSaveWhenThrereAreNoChanges {
     id contextWithoutChanges = [self mockMainContextWithStubbedHasChangesReturnValue:NO];
     self.sut.mainContext = contextWithoutChanges;
     

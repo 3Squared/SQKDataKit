@@ -210,8 +210,8 @@
 				A34BF3D3184F456B00F2E3B4 /* SQKContextManagerTests.m */,
 				A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */,
 				A328BAC01850921000267F2E /* NSManagedObjectTests.m */,
-				A34BF3C3184F41D500F2E3B4 /* Supporting Files */,
 				A30FAE8E1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m */,
+				A34BF3C3184F41D500F2E3B4 /* Supporting Files */,
 			);
 			path = SQKDataKitTests;
 			sourceTree = "<group>";

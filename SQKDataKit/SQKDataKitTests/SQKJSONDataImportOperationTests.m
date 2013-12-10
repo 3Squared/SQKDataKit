@@ -11,9 +11,9 @@
 #import "SQKJSONDataImportOperation.h"
 #import "SQKContextManager.h"
 
-@interface ConcreteDataImportOperationWithouOveride : SQKJSONDataImportOperation
+@interface ConcreteDataImportOperationWithoutOverride : SQKJSONDataImportOperation
 @end
-@implementation ConcreteDataImportOperationWithouOveride
+@implementation ConcreteDataImportOperationWithoutOverride
 @end
 
 @interface ConcreteDataImportOperation : SQKJSONDataImportOperation
@@ -44,7 +44,7 @@
     XCTAssertNotNil(dataImportOperation, @"");
 }
 
-- (void)testStoresConstructorParamtersInProperties {
+- (void)testStoresConstructorParametersInProperties {
     NSDictionary *json = @{};
     SQKJSONDataImportOperation *dataImportOperation = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
     
@@ -53,7 +53,7 @@
 }
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
-    ConcreteDataImportOperationWithouOveride *dataImportOperation = [[ConcreteDataImportOperationWithouOveride alloc] initWithPrivateContext:self.context json:@{}];
+    ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithPrivateContext:self.context json:@{}];
     XCTAssertThrowsSpecificNamed([dataImportOperation updatePrivateContext:self.context usingJSON:@{}], NSException, NSInternalInconsistencyException, @"");
 }
 

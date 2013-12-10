@@ -112,9 +112,9 @@
     XCTAssertEqualObjects(fetchedEntity.uniqueID, @"1234", @"");
 }
 
-#pragma mark - Test find or insert
+#pragma mark - Test find or fetch
 
-- (void)testInsertsNewEntityWhenUnique {
+- (void)testUsesInsertNewEntityWhenUnique {
     NSError *error = nil;
     Entity *entity = [Entity SQK_insertOrFetchWithKey:@"uniqueID" value:@"abcd" context:self.mainContext error:&error];
     
@@ -123,7 +123,7 @@
     XCTAssertEqualObjects(entity.uniqueID, @"abcd", @"");
 }
 
-- (void)testFindsExistingWhenNotUnique {
+- (void)testUsesFetchWhenNotUnique {
     Entity *existingEntity = [Entity SQK_insertInContext:self.mainContext];
     existingEntity.uniqueID = @"wxyz";
     
@@ -178,20 +178,24 @@
         ++blockCallCount;
     };
     
-    NSArray *dictArray = @[@{@"uniqueID" : @"123"}, @{@"uniqueID" : @"456"}, @{@"uniqueID" : @"789"}];
+    NSArray *dictArray = @[
+                           @{@"uniqueID" : @"123"},
+                           @{@"uniqueID" : @"456"},
+                           @{@"uniqueID" : @"789"}
+                           ];
     NSError *error = nil;
     [Entity SQK_insertOrUpdate:dictArray
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       privateContext:self.privateContext
+                privateContext:self.privateContext
                          error:&error];
     
     XCTAssertNil(error, @"");
     XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
 }
 
-- (void)testInserOrUpdateCallsPropertyBlockWithDictionaryAndManagedObject {
+- (void)testInsertOrUpdateCallsPropertyBlockWithDictionaryAndManagedObject {
     __block NSDictionary *capturedDictionary = nil;
     __block NSManagedObject *capturedManagedObject;
     SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary* dictionary, NSManagedObject *managedObject) {
@@ -207,7 +211,7 @@
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       privateContext:self.privateContext
+                privateContext:self.privateContext
                          error:&error];
     
     XCTAssertNil(error, @"");
@@ -215,14 +219,18 @@
     XCTAssertTrue([capturedManagedObject isKindOfClass:[Entity class]], @"");
 }
 
-- (void)testInsertsAllNewObjectsInInsertOrUpdateWithSameLocalAndRemoteUniqueKeys {
-    NSArray *dictArray = @[@{@"uniqueID" : @"123"}, @{@"uniqueID" : @"456"}, @{@"uniqueID" : @"789"}];
+- (void)testInsertsAllNewObjectsInInsertOrUpdateWithSameLocalAndRemoteKeys {
+    NSArray *dictArray = @[
+                           @{@"uniqueID" : @"123"},
+                           @{@"uniqueID" : @"456"},
+                           @{@"uniqueID" : @"789"}
+                           ];
     NSError *insertOrUpdateError = nil;
     [Entity SQK_insertOrUpdate:dictArray
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:nil
-                       privateContext:self.privateContext
+                privateContext:self.privateContext
                          error:&insertOrUpdateError];
     
     XCTAssertNil(insertOrUpdateError, @"");
@@ -236,7 +244,11 @@
 }
 
 - (void)testInsertsNewObjectsInInsertOrUpdateWithDifferingLocalAndRemoteUniqueKeys {
-    NSArray *dictArray = @[@{@"remoteUniqueID" : @"123"}, @{@"remoteUniqueID" : @"456"}, @{@"remoteUniqueID" : @"789"}];
+    NSArray *dictArray = @[
+                           @{@"remoteUniqueID" : @"123"},
+                           @{@"remoteUniqueID" : @"456"},
+                           @{@"remoteUniqueID" : @"789"}
+                           ];
     NSError *insertOrUpdateError = nil;
     [Entity SQK_insertOrUpdate:dictArray
                 uniqueModelKey:@"uniqueID"
@@ -253,7 +265,7 @@
     NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
     XCTAssertNil(fetchError, @"");
     XCTAssertTrue(objects.count == 3, @"");
-
+    
 }
 
 - (void)testUpdatesExistingObjectsWithSameLocalAndRemoteKeys {
@@ -267,15 +279,13 @@
     
     NSArray *dictArray =@[
                           @{@"uniqueID" : @"123", @"title" : @"updated"},
-                          @{@"uniqueID" : @"456", @"title" : @"abc"},
-                          @{@"uniqueID" : @"789", @"title" : @"def"}
                           ];
     NSError *insertOrUpdateError = nil;
     [Entity SQK_insertOrUpdate:dictArray
                 uniqueModelKey:@"uniqueID"
                uniqueRemoteKey:@"uniqueID"
            propertySetterBlock:propertySetterBlock
-                       privateContext:self.privateContext
+                privateContext:self.privateContext
                          error:&insertOrUpdateError];
     
     XCTAssertNil(insertOrUpdateError, @"");
@@ -284,7 +294,7 @@
     XCTAssertEqualObjects(existingEntity.title, @"updated", @"");
 }
 
-- (void)testUpdatesObjectsWithDifferingLocalAndRemoteUniqueKeys {
+- (void)testUpdatesObjectsWithDifferingLocalAndRemoteKeys {
     Entity *existingEntity = [Entity SQK_insertInContext:self.privateContext];
     existingEntity.uniqueID = @"123";
     existingEntity.title = @"existing";
