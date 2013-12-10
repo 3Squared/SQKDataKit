@@ -1,8 +1,5 @@
 # SQKDataKit
 
-<!-- [![Version](http://cocoapod-badges.herokuapp.com/v/SQKDataKit/badge.png)](http://cocoadocs.org/docsets/SQKDataKit)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/SQKDataKit/badge.png)](http://cocoadocs.org/docsets/SQKDataKit) -->
-
 # Licence
 
 Copyright (c) 3Squared Ltd
