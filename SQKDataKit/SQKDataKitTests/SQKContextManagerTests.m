@@ -10,16 +10,21 @@
 #import <OCMock/OCMock.h>
 #import "SQKContextManager.h"
 
+/**
+ *  Category that redefines the private internals of SQKContextManager
+ *  so we can access the properties necessary for testing.
+ */
+@interface SQKContextManager (TestVisibility)
+@property (nonatomic, strong, readwrite) NSManagedObjectContext* mainContext;
+@end
+
 @interface SQKContextManagerTests : XCTestCase
 // sut is the "System Under Test"
 @property (nonatomic, retain) SQKContextManager *sut;
-@property (nonatomic, retain) id mockMainContextWithChanges;
-@property (nonatomic, retain) id mockMainContextWithoutChanges;
 @property (nonatomic, retain) NSManagedObjectModel *managedObjectModel;
 @end
 
 @implementation SQKContextManagerTests
-
 
 - (void)setUp {
     [super setUp];
@@ -30,21 +35,7 @@
 
 #pragma mark - Helpers
 
-- (id)mockMainContextWithChanges {
-    if (!_mockMainContextWithChanges) {
-        _mockMainContextWithChanges = [self mockMainContextWithHasChangesBoolean:YES];
-    }
-    return _mockMainContextWithChanges;
-}
-
-- (id)mockMainContextWithoutChanges {
-    if (!_mockMainContextWithoutChanges) {
-        _mockMainContextWithoutChanges = [self mockMainContextWithHasChangesBoolean:NO];
-    }
-    return _mockMainContextWithoutChanges;
-}
-
-- (id)mockMainContextWithHasChangesBoolean:(BOOL)hasChanges {
+- (id)mockMainContextWithStubbedHasChangesReturnValue:(BOOL)hasChanges {
     id mock = [OCMockObject mockForClass:[NSManagedObjectContext class]];
     [[[mock stub] andReturnValue:OCMOCK_VALUE(hasChanges)] hasChanges];
     return mock;
@@ -113,29 +104,29 @@
 #pragma mark - Saving
 
 - (void)testSavesWhenThereAreChanges {
-    id sutMock = [OCMockObject partialMockForObject:_sut];
-    [[[sutMock stub] andCall:@selector(mockMainContextWithChanges) onObject:self] mainContext];
+    id contextWithChanges = [self mockMainContextWithStubbedHasChangesReturnValue:YES];
+    self.sut.mainContext = contextWithChanges;
     
-    [[self.mockMainContextWithChanges expect] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
+    [[contextWithChanges expect] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
     
     NSError *saveError = nil;
-    BOOL didSave = [sutMock saveMainContext:&saveError];
+    BOOL didSave = [self.sut saveMainContext:&saveError];
     
     XCTAssertTrue(didSave, @"");
-    [self.mockMainContextWithChanges verify];
+    [contextWithChanges verify];
 }
 
 - (void)testDoesNotSaveWhenNoChanges {
-    id sutMock = [OCMockObject partialMockForObject:_sut];
-    [[[sutMock stub] andCall:@selector(mockMainContextWithoutChanges) onObject:self] mainContext];
+    id contextWithoutChanges = [self mockMainContextWithStubbedHasChangesReturnValue:NO];
+    self.sut.mainContext = contextWithoutChanges;
     
-    [[self.mockMainContextWithoutChanges reject] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
-    
+    [[contextWithoutChanges reject] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
+
     NSError *saveError = nil;
-    BOOL didSave = [sutMock saveMainContext:&saveError];
+    BOOL didSave = [self.sut saveMainContext:&saveError];
     
     XCTAssertFalse(didSave, @"");
-    [self.mockMainContextWithoutChanges verify];
+    [contextWithoutChanges verify];
 }
 
 
