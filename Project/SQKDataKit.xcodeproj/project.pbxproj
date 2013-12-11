@@ -15,7 +15,8 @@
 		A30FAE8F1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A30FAE8E1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m */; };
 		A31AB0E71857769D00B240AB /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = A31AB0E61857769D00B240AB /* Commit.m */; };
 		A31AB0EC185776AE00B240AB /* DataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A31AB0EA185776AE00B240AB /* DataImportOperation.m */; };
-		A31AB0F1185885C900B240AB /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = A31AB0F0185885C900B240AB /* data.json */; };
+		A31AB0F41858A31D00B240AB /* FetchedResultsControllerDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A31AB0F31858A31D00B240AB /* FetchedResultsControllerDataSource.m */; };
+		A31AB0F61858AA6600B240AB /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = A31AB0F51858AA6600B240AB /* data.json */; };
 		A328BAC11850921000267F2E /* NSManagedObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A328BAC01850921000267F2E /* NSManagedObjectTests.m */; };
 		A328BAC71850986A00267F2E /* SQKDataKitModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A328BAC51850986A00267F2E /* SQKDataKitModel.xcdatamodeld */; };
 		A34BF39B184F41D300F2E3B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A34BF39A184F41D300F2E3B4 /* Foundation.framework */; };
@@ -24,8 +25,6 @@
 		A34BF3A5184F41D300F2E3B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3A3184F41D300F2E3B4 /* InfoPlist.strings */; };
 		A34BF3A7184F41D300F2E3B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3A6184F41D300F2E3B4 /* main.m */; };
 		A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */; };
-		A34BF3AE184F41D400F2E3B4 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3AC184F41D400F2E3B4 /* Main_iPhone.storyboard */; };
-		A34BF3B1184F41D400F2E3B4 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3AF184F41D400F2E3B4 /* Main_iPad.storyboard */; };
 		A34BF3B4184F41D400F2E3B4 /* SQKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3B3184F41D400F2E3B4 /* SQKViewController.m */; };
 		A34BF3B6184F41D400F2E3B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3B5184F41D400F2E3B4 /* Images.xcassets */; };
 		A34BF3BD184F41D400F2E3B4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A34BF3BC184F41D400F2E3B4 /* XCTest.framework */; };
@@ -65,7 +64,9 @@
 		A31AB0E61857769D00B240AB /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
 		A31AB0E9185776AE00B240AB /* DataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataImportOperation.h; sourceTree = "<group>"; };
 		A31AB0EA185776AE00B240AB /* DataImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataImportOperation.m; sourceTree = "<group>"; };
-		A31AB0F0185885C900B240AB /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		A31AB0F21858A31D00B240AB /* FetchedResultsControllerDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchedResultsControllerDataSource.h; sourceTree = "<group>"; };
+		A31AB0F31858A31D00B240AB /* FetchedResultsControllerDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchedResultsControllerDataSource.m; sourceTree = "<group>"; };
+		A31AB0F51858AA6600B240AB /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		A328BAC01850921000267F2E /* NSManagedObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSManagedObjectTests.m; sourceTree = "<group>"; };
 		A328BAC61850986A00267F2E /* SQKDataKitModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SQKDataKitModel.xcdatamodel; sourceTree = "<group>"; };
 		A34BF397184F41D300F2E3B4 /* SQKDataKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SQKDataKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,8 +79,6 @@
 		A34BF3A8184F41D300F2E3B4 /* SQKDataKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SQKDataKit-Prefix.pch"; sourceTree = "<group>"; };
 		A34BF3A9184F41D300F2E3B4 /* SQKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQKAppDelegate.h; sourceTree = "<group>"; };
 		A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKAppDelegate.m; sourceTree = "<group>"; };
-		A34BF3AD184F41D400F2E3B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		A34BF3B0184F41D400F2E3B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		A34BF3B2184F41D400F2E3B4 /* SQKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQKViewController.h; sourceTree = "<group>"; };
 		A34BF3B3184F41D400F2E3B4 /* SQKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKViewController.m; sourceTree = "<group>"; };
 		A34BF3B5184F41D400F2E3B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -136,7 +135,7 @@
 		A31AB0ED185776B300B240AB /* Data import */ = {
 			isa = PBXGroup;
 			children = (
-				A31AB0F0185885C900B240AB /* data.json */,
+				A31AB0F51858AA6600B240AB /* data.json */,
 				A31AB0E9185776AE00B240AB /* DataImportOperation.h */,
 				A31AB0EA185776AE00B240AB /* DataImportOperation.m */,
 			);
@@ -146,6 +145,8 @@
 		A328BAC81850989E00267F2E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A31AB0F21858A31D00B240AB /* FetchedResultsControllerDataSource.h */,
+				A31AB0F31858A31D00B240AB /* FetchedResultsControllerDataSource.m */,
 				A34BF3A9184F41D300F2E3B4 /* SQKAppDelegate.h */,
 				A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */,
 				A34BF3B2184F41D400F2E3B4 /* SQKViewController.h */,
@@ -157,8 +158,6 @@
 		A328BAC9185098A700267F2E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A34BF3AC184F41D400F2E3B4 /* Main_iPhone.storyboard */,
-				A34BF3AF184F41D400F2E3B4 /* Main_iPad.storyboard */,
 				A34BF3B5184F41D400F2E3B4 /* Images.xcassets */,
 			);
 			name = View;
@@ -337,10 +336,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A34BF3B1184F41D400F2E3B4 /* Main_iPad.storyboard in Resources */,
 				A34BF3B6184F41D400F2E3B4 /* Images.xcassets in Resources */,
-				A34BF3AE184F41D400F2E3B4 /* Main_iPhone.storyboard in Resources */,
-				A31AB0F1185885C900B240AB /* data.json in Resources */,
+				A31AB0F61858AA6600B240AB /* data.json in Resources */,
 				A34BF3A5184F41D300F2E3B4 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +401,7 @@
 				A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */,
 				A31AB0EC185776AE00B240AB /* DataImportOperation.m in Sources */,
 				A34BF3A7184F41D300F2E3B4 /* main.m in Sources */,
+				A31AB0F41858A31D00B240AB /* FetchedResultsControllerDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,22 +433,6 @@
 				A34BF3A4184F41D300F2E3B4 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		A34BF3AC184F41D400F2E3B4 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A34BF3AD184F41D400F2E3B4 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		A34BF3AF184F41D400F2E3B4 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A34BF3B0184F41D400F2E3B4 /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		A34BF3C5184F41D500F2E3B4 /* InfoPlist.strings */ = {
