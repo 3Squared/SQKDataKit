@@ -14,7 +14,7 @@
 
 @property (nonatomic, retain) NSString * sha;
 @property (nonatomic, retain) NSString * authorName;
-@property (nonatomic, retain) NSDate * authorEmail;
+@property (nonatomic, retain) NSString * authorEmail;
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * message;
 @property (nonatomic, retain) NSString * url;

@@ -7,28 +7,59 @@
 //
 
 #import "SQKAppDelegate.h"
+#import "DataImportOperation.h"
+#import <CoreData/CoreData.h>
+#import "SQKContextManager.h"
+#import "NSManagedObject+SQKAdditions.h"
+#import "Commit.h"
+
+@interface SQKAppDelegate ()
+@property (nonatomic, strong) SQKContextManager *contextManager;
+@end
 
 @implementation SQKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
     NSData* data = [NSData dataWithContentsOfFile:filePath];
-    NSArray *result = [NSJSONSerialization JSONObjectWithData:data
-                                                      options:kNilOptions
-                                                        error:nil];
+    id json = [NSJSONSerialization JSONObjectWithData:data
+                                                   options:kNilOptions
+                                                     error:nil];
     
-    NSDictionary *dict = result[0];
-    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        NSLog(@"%@ : %@", key, obj);
-        NSLog(@"----");
-        
+    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:managedObjectModel];
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
+    
+    NSDate *beforeDate = [NSDate date];
+    
+    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
+    [importOperation setCompletionBlock:^{
+        NSLog(@"Import time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
+        NSLog(@"Count: %@", @([self allCommitsCountInContext:privateContext]));
+        [self saveContext:privateContext];
+ 
     }];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [queue addOperation:importOperation];
+    
     
     
     return YES;
+}
+
+- (void)saveContext:(NSManagedObjectContext *)context {
+    NSDate *beforeDate = [NSDate date];
+    NSError *error = nil;
+    [context save:&error];
+    NSLog(@"Save time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
+}
+
+- (NSInteger)allCommitsCountInContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *request = [Commit SQK_fetchRequest];
+    NSError *error = nil;
+    return [context countForFetchRequest:request error:&error];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

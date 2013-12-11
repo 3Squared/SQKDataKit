@@ -7,17 +7,22 @@
 //
 
 #import "DataImportOperation.h"
+#import "Commit.h"
+#import "NSManagedObject+SQKAdditions.h"
 
 @implementation DataImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
-    NSData* data = [NSData dataWithContentsOfFile:filePath];
-    id result = [NSJSONSerialization JSONObjectWithData:data
-                                                options:kNilOptions
-                                                  error:nil];
-    
-    NSLog(@"%@", result);
+    [Commit SQK_insertOrUpdate:json
+                uniqueModelKey:@"sha"
+               uniqueRemoteKey:@"sha"
+           propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
+               commit.authorName = dictionary[@"commit"][@"committer"][@"name"];
+               commit.authorEmail = dictionary[@"commit"][@"committer"][@"email"];
+               commit.message = dictionary[@"commit"][@"message"];
+           }
+                privateContext:context
+                         error:nil];
 }
 
 @end
