@@ -15,7 +15,6 @@
 #import "FetchedResultsControllerDataSource.h"
 
 @interface SQKViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
-
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
 @end
 
@@ -32,29 +31,31 @@
 }
 
 - (void)import {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
-    NSData* data = [NSData dataWithContentsOfFile:filePath];
-    id json = [NSJSONSerialization JSONObjectWithData:data
-                                              options:kNilOptions
-                                                error:nil];
+    id json = [self loadJSON];
     
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    [Commit SQK_insertOrUpdate:json
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
-               commit.authorName = dictionary[@"commit"][@"committer"][@"name"];
-               commit.authorEmail = dictionary[@"commit"][@"committer"][@"email"];
-               commit.message = dictionary[@"commit"][@"message"];
-           }
-                privateContext:privateContext
-                         error:nil];
+    NSDate *beforeDate = [NSDate date];
+    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
+    [importOperation setCompletionBlock:^{
+        [privateContext save:nil];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+             NSLog(@"Time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
+        }];
+        
+    }];
     
-    NSLog(@"Import Finished");
-    NSError *error = nil;
-    [privateContext save:&error];
-    NSLog(@"Saved");
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [queue addOperation:importOperation];
+}
+
+- (id)loadJSON {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
+    NSData* data = [NSData dataWithContentsOfFile:filePath];
+    return [NSJSONSerialization JSONObjectWithData:data
+                                              options:kNilOptions
+                                                error:nil];
 }
 
 
