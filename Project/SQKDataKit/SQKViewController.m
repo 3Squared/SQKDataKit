@@ -25,7 +25,7 @@
     [super viewDidLoad];
     
     [self setupFetchedResultsController];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Import"
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Insert / Update"
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(import)];
@@ -39,16 +39,22 @@
                                                 error:nil];
     
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
-    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
-    [importOperation setCompletionBlock:^{
-        NSLog(@"Import Finished");
-        NSError *error = nil;
-        [privateContext save:&error];
-        NSLog(@"Saved");
-        
-    }];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperation:importOperation];
+    
+    [Commit SQK_insertOrUpdate:json
+                uniqueModelKey:@"sha"
+               uniqueRemoteKey:@"sha"
+           propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
+               commit.authorName = dictionary[@"commit"][@"committer"][@"name"];
+               commit.authorEmail = dictionary[@"commit"][@"committer"][@"email"];
+               commit.message = dictionary[@"commit"][@"message"];
+           }
+                privateContext:privateContext
+                         error:nil];
+    
+    NSLog(@"Import Finished");
+    NSError *error = nil;
+    [privateContext save:&error];
+    NSLog(@"Saved");
 }
 
 
