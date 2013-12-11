@@ -115,6 +115,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             }
             else {
                 id newObject = [[self class] SQK_insertInContext:context];
+                [newObject setValue:dictionary[remoteDataKey] forKey:modelKey];
                 if (propertySetterBlock) {
                     propertySetterBlock(dictionary, newObject);
                 }

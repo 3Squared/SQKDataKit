@@ -243,6 +243,42 @@
     XCTAssertTrue(objects.count == 3, @"");
 }
 
+- (void)testInsertsWithCorrectUniqueKeySet {
+    NSArray *dictArray = @[
+                           @{@"uniqueID" : @"123"},
+                           @{@"uniqueID" : @"456"},
+                           @{@"uniqueID" : @"789"}
+                           ];
+    NSError *insertOrUpdateError = nil;
+    [Entity SQK_insertOrUpdate:dictArray
+                uniqueModelKey:@"uniqueID"
+               uniqueRemoteKey:@"uniqueID"
+           propertySetterBlock:nil
+                privateContext:self.privateContext
+                         error:&insertOrUpdateError];
+    
+    XCTAssertNil(insertOrUpdateError, @"");
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Entity" inManagedObjectContext:self.mainContext]];
+    
+    NSArray *objects = nil;
+    
+    [request setPredicate:[NSPredicate predicateWithFormat:@"uniqueID == %@", @"123"]];
+    objects = [self.privateContext executeFetchRequest:request error:nil];
+    XCTAssertEqual((NSInteger)objects.count, 1, @"");
+    
+    [request setPredicate:[NSPredicate predicateWithFormat:@"uniqueID == %@", @"456"]];
+    objects = [self.privateContext executeFetchRequest:request error:nil];
+    XCTAssertEqual((NSInteger)objects.count, 1, @"");
+    
+    [request setPredicate:[NSPredicate predicateWithFormat:@"uniqueID == %@", @"789"]];
+    objects = [self.privateContext executeFetchRequest:request error:nil];
+    XCTAssertEqual((NSInteger)objects.count, 1, @"");
+    
+    
+}
+
 - (void)testInsertsNewObjectsInInsertOrUpdateWithDifferingLocalAndRemoteUniqueKeys {
     NSArray *dictArray = @[
                            @{@"remoteUniqueID" : @"123"},
@@ -265,7 +301,6 @@
     NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
     XCTAssertNil(fetchError, @"");
     XCTAssertTrue(objects.count == 3, @"");
-    
 }
 
 - (void)testUpdatesExistingObjectsWithSameLocalAndRemoteKeys {
