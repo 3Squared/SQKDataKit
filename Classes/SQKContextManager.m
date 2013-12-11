@@ -34,8 +34,22 @@
         self.storeType = storeType;
         self.managedObjectModel = managedObjectModel;
         self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        [self observeForSavedNotification];
     }
     return self;
+}
+
+- (void)observeForSavedNotification {
+    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification* note) {
+                                                      NSManagedObjectContext *managedObjectContext = [note object];
+                                                      for(NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
+                                                          [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+                                                      }
+                                                      [self.mainContext mergeChangesFromContextDidSaveNotification:note];
+                                                  }];
 }
 
 - (NSManagedObjectContext *)mainContext {
