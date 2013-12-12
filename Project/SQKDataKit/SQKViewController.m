@@ -13,6 +13,7 @@
 #import "Commit.h"
 #import "SQKAppDelegate.h"
 #import "FetchedResultsControllerDataSource.h"
+#import "SQKCommitCell.h"
 
 @interface SQKViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
@@ -49,7 +50,7 @@
 }
 
 - (id)loadJSON {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_small" ofType:@"json"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_large" ofType:@"json"];
     NSData* data = [NSData dataWithContentsOfFile:filePath];
     return [NSJSONSerialization JSONObjectWithData:data
                                               options:kNilOptions
@@ -62,14 +63,14 @@
     self.fetchedResultsControllerDataSource.fetchedResultsController = [self commitsFetchedResultsController];
     self.fetchedResultsControllerDataSource.delegate = self;
     self.fetchedResultsControllerDataSource.reuseIdentifier = @"Cell";
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:self.fetchedResultsControllerDataSource.reuseIdentifier];
+    [self.tableView registerClass:[SQKCommitCell class] forCellReuseIdentifier:self.fetchedResultsControllerDataSource.reuseIdentifier];
 }
 
 
 - (NSFetchedResultsController *)commitsFetchedResultsController {
     NSManagedObjectContext *mainContext = [[SQKAppDelegate appDelegate].contextManager mainContext];
     NSFetchRequest *request = [Commit SQK_fetchRequest];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"sha" ascending:YES]];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
     return [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                managedObjectContext:mainContext
                                                  sectionNameKeyPath:nil
@@ -79,9 +80,13 @@
 #pragma mark Fetched Results Controller Delegate
 
 - (void)configureCell:(id)theCell withObject:(id)object {
-    UITableViewCell *cell = theCell;
+    SQKCommitCell *cell = theCell;
     Commit *commit = object;
-    cell.textLabel.text = commit.sha;
+    cell.authorNameLabel.text = commit.authorName;
+    cell.authorEmailLabel.text = commit.authorEmail;
+    cell.dateLabel.text = [commit.date description];
+    cell.shaLabel.text = commit.sha;
+    cell.messageLabel.text = commit.message;
 }
 
 - (void)deleteObject:(id)object {
@@ -91,6 +96,8 @@
     [commit SQK_deleteObject];
 }
 
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
+    return SQKCommitCellHeight;
+}
 
 @end
