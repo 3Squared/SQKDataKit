@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SQKViewController : UITableViewController
+@interface SQKCommitsViewController : UITableViewController
 
 @end

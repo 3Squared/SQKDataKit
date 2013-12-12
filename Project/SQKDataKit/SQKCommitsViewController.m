@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKViewController.h"
+#import "SQKCommitsViewController.h"
 #import "SQKContextManager.h"
 #import "DataImportOperation.h"
 #import "NSManagedObject+SQKAdditions.h"
@@ -15,12 +15,12 @@
 #import "FetchedResultsControllerDataSource.h"
 #import "SQKCommitCell.h"
 
-@interface SQKViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
+@interface SQKCommitsViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
 @property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
-@implementation SQKViewController
+@implementation SQKCommitsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,6 +34,7 @@
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(deleteAll)];
+    
     self.queue = [[NSOperationQueue alloc] init];
 }
 

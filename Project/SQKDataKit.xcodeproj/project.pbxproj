@@ -24,7 +24,7 @@
 		A34BF3A5184F41D300F2E3B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3A3184F41D300F2E3B4 /* InfoPlist.strings */; };
 		A34BF3A7184F41D300F2E3B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3A6184F41D300F2E3B4 /* main.m */; };
 		A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */; };
-		A34BF3B4184F41D400F2E3B4 /* SQKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3B3184F41D400F2E3B4 /* SQKViewController.m */; };
+		A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3B3184F41D400F2E3B4 /* SQKCommitsViewController.m */; };
 		A34BF3B6184F41D400F2E3B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A34BF3B5184F41D400F2E3B4 /* Images.xcassets */; };
 		A34BF3BD184F41D400F2E3B4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A34BF3BC184F41D400F2E3B4 /* XCTest.framework */; };
 		A34BF3BE184F41D400F2E3B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A34BF39A184F41D300F2E3B4 /* Foundation.framework */; };
@@ -37,6 +37,7 @@
 		A3F70A881859CEB000C0A389 /* data_large.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A871859CEB000C0A389 /* data_large.json */; };
 		A3F70A8A1859CF6800C0A389 /* data_small.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A891859CF6800C0A389 /* data_small.json */; };
 		A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */; };
+		A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,8 +81,8 @@
 		A34BF3A8184F41D300F2E3B4 /* SQKDataKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SQKDataKit-Prefix.pch"; sourceTree = "<group>"; };
 		A34BF3A9184F41D300F2E3B4 /* SQKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQKAppDelegate.h; sourceTree = "<group>"; };
 		A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKAppDelegate.m; sourceTree = "<group>"; };
-		A34BF3B2184F41D400F2E3B4 /* SQKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQKViewController.h; sourceTree = "<group>"; };
-		A34BF3B3184F41D400F2E3B4 /* SQKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKViewController.m; sourceTree = "<group>"; };
+		A34BF3B2184F41D400F2E3B4 /* SQKCommitsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQKCommitsViewController.h; sourceTree = "<group>"; };
+		A34BF3B3184F41D400F2E3B4 /* SQKCommitsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKCommitsViewController.m; sourceTree = "<group>"; };
 		A34BF3B5184F41D400F2E3B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A34BF3BB184F41D400F2E3B4 /* SQKDataKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SQKDataKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34BF3BC184F41D400F2E3B4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -96,6 +97,8 @@
 		A3F70A891859CF6800C0A389 /* data_small.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_small.json; sourceTree = "<group>"; };
 		A3F70A8B1859D80C00C0A389 /* SQKCommitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKCommitCell.h; sourceTree = "<group>"; };
 		A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKCommitCell.m; sourceTree = "<group>"; };
+		A3F70A8E185A041D00C0A389 /* SQKMetricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKMetricsViewController.h; sourceTree = "<group>"; };
+		A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKMetricsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,8 +158,10 @@
 				A31AB0F31858A31D00B240AB /* FetchedResultsControllerDataSource.m */,
 				A34BF3A9184F41D300F2E3B4 /* SQKAppDelegate.h */,
 				A34BF3AA184F41D300F2E3B4 /* SQKAppDelegate.m */,
-				A34BF3B2184F41D400F2E3B4 /* SQKViewController.h */,
-				A34BF3B3184F41D400F2E3B4 /* SQKViewController.m */,
+				A34BF3B2184F41D400F2E3B4 /* SQKCommitsViewController.h */,
+				A34BF3B3184F41D400F2E3B4 /* SQKCommitsViewController.m */,
+				A3F70A8E185A041D00C0A389 /* SQKMetricsViewController.h */,
+				A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -403,7 +408,7 @@
 				A38979FD1852306900E5676B /* Entity.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */,
-				A34BF3B4184F41D400F2E3B4 /* SQKViewController.m in Sources */,
+				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
 				A31AB0E71857769D00B240AB /* Commit.m in Sources */,
 				A328BAC71850986A00267F2E /* SQKDataKitModel.xcdatamodeld in Sources */,
 				A30F0DDD18574D4B00CEE72D /* SQKContextManager.m in Sources */,
@@ -411,6 +416,7 @@
 				A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */,
 				A31AB0EC185776AE00B240AB /* DataImportOperation.m in Sources */,
 				A34BF3A7184F41D300F2E3B4 /* main.m in Sources */,
+				A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */,
 				A31AB0F41858A31D00B240AB /* FetchedResultsControllerDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

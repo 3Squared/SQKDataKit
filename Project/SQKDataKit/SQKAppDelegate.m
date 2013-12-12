@@ -7,8 +7,9 @@
 //
 
 #import "SQKAppDelegate.h"
-#import "SQKViewController.h"
+#import "SQKCommitsViewController.h"
 #import "SQKContextManager.h"
+#import "SQKMetricsViewController.h"
 
 @interface SQKAppDelegate ()
 @property (nonatomic, readwrite, strong) SQKContextManager *contextManager;
@@ -21,10 +22,19 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
 
-    SQKViewController *viewController = [[SQKViewController alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    SQKCommitsViewController *commitsViewController = [[SQKCommitsViewController alloc] initWithStyle:UITableViewStylePlain];
+    commitsViewController.title = @"List";
+    UINavigationController *commitsNavController = [[UINavigationController alloc] initWithRootViewController:commitsViewController];
     
-    self.window.rootViewController = navController;
+    SQKMetricsViewController *matricsViewController = [[SQKMetricsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    matricsViewController.title = @"Metrics";
+    UINavigationController *metricsNavController = [[UINavigationController alloc] initWithRootViewController:matricsViewController];
+    
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    tabBarController.viewControllers = @[commitsNavController, metricsNavController];
+    
+    self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
     
     return YES;
