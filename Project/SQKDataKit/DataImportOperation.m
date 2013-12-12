@@ -13,6 +13,8 @@
 @implementation DataImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+    NSDate *beforeDate = [NSDate date];
+    
     [Commit SQK_insertOrUpdate:json
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
@@ -23,6 +25,8 @@
            }
                 privateContext:context
                          error:nil];
+    
+     NSLog(@"Time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
 }
 
 @end

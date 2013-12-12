@@ -35,13 +35,11 @@
     
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    NSDate *beforeDate = [NSDate date];
     DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-             NSLog(@"Time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
         }];
         
     }];
@@ -51,7 +49,7 @@
 }
 
 - (id)loadJSON {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_small" ofType:@"json"];
     NSData* data = [NSData dataWithContentsOfFile:filePath];
     return [NSJSONSerialization JSONObjectWithData:data
                                               options:kNilOptions
