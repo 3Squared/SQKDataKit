@@ -23,8 +23,7 @@
         return nil;
     }
     
-    NSArray *validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
-    if (![validStoreTypes containsObject:storeType]) {
+    if (![[SQKContextManager validStoreTypes] containsObject:storeType]) {
         return nil;
     }
     
@@ -37,6 +36,14 @@
         [self observeForSavedNotification];
     }
     return self;
+}
+
++ (NSArray *)validStoreTypes {
+    NSArray *validStoreTypes = nil;
+    if (!validStoreTypes) {
+        validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
+    }
+    return validStoreTypes;
 }
 
 - (void)observeForSavedNotification {
