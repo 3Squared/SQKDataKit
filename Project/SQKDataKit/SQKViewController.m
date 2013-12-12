@@ -17,6 +17,7 @@
 
 @interface SQKViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
+@property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
 @implementation SQKViewController
@@ -28,25 +29,39 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Insert / Update"
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
-                                                                             action:@selector(import)];
+                                                                             action:@selector(insertUpdate)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Delete All"
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(deleteAll)];
+    self.queue = [[NSOperationQueue alloc] init];
 }
 
-- (void)import {
+- (void)insertUpdate {
     id json = [self loadJSON];
+    json = [json subarrayWithRange:NSMakeRange(0, 1000)];
     
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
     DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        }];
-        
     }];
     
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperation:importOperation];
+    [self.queue addOperation:importOperation];
+}
+
+- (void)deleteAll {
+    NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
+      NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+        [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
+        [privateContext save:nil];
+    }];
+    [deleteOperation setCompletionBlock:^{
+        NSLog(@"Delete all finished");
+    }];
+    
+    [self.queue addOperation:deleteOperation];
 }
 
 - (id)loadJSON {
@@ -70,6 +85,7 @@
 - (NSFetchedResultsController *)commitsFetchedResultsController {
     NSManagedObjectContext *mainContext = [[SQKAppDelegate appDelegate].contextManager mainContext];
     NSFetchRequest *request = [Commit SQK_fetchRequest];
+    [request setFetchBatchSize:100];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
     return [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                managedObjectContext:mainContext
