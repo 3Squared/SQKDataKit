@@ -47,15 +47,16 @@
 }
 
 - (void)observeForSavedNotification {
+    __weak typeof(self) weakSelf = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification* note) {
                                                       NSManagedObjectContext *managedObjectContext = [note object];
-                                                      for(NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
+                                                      for (NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
                                                           [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                                                       }
-                                                      [self.mainContext mergeChangesFromContextDidSaveNotification:note];
+                                                      [weakSelf.mainContext mergeChangesFromContextDidSaveNotification:note];
                                                   }];
 }
 
@@ -82,6 +83,10 @@
         return YES;
     }
     return NO;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 }
 
 @end
