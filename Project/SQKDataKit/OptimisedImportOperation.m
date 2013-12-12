@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "DataImportOperation.h"
+#import "OptimisedImportOperation.h"
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 
-@implementation DataImportOperation
+@implementation OptimisedImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
     NSDate *beforeDate = [NSDate date];
@@ -28,7 +28,7 @@
                 privateContext:context
                          error:nil];
     
-     NSLog(@"Time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
+     NSLog(@"Optimised took: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
 }
 
 - (NSDate *)dateFromJSONString:(NSString *)jsonString {

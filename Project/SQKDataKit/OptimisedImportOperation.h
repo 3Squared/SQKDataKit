@@ -8,6 +8,6 @@
 
 #import "SQKJSONDataImportOperation.h"
 
-@interface DataImportOperation : SQKJSONDataImportOperation
+@interface OptimisedImportOperation : SQKJSONDataImportOperation
 
 @end

@@ -8,12 +8,13 @@
 
 #import "SQKCommitsViewController.h"
 #import "SQKContextManager.h"
-#import "DataImportOperation.h"
+#import "OptimisedImportOperation.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
 #import "SQKAppDelegate.h"
 #import "FetchedResultsControllerDataSource.h"
 #import "SQKCommitCell.h"
+#import "NaiveImportOperation.h"
 
 @interface SQKCommitsViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
@@ -44,7 +45,7 @@
     
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
+    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:json];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
     }];
