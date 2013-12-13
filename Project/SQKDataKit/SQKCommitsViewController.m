@@ -8,17 +8,14 @@
 
 #import "SQKCommitsViewController.h"
 #import "SQKContextManager.h"
-#import "OptimisedImportOperation.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
 #import "SQKAppDelegate.h"
 #import "FetchedResultsControllerDataSource.h"
 #import "SQKCommitCell.h"
-#import "NaiveImportOperation.h"
 
 @interface SQKCommitsViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
-@property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
 @implementation SQKCommitsViewController
@@ -27,51 +24,6 @@
     [super viewDidLoad];
     
     [self setupFetchedResultsController];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Insert / Update"
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(insertUpdate)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Delete All"
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(deleteAll)];
-    
-    self.queue = [[NSOperationQueue alloc] init];
-}
-
-- (void)insertUpdate {
-    id json = [self loadJSON];
-    json = [json subarrayWithRange:NSMakeRange(0, 1000)];
-    
-    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
-    
-    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:json];
-    [importOperation setCompletionBlock:^{
-        [privateContext save:nil];
-    }];
-    
-    [self.queue addOperation:importOperation];
-}
-
-- (void)deleteAll {
-    NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
-      NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
-        [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
-        [privateContext save:nil];
-    }];
-    [deleteOperation setCompletionBlock:^{
-        NSLog(@"Delete all finished");
-    }];
-    
-    [self.queue addOperation:deleteOperation];
-}
-
-- (id)loadJSON {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_large" ofType:@"json"];
-    NSData* data = [NSData dataWithContentsOfFile:filePath];
-    return [NSJSONSerialization JSONObjectWithData:data
-                                              options:kNilOptions
-                                                error:nil];
 }
 
 

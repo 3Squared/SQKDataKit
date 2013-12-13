@@ -11,10 +11,13 @@
 #import "SQKContextManager.h"
 #import "OptimisedImportOperation.h"
 #import "NaiveImportOperation.h"
+#import "Commit.h"
+#import "NSManagedObject+SQKAdditions.h"
 
 typedef NS_ENUM(NSInteger, MetricsSection) {
     MetricsSectionNaive,
     MetricsSectionOptimised,
+    MetricsSectionDelete,
     MetricsSectionCount
 };
 
@@ -27,6 +30,7 @@ typedef NS_ENUM(NSInteger, MetricsRow) {
 @interface SQKMetricsViewController ()
 @property (nonatomic, assign) BOOL isNaiveImporting;
 @property (nonatomic, assign) BOOL isOptimisedImporting;
+@property (nonatomic, assign) BOOL isDeleting;
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) id json;
 @property (nonatomic, assign) NSInteger naiveProgress;
@@ -52,12 +56,38 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return MetricsRowCount;
+    switch (section) {
+        case MetricsSectionNaive:
+            return MetricsRowCount;
+            break;
+        case MetricsSectionOptimised:
+            return MetricsRowCount;
+            break;
+        case MetricsSectionDelete:
+            return 1;
+            break;
+        default:
+            break;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    if (indexPath.section == MetricsSectionDelete) {
+        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        if (self.isDeleting) {
+            [activityView startAnimating];
+        }
+        else {
+            [activityView stopAnimating];
+        }
+        cell.accessoryView = activityView;
+        cell.textLabel.text = @"Delete All";
+        return cell;
+    }
     
     switch (indexPath.row) {
         case MetricsRowStart: {
@@ -74,7 +104,6 @@ static NSString *CellIdentifier = @"Cell";
             break;
             
         case MetricsRowInformation: {
-            
             switch (indexPath.section) {
                 case MetricsSectionNaive:
                     cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.naiveProgress];
@@ -85,8 +114,6 @@ static NSString *CellIdentifier = @"Cell";
                 default:
                     break;
             }
-
-            
         }
             break;
             
@@ -109,21 +136,29 @@ static NSString *CellIdentifier = @"Cell";
             break;
     }
     return nil;
-
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive && !self.isOptimisedImporting && !self.isNaiveImporting) {
         [self insertOrUpdateWithNaiveOperation];
         self.isNaiveImporting = YES;
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised && !self.isNaiveImporting && !self.isOptimisedImporting) {
+    else if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised && !self.isNaiveImporting && !self.isOptimisedImporting) {
         [self insertOrUpdateWithOptimisedOperation];
         self.isOptimisedImporting = YES;
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    else if (indexPath.section == MetricsSectionDelete) {
+        if (!self.isNaiveImporting && !self.isOptimisedImporting) {
+            self.isDeleting = YES;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self deleteAll];
+        }
+        [tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete] animated:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)insertOrUpdateWithNaiveOperation {
@@ -160,7 +195,7 @@ static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MetricsRowInformation inSection:MetricsSectionOptimised]];
             cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.optimisedProgress];
         }];
-            }];
+    }];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         NSLog(@"Done saving");
@@ -172,6 +207,23 @@ static NSString *CellIdentifier = @"Cell";
     }];
     
     [self.queue addOperation:importOperation];
+}
+
+- (void)deleteAll {
+    NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
+        NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+        [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
+        [privateContext save:nil];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.isDeleting = NO;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
+    }];
+    [deleteOperation setCompletionBlock:^{
+        NSLog(@"Delete all finished");
+    }];
+    
+    [self.queue addOperation:deleteOperation];
 }
 
 

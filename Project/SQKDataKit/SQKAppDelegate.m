@@ -32,7 +32,7 @@
     
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[commitsNavController, metricsNavController];
+    tabBarController.viewControllers = @[metricsNavController, commitsNavController];
     
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
