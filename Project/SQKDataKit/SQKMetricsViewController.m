@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, MetricsRow) {
 @property (nonatomic, assign) BOOL isOptimisedImporting;
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) id json;
+@property (nonatomic, assign) NSInteger naiveProgress;
+@property (nonatomic, assign) NSInteger optimisedProgress;
 @end
 
 static NSString *CellIdentifier = @"Cell";
@@ -39,7 +41,7 @@ static NSString *CellIdentifier = @"Cell";
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     self.queue = [[NSOperationQueue alloc] init];
-    self.json = [self loadJSON];
+    self.json = [[self loadJSON] subarrayWithRange:NSMakeRange(0, 5000)];
 }
 
 
@@ -72,7 +74,19 @@ static NSString *CellIdentifier = @"Cell";
             break;
             
         case MetricsRowInformation: {
-            cell.textLabel.text = @"Info";
+            
+            switch (indexPath.section) {
+                case MetricsSectionNaive:
+                    cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.naiveProgress];
+                    break;
+                case MetricsSectionOptimised:
+                    cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.optimisedProgress];
+                    break;
+                default:
+                    break;
+            }
+
+            
         }
             break;
             
@@ -113,9 +127,16 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)insertOrUpdateWithNaiveOperation {
+    self.naiveProgress = 0;
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json progressBlock:^(NSInteger finishedCount, NSInteger total) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.naiveProgress = ((CGFloat)finishedCount / (CGFloat)total) * 100;
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MetricsRowInformation inSection:MetricsSectionNaive]];
+            cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.naiveProgress];
+        }];
+    }];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         NSLog(@"Done saving");
@@ -124,17 +145,22 @@ static NSString *CellIdentifier = @"Cell";
             self.isNaiveImporting = NO;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionNaive]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
-        
-        
     }];
     
     [self.queue addOperation:importOperation];
 }
 
 - (void)insertOrUpdateWithOptimisedOperation {
+    self.optimisedProgress = 0;
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json progressBlock:^(NSInteger finishedCount, NSInteger total) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.optimisedProgress = ((CGFloat)finishedCount / (CGFloat)total) * 100;
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MetricsRowInformation inSection:MetricsSectionOptimised]];
+            cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.optimisedProgress];
+        }];
+            }];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         NSLog(@"Done saving");
@@ -143,7 +169,6 @@ static NSString *CellIdentifier = @"Cell";
             self.isOptimisedImporting = NO;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionOptimised]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
-        
     }];
     
     [self.queue addOperation:importOperation];

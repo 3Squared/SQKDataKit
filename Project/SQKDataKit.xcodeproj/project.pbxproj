@@ -35,6 +35,7 @@
 		A34BF42B184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */; };
 		A38979FD1852306900E5676B /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = A38979FC1852306900E5676B /* Entity.m */; };
 		A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */; };
+		A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */; };
 		A3F70A881859CEB000C0A389 /* data_large.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A871859CEB000C0A389 /* data_large.json */; };
 		A3F70A8A1859CF6800C0A389 /* data_small.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A891859CF6800C0A389 /* data_small.json */; };
 		A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */; };
@@ -96,6 +97,8 @@
 		A38979FC1852306900E5676B /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		A3C66D04185A20CE007AE9B5 /* NaiveImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaiveImportOperation.h; sourceTree = "<group>"; };
 		A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NaiveImportOperation.m; sourceTree = "<group>"; };
+		A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitDataImportOperation.h; sourceTree = "<group>"; };
+		A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitDataImportOperation.m; sourceTree = "<group>"; };
 		A3F70A871859CEB000C0A389 /* data_large.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_large.json; sourceTree = "<group>"; };
 		A3F70A891859CF6800C0A389 /* data_small.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_small.json; sourceTree = "<group>"; };
 		A3F70A8B1859D80C00C0A389 /* SQKCommitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKCommitCell.h; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 			children = (
 				A3F70A891859CF6800C0A389 /* data_small.json */,
 				A3F70A871859CEB000C0A389 /* data_large.json */,
+				A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */,
+				A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */,
 				A31AB0E9185776AE00B240AB /* OptimisedImportOperation.h */,
 				A31AB0EA185776AE00B240AB /* OptimisedImportOperation.m */,
 				A3C66D04185A20CE007AE9B5 /* NaiveImportOperation.h */,
@@ -422,6 +427,7 @@
 				A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */,
 				A31AB0EC185776AE00B240AB /* OptimisedImportOperation.m in Sources */,
 				A34BF3A7184F41D300F2E3B4 /* main.m in Sources */,
+				A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */,
 				A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */,
 				A31AB0F41858A31D00B240AB /* FetchedResultsControllerDataSource.m in Sources */,
 			);
@@ -545,12 +551,16 @@
 		A34BF3CD184F41D500F2E3B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SQKDataKit/SQKDataKit-Prefix.pch";
 				INFOPLIST_FILE = "SQKDataKit/SQKDataKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F17FB7EB-FA49-4945-9D38-768CA2170CA7";
+				SDKROOT = iphoneos6.1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -558,12 +568,16 @@
 		A34BF3CE184F41D500F2E3B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SQKDataKit/SQKDataKit-Prefix.pch";
 				INFOPLIST_FILE = "SQKDataKit/SQKDataKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "F17FB7EB-FA49-4945-9D38-768CA2170CA7";
+				SDKROOT = iphoneos6.1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

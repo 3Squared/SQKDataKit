@@ -7,7 +7,8 @@
 //
 
 #import "SQKJSONDataImportOperation.h"
+#import "GitDataImportOperation.h"
 
-@interface OptimisedImportOperation : SQKJSONDataImportOperation
+@interface OptimisedImportOperation : GitDataImportOperation
 
 @end

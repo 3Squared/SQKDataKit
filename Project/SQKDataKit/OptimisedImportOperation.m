@@ -15,6 +15,9 @@
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
     NSDate *beforeDate = [NSDate date];
     
+    NSInteger totalCount = [json count];
+    __block NSInteger currentIndex = 0;
+    
     [Commit SQK_insertOrUpdate:json
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
@@ -24,6 +27,11 @@
                commit.date = [self dateFromJSONString:dictionary[@"commit"][@"committer"][@"date"]];
                commit.message = dictionary[@"commit"][@"message"];
                commit.url = dictionary[@"html_url"];
+               
+               ++currentIndex;
+               if (self.progressBlock) {
+                   self.progressBlock(currentIndex, totalCount);
+               }
            }
                 privateContext:context
                          error:nil];
