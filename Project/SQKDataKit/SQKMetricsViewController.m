@@ -7,6 +7,10 @@
 //
 
 #import "SQKMetricsViewController.h"
+#import "SQKAppDelegate.h"
+#import "SQKContextManager.h"
+#import "OptimisedImportOperation.h"
+#import "NaiveImportOperation.h"
 
 typedef NS_ENUM(NSInteger, MetricsSection) {
     MetricsSectionNaive,
@@ -23,6 +27,8 @@ typedef NS_ENUM(NSInteger, MetricsRow) {
 @interface SQKMetricsViewController ()
 @property (nonatomic, assign) BOOL isNaiveImporting;
 @property (nonatomic, assign) BOOL isOptimisedImporting;
+@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, strong) id json;
 @end
 
 static NSString *CellIdentifier = @"Cell";
@@ -32,6 +38,8 @@ static NSString *CellIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
+    self.queue = [[NSOperationQueue alloc] init];
+    self.json = [self loadJSON];
 }
 
 
@@ -91,9 +99,63 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.isNaiveImporting = (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive);
-    self.isOptimisedImporting = (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised);
+    if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive && !self.isOptimisedImporting && !self.isNaiveImporting) {
+        [self insertOrUpdateWithNaiveOperation];
+        self.isNaiveImporting = YES;
+    }
+    
+    if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised && !self.isNaiveImporting && !self.isOptimisedImporting) {
+        [self insertOrUpdateWithOptimisedOperation];
+        self.isOptimisedImporting = YES;
+    }
+    
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)insertOrUpdateWithNaiveOperation {
+    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+    
+    NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    [importOperation setCompletionBlock:^{
+        [privateContext save:nil];
+        NSLog(@"Done saving");
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.isNaiveImporting = NO;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionNaive]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
+        
+        
+    }];
+    
+    [self.queue addOperation:importOperation];
+}
+
+- (void)insertOrUpdateWithOptimisedOperation {
+    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+    
+    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    [importOperation setCompletionBlock:^{
+        [privateContext save:nil];
+        NSLog(@"Done saving");
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            self.isOptimisedImporting = NO;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionOptimised]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
+        
+    }];
+    
+    [self.queue addOperation:importOperation];
+}
+
+
+- (id)loadJSON {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_large" ofType:@"json"];
+    NSData* data = [NSData dataWithContentsOfFile:filePath];
+    return [NSJSONSerialization JSONObjectWithData:data
+                                           options:kNilOptions
+                                             error:nil];
 }
 
 @end
