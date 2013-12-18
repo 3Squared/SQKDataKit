@@ -12,7 +12,7 @@
 
 @implementation DataImportOperation
 
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)json {
     [Commit SQK_insertOrUpdate:json
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
@@ -23,6 +23,7 @@
            }
                 privateContext:context
                          error:nil];
+    [context save:nil];
 }
 
 @end

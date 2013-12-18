@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKJSONDataImportOperation.h"
+#import "SQKDataImportOperation.h"
 
-@interface DataImportOperation : SQKJSONDataImportOperation
+@interface DataImportOperation : SQKDataImportOperation
 
 @end

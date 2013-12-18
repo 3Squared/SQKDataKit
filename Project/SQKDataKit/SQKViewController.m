@@ -33,13 +33,10 @@
 - (void)import {
     id json = [self loadJSON];
     
-    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
     NSDate *beforeDate = [NSDate date];
-    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithPrivateContext:privateContext json:json];
+    DataImportOperation *importOperation = [[DataImportOperation alloc] initWithContextManager:[[SQKAppDelegate appDelegate] contextManager] data:json];
     [importOperation setCompletionBlock:^{
-        [privateContext save:nil];
-        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
              NSLog(@"Time taken: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
         }];
