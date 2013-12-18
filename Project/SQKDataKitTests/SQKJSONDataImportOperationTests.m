@@ -8,22 +8,23 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "SQKJSONDataImportOperation.h"
+#import "SQKDataImportOperation.h"
 #import "SQKContextManager.h"
 
-@interface ConcreteDataImportOperationWithoutOverride : SQKJSONDataImportOperation
+@interface ConcreteDataImportOperationWithoutOverride : SQKDataImportOperation
 @end
 @implementation ConcreteDataImportOperationWithoutOverride
 @end
 
-@interface ConcreteDataImportOperation : SQKJSONDataImportOperation
+@interface ConcreteDataImportOperation : SQKDataImportOperation
 @end
 @implementation ConcreteDataImportOperation
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
 }
 @end
 
 @interface SQKJSONDataImportOperationTests : XCTestCase
+@property (nonatomic, strong) SQKContextManager *contextManager;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @end
 
@@ -31,38 +32,37 @@
 
 - (void)setUp {
     [super setUp];
-    
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
-    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
-    self.context = [contextManager newPrivateContext];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
+    self.context = [self.contextManager newPrivateContext];
 }
 
 - (void)testInitialisesWithContextAndJSON {
     NSDictionary *json = @{};
-    SQKJSONDataImportOperation *dataImportOperation = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    SQKDataImportOperation *dataImportOperation = [[SQKDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
     
     XCTAssertNotNil(dataImportOperation, @"");
 }
 
 - (void)testStoresConstructorParametersInProperties {
     NSDictionary *json = @{};
-    SQKJSONDataImportOperation *dataImportOperation = [[SQKJSONDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    SQKDataImportOperation *dataImportOperation = [[SQKDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
     
-    XCTAssertEqual(dataImportOperation.privateContext, self.context, @"");
-    XCTAssertEqual(dataImportOperation.json, json, @"");
+    XCTAssertEqual(dataImportOperation.contextManager, self.contextManager, @"");
+    XCTAssertEqual(dataImportOperation.data, json, @"");
 }
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
-    ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithPrivateContext:self.context json:@{}];
-    XCTAssertThrowsSpecificNamed([dataImportOperation updatePrivateContext:self.context usingJSON:@{}], NSException, NSInternalInconsistencyException, @"");
+    ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager data:@{}];
+    XCTAssertThrowsSpecificNamed([dataImportOperation updatePrivateContext:self.context usingData:@{}], NSException, NSInternalInconsistencyException, @"");
 }
 
 - (void)testCallsUpdateWhenOperationIsStarted {
     id json = @{@"key" : @"value"};
     
-    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithPrivateContext:self.context json:json];
+    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
     id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
-    [[dataImportOperationPartialMock expect] updatePrivateContext:self.context usingJSON:json];
+    [[dataImportOperationPartialMock expect] updatePrivateContext:[OCMArg any] usingData:json];
     
     [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
     
