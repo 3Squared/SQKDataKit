@@ -43,11 +43,21 @@ static NSString *CellIdentifier = @"Cell";
 
 @implementation SQKMetricsViewController
 
+- (instancetype)init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self) {
+        self.queue = [[NSOperationQueue alloc] init];
+        self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
+        self.title = @"Metrics";
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"metrics"] tag:0];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
-    self.queue = [[NSOperationQueue alloc] init];
-    self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
 }
 
 

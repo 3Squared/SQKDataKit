@@ -20,6 +20,15 @@
 
 @implementation SQKCommitsViewController
 
+- (instancetype)init {
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        self.title = @"List";
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"list"] tag:0];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
