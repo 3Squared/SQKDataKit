@@ -10,14 +10,10 @@
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 
+
 @implementation NaiveImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
-    NSDate *beforeDate = [NSDate date];
-    
-    NSInteger totalCount = [json count];
-    __block NSInteger currentIndex = 0;
-    
     [json enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
         NSFetchRequest *fetchRequest = [Commit SQK_fetchRequest];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sha == %@", dictionary[@"sha"]];
@@ -33,15 +29,7 @@
             commit.message = dictionary[@"commit"][@"message"];
             commit.url = dictionary[@"html_url"];
         }
-        
-        ++currentIndex;
-        if (self.progressBlock) {
-            self.progressBlock(currentIndex, totalCount);
-        }
     }];
-    
-    NSLog(@"Naive took: %f", [[NSDate date] timeIntervalSinceDate:beforeDate]);
-    
 }
 
 - (NSDate *)dateFromJSONString:(NSString *)jsonString {

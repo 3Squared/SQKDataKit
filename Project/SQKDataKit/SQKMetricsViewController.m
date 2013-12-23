@@ -33,8 +33,8 @@ typedef NS_ENUM(NSInteger, MetricsRow) {
 @property (nonatomic, assign) BOOL isDeleting;
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) id json;
-@property (nonatomic, assign) NSInteger naiveProgress;
-@property (nonatomic, assign) NSInteger optimisedProgress;
+@property (nonatomic, assign) NSTimeInterval naiveImportDuration;
+@property (nonatomic, assign) NSTimeInterval optimisedImportDuration;
 @end
 
 static NSString *CellIdentifier = @"Cell";
@@ -77,50 +77,51 @@ static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     if (indexPath.section == MetricsSectionDelete) {
+        [self configureDeleteCell:cell];
+    }
+    
+    else if (indexPath.row == MetricsRowStart) {
+        cell.textLabel.text = @"Start";
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        if (self.isDeleting) {
+        if ((indexPath.section == MetricsSectionNaive && self.isNaiveImporting) || (indexPath.section == MetricsSectionOptimised && self.isOptimisedImporting)) {
             [activityView startAnimating];
         }
         else {
             [activityView stopAnimating];
         }
         cell.accessoryView = activityView;
-        cell.textLabel.text = @"Delete All";
-        return cell;
     }
     
-    switch (indexPath.row) {
-        case MetricsRowStart: {
-            cell.textLabel.text = @"Start";
-            UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            if ((indexPath.section == MetricsSectionNaive && self.isNaiveImporting) || (indexPath.section == MetricsSectionOptimised && self.isOptimisedImporting)) {
-                [activityView startAnimating];
-            }
-            else {
-                [activityView stopAnimating];
-            }
-            cell.accessoryView = activityView;
+    else if (indexPath.row == MetricsRowInformation) {
+        switch (indexPath.section) {
+            case MetricsSectionNaive:
+                cell.textLabel.text = [NSString stringWithFormat:@"Seconds For Completion: %0.2f seconds", self.naiveImportDuration];
+                break;
+            case MetricsSectionOptimised:
+                cell.textLabel.text = [NSString stringWithFormat:@"Seconds For Completion: %0.2f seconds", self.optimisedImportDuration];
+                break;
+            default:
+                break;
         }
-            break;
-            
-        case MetricsRowInformation: {
-            switch (indexPath.section) {
-                case MetricsSectionNaive:
-                    cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.naiveProgress];
-                    break;
-                case MetricsSectionOptimised:
-                    cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.optimisedProgress];
-                    break;
-                default:
-                    break;
-            }
-        }
-            break;
-            
-        default:
-            break;
     }
+    
     return cell;
+}
+
+- (void)configureDeleteCell:(UITableViewCell *)cell {
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if (self.isDeleting) {
+        [activityView startAnimating];
+    }
+    else {
+        [activityView stopAnimating];
+    }
+    cell.accessoryView = activityView;
+    cell.textLabel.text = @"Delete All";
+}
+
+- (void)configureStartCell:(UITableViewCell *)cell {
+    
 }
 
 
@@ -162,23 +163,16 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)insertOrUpdateWithNaiveOperation {
-    self.naiveProgress = 0;
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json progressBlock:^(NSInteger finishedCount, NSInteger total) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.naiveProgress = ((CGFloat)finishedCount / (CGFloat)total) * 100;
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MetricsRowInformation inSection:MetricsSectionNaive]];
-            cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.naiveProgress];
-        }];
-    }];
+    NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
-        NSLog(@"Done saving");
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isNaiveImporting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionNaive]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionNaive]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
     
@@ -186,23 +180,16 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)insertOrUpdateWithOptimisedOperation {
-    self.optimisedProgress = 0;
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
-    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json progressBlock:^(NSInteger finishedCount, NSInteger total) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.optimisedProgress = ((CGFloat)finishedCount / (CGFloat)total) * 100;
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:MetricsRowInformation inSection:MetricsSectionOptimised]];
-            cell.textLabel.text = [NSString stringWithFormat:@"Progress: %d%%", self.optimisedProgress];
-        }];
-    }];
+    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
-        NSLog(@"Done saving");
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isOptimisedImporting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionOptimised]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionOptimised]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
     

@@ -10,8 +10,4 @@
 
 @interface GitDataImportOperation : SQKJSONDataImportOperation
 
-@property (nonatomic, copy, readonly) void (^progressBlock)(NSInteger finishedCount, NSInteger total);
-
-- (instancetype)initWithPrivateContext:(NSManagedObjectContext *)context json:(id)json progressBlock:(void (^)(NSInteger finishedCount, NSInteger total))progressBlock;
-
 @end
