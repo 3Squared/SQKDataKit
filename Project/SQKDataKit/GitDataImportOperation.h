@@ -10,4 +10,6 @@
 
 @interface GitDataImportOperation : SQKJSONDataImportOperation
 
+@property (nonatomic, readonly) NSDate *startDate;
+
 @end

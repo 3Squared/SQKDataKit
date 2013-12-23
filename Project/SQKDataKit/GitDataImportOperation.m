@@ -8,6 +8,12 @@
 
 #import "GitDataImportOperation.h"
 
+
+@interface GitDataImportOperation ()
+@property (nonatomic, strong, readwrite) NSDate *startDate;
+@end
+
 @implementation GitDataImportOperation
+
 
 @end

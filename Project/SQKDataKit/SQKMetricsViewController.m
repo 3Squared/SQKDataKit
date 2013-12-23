@@ -81,12 +81,13 @@ static NSString *CellIdentifier = @"Cell";
     }
     
     else if (indexPath.row == MetricsRowStart) {
-        cell.textLabel.text = @"Start";
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         if ((indexPath.section == MetricsSectionNaive && self.isNaiveImporting) || (indexPath.section == MetricsSectionOptimised && self.isOptimisedImporting)) {
+            cell.textLabel.text = @"Importing...";
             [activityView startAnimating];
         }
         else {
+            cell.textLabel.text = @"Start";
             [activityView stopAnimating];
         }
         cell.accessoryView = activityView;
@@ -95,10 +96,10 @@ static NSString *CellIdentifier = @"Cell";
     else if (indexPath.row == MetricsRowInformation) {
         switch (indexPath.section) {
             case MetricsSectionNaive:
-                cell.textLabel.text = [NSString stringWithFormat:@"Seconds For Completion: %0.2f seconds", self.naiveImportDuration];
+                cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.naiveImportDuration];
                 break;
             case MetricsSectionOptimised:
-                cell.textLabel.text = [NSString stringWithFormat:@"Seconds For Completion: %0.2f seconds", self.optimisedImportDuration];
+                cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.optimisedImportDuration];
                 break;
             default:
                 break;
@@ -112,12 +113,14 @@ static NSString *CellIdentifier = @"Cell";
     UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     if (self.isDeleting) {
         [activityView startAnimating];
+        cell.textLabel.text = @"Deleting...";
     }
     else {
+        
+        cell.textLabel.text = @"Delete All";
         [activityView stopAnimating];
     }
     cell.accessoryView = activityView;
-    cell.textLabel.text = @"Delete All";
 }
 
 - (void)configureStartCell:(UITableViewCell *)cell {
@@ -138,6 +141,8 @@ static NSString *CellIdentifier = @"Cell";
     }
     return nil;
 }
+
+#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive && !self.isOptimisedImporting && !self.isNaiveImporting) {
@@ -162,17 +167,22 @@ static NSString *CellIdentifier = @"Cell";
     }
 }
 
+#pragma mark - Data manipulation
+
 - (void)insertOrUpdateWithNaiveOperation {
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
     NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    __weak typeof(NaiveImportOperation) *weakOperation = importOperation;
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         
+        __strong typeof(NaiveImportOperation) *strongOperation = weakOperation;
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isNaiveImporting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionNaive]]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            self.naiveImportDuration = [[NSDate date] timeIntervalSinceDate:strongOperation.startDate];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:MetricsSectionNaive] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
     
@@ -183,13 +193,16 @@ static NSString *CellIdentifier = @"Cell";
     NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
     
     OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
+    __weak typeof(OptimisedImportOperation) *weakOperation = importOperation;
     [importOperation setCompletionBlock:^{
         [privateContext save:nil];
         
+        __strong typeof(OptimisedImportOperation) *strongOperation = weakOperation;
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isOptimisedImporting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:MetricsRowStart inSection:MetricsSectionOptimised]]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            self.optimisedImportDuration = [[NSDate date] timeIntervalSinceDate:strongOperation.startDate];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:MetricsSectionOptimised] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
     

@@ -10,10 +10,14 @@
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 
+@interface NaiveImportOperation ()
+@property (nonatomic, strong, readwrite) NSDate *startDate;
+@end
 
 @implementation NaiveImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+    self.startDate = [NSDate date];
     [json enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
         NSFetchRequest *fetchRequest = [Commit SQK_fetchRequest];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sha == %@", dictionary[@"sha"]];

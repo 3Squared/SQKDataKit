@@ -10,9 +10,14 @@
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 
+@interface OptimisedImportOperation ()
+@property (nonatomic, strong, readwrite) NSDate *startDate;
+@end
+
 @implementation OptimisedImportOperation
 
 - (void)updatePrivateContext:(NSManagedObjectContext *)context usingJSON:(id)json {
+    self.startDate = [NSDate date];
     [Commit SQK_insertOrUpdate:json
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
