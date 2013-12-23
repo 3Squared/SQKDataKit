@@ -37,7 +37,7 @@
 
 
 - (NSFetchedResultsController *)commitsFetchedResultsController {
-    NSManagedObjectContext *mainContext = [[SQKAppDelegate appDelegate].contextManager mainContext];
+    NSManagedObjectContext *mainContext = [self.contextManager mainContext];
     NSFetchRequest *request = [Commit SQK_fetchRequest];
     [request setFetchBatchSize:100];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];

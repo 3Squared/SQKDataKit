@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class SQKContextManager;
 @interface SQKMetricsViewController : UITableViewController
-
+@property (nonatomic, strong) SQKContextManager *contextManager;
 @end

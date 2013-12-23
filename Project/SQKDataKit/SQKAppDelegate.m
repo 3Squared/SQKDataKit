@@ -24,11 +24,13 @@
 
     SQKCommitsViewController *commitsViewController = [[SQKCommitsViewController alloc] initWithStyle:UITableViewStylePlain];
     commitsViewController.title = @"List";
+    commitsViewController.contextManager = self.contextManager;
     UINavigationController *commitsNavController = [[UINavigationController alloc] initWithRootViewController:commitsViewController];
     
-    SQKMetricsViewController *matricsViewController = [[SQKMetricsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    matricsViewController.title = @"Metrics";
-    UINavigationController *metricsNavController = [[UINavigationController alloc] initWithRootViewController:matricsViewController];
+    SQKMetricsViewController *metricsViewController = [[SQKMetricsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    metricsViewController.title = @"Metrics";
+    metricsViewController.contextManager = self.contextManager;
+    UINavigationController *metricsNavController = [[UINavigationController alloc] initWithRootViewController:metricsViewController];
     
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
@@ -40,9 +42,6 @@
     return YES;
 }
 
-+ (SQKAppDelegate *)appDelegate {
-    return [UIApplication sharedApplication].delegate;
-}
 
 - (SQKContextManager *)contextManager {
     if (!_contextManager) {

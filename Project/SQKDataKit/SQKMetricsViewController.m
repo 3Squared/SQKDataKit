@@ -13,6 +13,7 @@
 #import "NaiveImportOperation.h"
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
+#import "SQKContextManager.h"
 
 typedef NS_ENUM(NSInteger, MetricsSection) {
     MetricsSectionNaive,
@@ -170,7 +171,7 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark - Data manipulation
 
 - (void)insertOrUpdateWithNaiveOperation {
-    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
     
     NaiveImportOperation *importOperation = [[NaiveImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
     __weak typeof(NaiveImportOperation) *weakOperation = importOperation;
@@ -190,7 +191,7 @@ static NSString *CellIdentifier = @"Cell";
 }
 
 - (void)insertOrUpdateWithOptimisedOperation {
-    NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
     
     OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithPrivateContext:privateContext json:self.json];
     __weak typeof(OptimisedImportOperation) *weakOperation = importOperation;
@@ -211,7 +212,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)deleteAll {
     NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [[[SQKAppDelegate appDelegate] contextManager] newPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
         [privateContext save:nil];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
