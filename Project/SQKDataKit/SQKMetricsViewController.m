@@ -8,11 +8,10 @@
 
 #import "SQKMetricsViewController.h"
 #import "SQKAppDelegate.h"
-#import "SQKContextManager.h"
+#import "SQKDataKit.h"
 #import "OptimisedImportOperation.h"
 #import "NaiveImportOperation.h"
 #import "Commit.h"
-#import "NSManagedObject+SQKAdditions.h"
 #import "SQKContextManager.h"
 #import "SQKJSONLoader.h"
 
