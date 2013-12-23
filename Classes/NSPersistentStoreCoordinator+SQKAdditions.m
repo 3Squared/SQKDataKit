@@ -7,7 +7,7 @@
 //
 
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
-#import "Bundle.h"
+#import "SQKBundle.h"
 
 @implementation NSPersistentStoreCoordinator (SQKAdditions)
 

@@ -1,0 +1,20 @@
+//
+//  DataImportOperation.h
+//  SQKDataKit
+//
+//  Created by Luke Stringer on 10/12/2013.
+//  Copyright (c) 2013 3Squared. All rights reserved.
+//
+
+<<<<<<< HEAD:Project/SQKDataKit/DataImportOperation.h
+#import "SQKDataImportOperation.h"
+
+@interface DataImportOperation : SQKDataImportOperation
+=======
+#import "SQKJSONDataImportOperation.h"
+#import "GitDataImportOperation.h"
+
+@interface OptimisedImportOperation : GitDataImportOperation
+>>>>>>> develop:Project/SQKDataKit/OptimisedImportOperation.h
+
+@end

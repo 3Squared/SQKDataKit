@@ -54,7 +54,7 @@
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
     ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager data:@{}];
-    XCTAssertThrowsSpecificNamed([dataImportOperation updatePrivateContext:self.context usingData:@{}], NSException, NSInternalInconsistencyException, @"");
+    XCTAssertThrowsSpecificNamed([dataImportOperation updateContext:self.context usingData:@{}], NSException, NSInternalInconsistencyException, @"");
 }
 
 - (void)testCallsUpdateWhenOperationIsStarted {

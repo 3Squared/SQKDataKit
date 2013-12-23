@@ -23,8 +23,7 @@
         return nil;
     }
     
-    NSArray *validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
-    if (![validStoreTypes containsObject:storeType]) {
+    if (![[SQKContextManager validStoreTypes] containsObject:storeType]) {
         return nil;
     }
     
@@ -39,16 +38,25 @@
     return self;
 }
 
++ (NSArray *)validStoreTypes {
+    NSArray *validStoreTypes = nil;
+    if (!validStoreTypes) {
+        validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
+    }
+    return validStoreTypes;
+}
+
 - (void)observeForSavedNotification {
+    __weak typeof(self) weakSelf = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification* note) {
                                                       NSManagedObjectContext *managedObjectContext = [note object];
-                                                      for(NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
+                                                      for (NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
                                                           [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                                                       }
-                                                      [self.mainContext mergeChangesFromContextDidSaveNotification:note];
+                                                      [weakSelf.mainContext mergeChangesFromContextDidSaveNotification:note];
                                                   }];
 }
 
@@ -75,6 +83,10 @@
         return YES;
     }
     return NO;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 }
 
 @end

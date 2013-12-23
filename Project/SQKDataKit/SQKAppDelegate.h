@@ -12,8 +12,5 @@
 @interface SQKAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, readonly) SQKContextManager *contextManager;
-
-+ (SQKAppDelegate *)appDelegate;
 
 @end

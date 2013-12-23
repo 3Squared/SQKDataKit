@@ -41,8 +41,9 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "3squared_152.png",
       "scale" : "2x"
     }
   ],
