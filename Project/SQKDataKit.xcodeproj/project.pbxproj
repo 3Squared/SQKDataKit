@@ -36,6 +36,7 @@
 		A38979FD1852306900E5676B /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = A38979FC1852306900E5676B /* Entity.m */; };
 		A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */; };
 		A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */; };
+		A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */; };
 		A3F70A881859CEB000C0A389 /* data_large.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A871859CEB000C0A389 /* data_large.json */; };
 		A3F70A8A1859CF6800C0A389 /* data_small.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F70A891859CF6800C0A389 /* data_small.json */; };
 		A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */; };
@@ -99,6 +100,8 @@
 		A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NaiveImportOperation.m; sourceTree = "<group>"; };
 		A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitDataImportOperation.h; sourceTree = "<group>"; };
 		A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitDataImportOperation.m; sourceTree = "<group>"; };
+		A3DC7C991868731100C45DB0 /* SQKJSONLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKJSONLoader.h; sourceTree = "<group>"; };
+		A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKJSONLoader.m; sourceTree = "<group>"; };
 		A3F70A871859CEB000C0A389 /* data_large.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_large.json; sourceTree = "<group>"; };
 		A3F70A891859CF6800C0A389 /* data_small.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_small.json; sourceTree = "<group>"; };
 		A3F70A8B1859D80C00C0A389 /* SQKCommitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKCommitCell.h; sourceTree = "<group>"; };
@@ -172,6 +175,8 @@
 				A34BF3B3184F41D400F2E3B4 /* SQKCommitsViewController.m */,
 				A3F70A8E185A041D00C0A389 /* SQKMetricsViewController.h */,
 				A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */,
+				A3DC7C991868731100C45DB0 /* SQKJSONLoader.h */,
+				A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 				A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */,
 				A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */,
 				A31AB0F41858A31D00B240AB /* FetchedResultsControllerDataSource.m in Sources */,
+				A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

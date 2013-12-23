@@ -14,6 +14,7 @@
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "SQKContextManager.h"
+#import "SQKJSONLoader.h"
 
 typedef NS_ENUM(NSInteger, MetricsSection) {
     MetricsSectionNaive,
@@ -46,7 +47,7 @@ static NSString *CellIdentifier = @"Cell";
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     self.queue = [[NSOperationQueue alloc] init];
-    self.json = [[self loadJSON] subarrayWithRange:NSMakeRange(0, 5000)];
+    self.json = [SQKJSONLoader loadJSONFileName:@"data_small"];
 }
 
 
@@ -227,13 +228,5 @@ static NSString *CellIdentifier = @"Cell";
     [self.queue addOperation:deleteOperation];
 }
 
-
-- (id)loadJSON {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data_large" ofType:@"json"];
-    NSData* data = [NSData dataWithContentsOfFile:filePath];
-    return [NSJSONSerialization JSONObjectWithData:data
-                                           options:kNilOptions
-                                             error:nil];
-}
 
 @end
