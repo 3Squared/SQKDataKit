@@ -55,7 +55,7 @@
 /* Begin PBXFileReference section */
 		16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKDataKitTests.xcconfig"; path = "Pods/Pods-SQKDataKitTests.xcconfig"; sourceTree = "<group>"; };
 		59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A30F0DD218574D4B00CEE72D /* Bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bundle.h; path = ../../Classes/Bundle.h; sourceTree = "<group>"; };
+		A30F0DD218574D4B00CEE72D /* SQKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKBundle.h; path = ../../Classes/SQKBundle.h; sourceTree = "<group>"; };
 		A30F0DD318574D4B00CEE72D /* NSManagedObject+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObject+SQKAdditions.h"; path = "../../Classes/NSManagedObject+SQKAdditions.h"; sourceTree = "<group>"; };
 		A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+SQKAdditions.m"; path = "../../Classes/NSManagedObject+SQKAdditions.m"; sourceTree = "<group>"; };
 		A30F0DD518574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSPersistentStoreCoordinator+SQKAdditions.h"; path = "../../Classes/NSPersistentStoreCoordinator+SQKAdditions.h"; sourceTree = "<group>"; };
@@ -235,7 +235,7 @@
 		A34BF3A0184F41D300F2E3B4 /* SQKDataKit */ = {
 			isa = PBXGroup;
 			children = (
-				A30F0DD218574D4B00CEE72D /* Bundle.h */,
+				A30F0DD218574D4B00CEE72D /* SQKBundle.h */,
 				A30F0DD318574D4B00CEE72D /* NSManagedObject+SQKAdditions.h */,
 				A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */,
 				A30F0DD518574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.h */,
