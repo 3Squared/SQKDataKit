@@ -16,6 +16,6 @@
 
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data;
 
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)data;
+- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data;
 
 @end

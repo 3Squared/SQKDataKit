@@ -25,14 +25,14 @@
     return self;
 }
 
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
      @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo:nil];
 }
 
 - (void)main {
     NSManagedObjectContext *context = [self.contextManager newPrivateContext];
     [context performBlockAndWait:^{
-        [self updatePrivateContext:context usingData:self.data];
+        [self updateContext:context usingData:self.data];
     }];
 }
 

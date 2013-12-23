@@ -29,7 +29,7 @@
 }
 
 
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)json {
+- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)json {
     [Commit SQK_insertOrUpdate:json
                 uniqueModelKey:self.uniqueModelKey
                uniqueRemoteKey:self.uniqueRemoteKey

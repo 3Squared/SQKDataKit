@@ -19,7 +19,7 @@
 @interface ConcreteDataImportOperation : SQKDataImportOperation
 @end
 @implementation ConcreteDataImportOperation
-- (void)updatePrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
 }
 @end
 
@@ -62,7 +62,7 @@
     
     ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
     id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
-    [[dataImportOperationPartialMock expect] updatePrivateContext:[OCMArg any] usingData:json];
+    [[dataImportOperationPartialMock expect] updateContext:[OCMArg any] usingData:json];
     
     [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
     

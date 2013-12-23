@@ -13,4 +13,7 @@
 @property (nonatomic, readonly) NSString *uniqueModelKey;
 @property (nonatomic, readonly) NSString *uniqueRemoteKey;
 @property (nonatomic, assign, readonly) SQKPropertySetterBlock propertySetterBlock;
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data uniqueModelKey:(NSString*)uniqueModelKey uniqueRemoteKey:(NSString*)uniqueRemoteKey propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock;
+
 @end
