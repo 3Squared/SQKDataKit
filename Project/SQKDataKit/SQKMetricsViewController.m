@@ -47,7 +47,7 @@ static NSString *CellIdentifier = @"Cell";
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
     self.queue = [[NSOperationQueue alloc] init];
-    self.json = [SQKJSONLoader loadJSONFileName:@"data_small"];
+    self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
 }
 
 
@@ -155,23 +155,21 @@ static NSString *CellIdentifier = @"Cell";
     if (indexPathIsStartNaiveImport && notImporting && !self.isDeleting) {
         [self insertOrUpdateWithNaiveOperation];
         self.isNaiveImporting = YES;
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        self.naiveImportDuration = 0.0f;
     }
     
     else if (indePathIsStartOptmisedImport && notImporting && !self.isDeleting) {
         [self insertOrUpdateWithOptimisedOperation];
         self.isOptimisedImporting = YES;
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        self.optimisedImportDuration = 0.0f;
     }
     
-    else if (indexPathIsDeleteAll && !self.isDeleting) {
-        if (notImporting) {
-            self.isDeleting = YES;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self deleteAll];
-        }
-        [tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll] animated:UITableViewRowAnimationAutomatic];
+    else if (indexPathIsDeleteAll && notImporting && !self.isDeleting) {
+        self.isDeleting = YES;
+        [self deleteAll];
     }
+    
+    [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Data manipulation
