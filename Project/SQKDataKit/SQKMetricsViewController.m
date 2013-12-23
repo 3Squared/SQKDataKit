@@ -19,7 +19,7 @@
 typedef NS_ENUM(NSInteger, MetricsSection) {
     MetricsSectionNaive,
     MetricsSectionOptimised,
-    MetricsSectionDelete,
+    MetricsSectionDeleteAll,
     MetricsSectionCount
 };
 
@@ -65,7 +65,7 @@ static NSString *CellIdentifier = @"Cell";
         case MetricsSectionOptimised:
             return MetricsRowCount;
             break;
-        case MetricsSectionDelete:
+        case MetricsSectionDeleteAll:
             return 1;
             break;
         default:
@@ -74,38 +74,17 @@ static NSString *CellIdentifier = @"Cell";
     return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    if (indexPath.section == MetricsSectionDelete) {
+    if (indexPath.section == MetricsSectionDeleteAll) {
         [self configureDeleteCell:cell];
     }
-    
     else if (indexPath.row == MetricsRowStart) {
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        if ((indexPath.section == MetricsSectionNaive && self.isNaiveImporting) || (indexPath.section == MetricsSectionOptimised && self.isOptimisedImporting)) {
-            cell.textLabel.text = @"Importing...";
-            [activityView startAnimating];
-        }
-        else {
-            cell.textLabel.text = @"Start";
-            [activityView stopAnimating];
-        }
-        cell.accessoryView = activityView;
+        [self configureStartCell:cell inSection:indexPath.section];
     }
-    
     else if (indexPath.row == MetricsRowInformation) {
-        switch (indexPath.section) {
-            case MetricsSectionNaive:
-                cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.naiveImportDuration];
-                break;
-            case MetricsSectionOptimised:
-                cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.optimisedImportDuration];
-                break;
-            default:
-                break;
-        }
+        [self configureInformationCell:cell inSection:indexPath.section];
     }
     
     return cell;
@@ -125,10 +104,31 @@ static NSString *CellIdentifier = @"Cell";
     cell.accessoryView = activityView;
 }
 
-- (void)configureStartCell:(UITableViewCell *)cell {
-    
+- (void)configureStartCell:(UITableViewCell *)cell inSection:(MetricsSection)section {
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if ((section == MetricsSectionNaive && self.isNaiveImporting) || (section == MetricsSectionOptimised && self.isOptimisedImporting)) {
+        cell.textLabel.text = @"Importing...";
+        [activityView startAnimating];
+    }
+    else {
+        cell.textLabel.text = @"Start";
+        [activityView stopAnimating];
+    }
+    cell.accessoryView = activityView;
 }
 
+- (void)configureInformationCell:(UITableViewCell *)cell inSection:(MetricsSection)section {
+    switch (section) {
+        case MetricsSectionNaive:
+            cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.naiveImportDuration];
+            break;
+        case MetricsSectionOptimised:
+            cell.textLabel.text = [NSString stringWithFormat:@"Import Duration: %0.2f seconds", self.optimisedImportDuration];
+            break;
+        default:
+            break;
+    }
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
@@ -147,25 +147,30 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive && !self.isOptimisedImporting && !self.isNaiveImporting) {
+    BOOL indexPathIsStartNaiveImport = indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive;
+    BOOL indePathIsStartOptmisedImport = indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised;
+    BOOL indexPathIsDeleteAll = indexPath.section == MetricsSectionDeleteAll;
+    BOOL notImporting = !self.isOptimisedImporting && !self.isNaiveImporting;
+    
+    if (indexPathIsStartNaiveImport && notImporting && !self.isDeleting) {
         [self insertOrUpdateWithNaiveOperation];
         self.isNaiveImporting = YES;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    else if (indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised && !self.isNaiveImporting && !self.isOptimisedImporting) {
+    else if (indePathIsStartOptmisedImport && notImporting && !self.isDeleting) {
         [self insertOrUpdateWithOptimisedOperation];
         self.isOptimisedImporting = YES;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     
-    else if (indexPath.section == MetricsSectionDelete) {
-        if (!self.isNaiveImporting && !self.isOptimisedImporting) {
+    else if (indexPathIsDeleteAll && !self.isDeleting) {
+        if (notImporting) {
             self.isDeleting = YES;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [self deleteAll];
         }
-        [tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete] animated:UITableViewRowAnimationAutomatic];
+        [tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll] animated:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -216,13 +221,11 @@ static NSString *CellIdentifier = @"Cell";
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
         [privateContext save:nil];
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isDeleting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDelete]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
-    }];
-    [deleteOperation setCompletionBlock:^{
-        NSLog(@"Delete all finished");
     }];
     
     [self.queue addOperation:deleteOperation];
