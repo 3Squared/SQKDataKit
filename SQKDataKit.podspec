@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
 
   s.source_files  = 'Classes/**/*{h,m}'
-  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKJSONDataImportOperation.h", "Classes/SQKDataKit.h"]
+  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKDataImportOperation.h", "Classes/SQKDataKit.h"]
 
   s.framework  = 'CoreData'
 
