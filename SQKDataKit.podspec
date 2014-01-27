@@ -17,14 +17,14 @@ Pod::Spec.new do |s|
 
   s.homepage     = "http://git.3squared.com/ios-libraries/sqkdatakit"
 
-  s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sma.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walkter@3squared.com"}
+  s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walter@3squared.com"}
 
   s.platform     = :ios, '6.0'
 
   s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
 
   s.source_files  = 'Classes/**/*{h,m}'
-  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKJSONDataImportOperation.h"]
+  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKJSONDataImportOperation.h", "Classes/SQKDataKit.h"]
 
   s.framework  = 'CoreData'
 
