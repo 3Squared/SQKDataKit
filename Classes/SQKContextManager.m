@@ -56,7 +56,9 @@
                                                       for (NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
                                                           [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                                                       }
-                                                      [weakSelf.mainContext mergeChangesFromContextDidSaveNotification:note];
+													  [managedObjectContext performBlock:^{
+														  [weakSelf.mainContext mergeChangesFromContextDidSaveNotification:note];
+													  }];
                                                   }];
 }
 
