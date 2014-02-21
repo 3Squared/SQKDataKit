@@ -129,16 +129,5 @@
     [contextWithoutChanges verify];
 }
 
-- (void)testChangesMergedIntoMainContextWhenPrivateContextIsSaved {
-    id mockMainContext = [OCMockObject mockForClass:[NSManagedObjectContext class]];
-    [[mockMainContext expect] mergeChangesFromContextDidSaveNotification:[OCMArg any]];
-    self.sut.mainContext = mockMainContext;
-    
-    NSManagedObjectContext *privateContext = [self.sut newPrivateContext];
-    [privateContext save:nil];
-    
-    [mockMainContext verify];
-}
-
 
 @end
