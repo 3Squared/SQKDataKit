@@ -56,11 +56,11 @@
 - (void)contextSaveNotificationReceived:(NSNotification *)notifcation {
 	
 	/**
-	 *  If NSManagedObjectContext is not the main context, then merge the changes
-	 *	into the main context.
+	 *  If NSManagedObjectContext from the notitification is a private context
+	 *	then merge the changes into the main context.
 	 */
 	NSManagedObjectContext *managedObjectContext = [notifcation object];
-	if (managedObjectContext != self.mainContext) {
+	if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
 		
 		for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
 			[[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
