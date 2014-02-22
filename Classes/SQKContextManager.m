@@ -47,19 +47,29 @@
 }
 
 - (void)observeForSavedNotification {
-    __weak typeof(self) weakSelf = self;
-    [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextDidSaveNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification* note) {
-                                                      NSManagedObjectContext *managedObjectContext = [note object];
-                                                      for (NSManagedObject *object in [[note userInfo] objectForKey:NSUpdatedObjectsKey]) {
-                                                          [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
-                                                      }
-													  [managedObjectContext performBlock:^{
-														  [weakSelf.mainContext mergeChangesFromContextDidSaveNotification:note];
-													  }];
-                                                  }];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(contextSaveNotificationReceived:)
+												 name:NSManagedObjectContextDidSaveNotification
+											   object:nil];
+}
+
+- (void)contextSaveNotificationReceived:(NSNotification *)notifcation {
+	
+	/**
+	 *  If NSManagedObjectContext is not the main context, then merge the changes
+	 *	into the main context.
+	 */
+	NSManagedObjectContext *managedObjectContext = [notifcation object];
+	if (managedObjectContext != self.mainContext) {
+		
+		for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
+			[[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+		}
+		[managedObjectContext performBlock:^{
+			[self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
+		}];
+		
+	}
 }
 
 - (NSManagedObjectContext *)mainContext {
