@@ -11,12 +11,7 @@
 #import <CoreData/CoreData.h>
 
 @interface NSPersistentStoreCoordinatorTests : XCTestCase
-
-/**
- *  `sut` is the "System Under Test"
- */
-@property (nonatomic, strong) NSPersistentStoreCoordinator *sut;
-
+@property (nonatomic, strong) NSPersistentStoreCoordinator *persitentStoreCoordinator;
 @property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @end
 
@@ -25,26 +20,26 @@
 - (void)setUp {
     [super setUp];
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    self.sut = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:NSSQLiteStoreType managedObjectModel:self.managedObjectModel];
+    self.persitentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:NSSQLiteStoreType managedObjectModel:self.managedObjectModel];
 }
 
 - (void)testCorrectManagedObjectModel {
-    XCTAssertNotNil(self.sut, @"");
-    XCTAssertEqualObjects(self.sut.managedObjectModel, _managedObjectModel, @"");
+    XCTAssertNotNil(self.persitentStoreCoordinator, @"");
+    XCTAssertEqualObjects(self.persitentStoreCoordinator.managedObjectModel, _managedObjectModel, @"");
 }
 
 - (void)testHasOnePersistentStore {
-    XCTAssertNotNil(self.sut, @"");
-    XCTAssertTrue([self.sut persistentStores].count == 1, @"");
+    XCTAssertNotNil(self.persitentStoreCoordinator, @"");
+    XCTAssertTrue([self.persitentStoreCoordinator persistentStores].count == 1, @"");
 }
 
 - (void)testCorrectStoreType {
-    NSPersistentStore *store = (NSPersistentStore *)[self.sut persistentStores][0];
+    NSPersistentStore *store = (NSPersistentStore *)[self.persitentStoreCoordinator persistentStores][0];
     XCTAssertEqualObjects(store.type, NSSQLiteStoreType, @"");
 }
 
 - (void)testCorrectStoreOptions {
-    NSPersistentStore *store = (NSPersistentStore *)[self.sut persistentStores][0];
+    NSPersistentStore *store = (NSPersistentStore *)[self.persitentStoreCoordinator persistentStores][0];
     XCTAssertEqualObjects(store.options[NSMigratePersistentStoresAutomaticallyOption], @(YES), @"");
     XCTAssertEqualObjects(store.options[NSInferMappingModelAutomaticallyOption], @(YES), @"");
 }
