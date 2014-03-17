@@ -22,8 +22,7 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
 
-    SQKCommitsViewController *commitsViewController = [[SQKCommitsViewController alloc] init];
-    commitsViewController.contextManager = self.contextManager;
+    SQKCommitsViewController *commitsViewController = [[SQKCommitsViewController alloc] initWithContext:self.contextManager.mainContext];
     UINavigationController *commitsNavController = [[UINavigationController alloc] initWithRootViewController:commitsViewController];
     
     SQKMetricsViewController *metricsViewController = [[SQKMetricsViewController alloc] init];

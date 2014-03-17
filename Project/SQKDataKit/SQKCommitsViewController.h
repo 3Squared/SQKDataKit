@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class SQKContextManager;
 @interface SQKCommitsViewController : UITableViewController
-@property (nonatomic, strong) SQKContextManager *contextManager;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *context;
+
+- (instancetype)initWithContext:(NSManagedObjectContext *)context;
+
 @end
