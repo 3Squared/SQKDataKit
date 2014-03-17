@@ -34,7 +34,6 @@
 		A34BF3D4184F456B00F2E3B4 /* SQKContextManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF3D3184F456B00F2E3B4 /* SQKContextManagerTests.m */; };
 		A34BF3D9184F471E00F2E3B4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A34BF3D8184F471E00F2E3B4 /* CoreData.framework */; };
 		A34BF42B184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */; };
-		A38979FD1852306900E5676B /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = A38979FC1852306900E5676B /* Entity.m */; };
 		A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */; };
 		A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */; };
 		A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */; };
@@ -97,8 +96,6 @@
 		A34BF3D3184F456B00F2E3B4 /* SQKContextManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKContextManagerTests.m; sourceTree = "<group>"; };
 		A34BF3D8184F471E00F2E3B4 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPersistentStoreCoordinatorTests.m; sourceTree = "<group>"; };
-		A38979FB1852306900E5676B /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
-		A38979FC1852306900E5676B /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = "<group>"; };
 		A3C66D04185A20CE007AE9B5 /* NaiveImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaiveImportOperation.h; sourceTree = "<group>"; };
 		A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NaiveImportOperation.m; sourceTree = "<group>"; };
 		A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitDataImportOperation.h; sourceTree = "<group>"; };
@@ -138,7 +135,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A30F0DD118574D3600CEE72D /* App */ = {
+		A30F0DD118574D3600CEE72D /* Example App */ = {
 			isa = PBXGroup;
 			children = (
 				A31AB0ED185776B300B240AB /* Data import */,
@@ -147,7 +144,7 @@
 				A328BAC9185098A700267F2E /* View */,
 				A34BF3A1184F41D300F2E3B4 /* Supporting Files */,
 			);
-			name = App;
+			name = "Example App";
 			path = SQKDataKit;
 			sourceTree = "<group>";
 		};
@@ -195,8 +192,6 @@
 		A328BACA185098B600267F2E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A38979FB1852306900E5676B /* Entity.h */,
-				A38979FC1852306900E5676B /* Entity.m */,
 				A31AB0E51857769D00B240AB /* Commit.h */,
 				A31AB0E61857769D00B240AB /* Commit.m */,
 				A328BAC51850986A00267F2E /* SQKDataKitModel.xcdatamodeld */,
@@ -208,7 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				A34BF3A0184F41D300F2E3B4 /* SQKDataKit */,
-				A30F0DD118574D3600CEE72D /* App */,
+				A30F0DD118574D3600CEE72D /* Example App */,
 				A34BF3C2184F41D400F2E3B4 /* SQKDataKitTests */,
 				A34BF399184F41D300F2E3B4 /* Frameworks */,
 				A34BF398184F41D300F2E3B4 /* Products */,
@@ -424,7 +419,6 @@
 			files = (
 				22ECBB151861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m in Sources */,
 				A30F0DDC18574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */,
-				A38979FD1852306900E5676B /* Entity.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
