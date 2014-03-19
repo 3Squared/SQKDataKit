@@ -19,7 +19,8 @@ Pod::Spec.new do |s|
 
   s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walter@3squared.com"}
 
-  s.platform     = :ios, '6.0', :macosx, '10.9'
+  s.osx.platform    = :osx, '10.9' 
+  s.ios.platform    = :ios, '6.0'
 
   s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
 
