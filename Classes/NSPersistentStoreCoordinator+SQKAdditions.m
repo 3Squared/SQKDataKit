@@ -34,10 +34,22 @@
 }
 
 + (NSURL *)storeURL {
+	
     NSDictionary *applicationInfo = [[NSBundle mainBundle] infoDictionary];
+	
     NSString *applicationName = [applicationInfo objectForKey:@"CFBundleDisplayName"];
+	
+	#if TARGET_OS_IPHONE
+	
     NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    return [documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", applicationName]];
+	
+	#else
+	
+	NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] lastObject];
+	
+	#endif
+	
+	return [documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", applicationName]];
 }
 
 + (void)abortWithError:(NSError *)error {
