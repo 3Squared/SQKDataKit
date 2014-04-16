@@ -241,13 +241,13 @@
 		A34BF3A0184F41D300F2E3B4 /* SQKDataKit */ = {
 			isa = PBXGroup;
 			children = (
+				181B6BA918966D2300DFB44B /* SQKDataKit.h */,
 				A30F0DD218574D4B00CEE72D /* SQKBundle.h */,
 				A30F0DD318574D4B00CEE72D /* NSManagedObject+SQKAdditions.h */,
 				A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */,
 				A30F0DD518574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.h */,
 				A30F0DD618574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m */,
 				A30F0DD718574D4B00CEE72D /* SQKContextManager.h */,
-				181B6BA918966D2300DFB44B /* SQKDataKit.h */,
 				A30F0DD818574D4B00CEE72D /* SQKContextManager.m */,
 				A30F0DD918574D4B00CEE72D /* SQKDataImportOperation.h */,
 				A30F0DDA18574D4B00CEE72D /* SQKDataImportOperation.m */,
