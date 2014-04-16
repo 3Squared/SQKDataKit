@@ -8,10 +8,18 @@
 
 #import <CoreData/CoreData.h>
 
+/**
+ *  Domain for errors from SQKDataKit.
+ */
 extern NSString * const SQKDataKitErrorDomain;
 
-
+/**
+ *  SQKDataKit related errors.
+ */
 typedef NS_ENUM(NSInteger, SQKDataKitError) {
+    /**
+     *  Returned by the insert-or-update method when a non-private managec object context is used.
+     */
     SQKDataKitErrorUnsupportedQueueConcurencyType
 };
 
@@ -119,7 +127,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
                              error:&error];
  *
  *  @param dictArray           An array of dictionaries corresponding to the objects you wish to insert/update. This is most likely data from a remote source, i.e. a web service.
- *  @param modelKey            The key path name primary key property of the managed object subclass being inserted/updated.
+ *  @param modelKey            The key path name of the primary key property of the managed object subclass being inserted/updated.
  *  @param remoteDataKey       The dictionary key in the remote data to map to the primary key for the managed object.
  *  @param propertySetterBlock A block called to facilitate setting properties of the managed object. You should not initiate any other fetch requests here, you should only apply the logic necessary to set the properties of the managed object.
  *  @param context             A managed object context that must have the concurrency type NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain one.
