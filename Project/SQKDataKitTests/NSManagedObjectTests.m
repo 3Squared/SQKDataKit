@@ -333,6 +333,8 @@
     XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
 }
 
+#pragma mark - Errors
+
 - (void)testInsertOrUpdateFailsWithUnsupportedConcurencyTypeError {
     NSError *insertOrUpdateError = nil;
     [Commit SQK_insertOrUpdate:@[]
@@ -347,5 +349,16 @@
     XCTAssertEqual(insertOrUpdateError.code, (NSInteger)SQKDataKitErrorUnsupportedQueueConcurencyType, @"");
 }
 
+- (void)testInsertOrUpdateFailsSilentlyWithWithoutErrorPointer {
+    /**
+     *  Necessary as there was a bug where not passing an error pointer caused a exc_bad_access crash.
+     */
+    [Commit SQK_insertOrUpdate:@[]
+                uniqueModelKey:@"unusedKey"
+               uniqueRemoteKey:@"unusedKey"
+           propertySetterBlock:nil
+                privateContext:self.mainContext
+                         error:nil];
+}
 
 @end
