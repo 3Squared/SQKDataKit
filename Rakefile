@@ -65,7 +65,7 @@ task :release do
   sh "git tag -a #{spec_version} -m 'Release #{spec_version}'"
   sh "git push origin master"
   sh "git push origin --tags"
-  sh "pod push #{spec_repo_name} #{podspec_path}"
+  sh "pod push #{specs_repo_name} #{podspec_path}"
 end
 
 # @return [Pod::Version] The version as reported by the Podspec.
