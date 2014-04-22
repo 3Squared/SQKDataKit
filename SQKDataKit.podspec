@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.homepage     = "http://git.3squared.com/ios-libraries/sqkdatakit"
 
-  s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walter@3squared.com"}
+  s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walker@3squared.com"}
 
   s.platform     = :ios, '6.0', :osx, '10.9'
 
