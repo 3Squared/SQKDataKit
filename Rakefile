@@ -7,7 +7,7 @@ task :version do
   git_remotes = `git remote`.strip.split("\n")
 
   if git_remotes.count > 0
-    puts "-- fetching version number from github"
+    puts "-- fetching version number from specs repo"
     sh 'git fetch'
 
     remote_version = remote_spec_version
@@ -57,12 +57,15 @@ task :release do
   puts "* Linting the podspec"
   sh "pod lib lint"
 
+  # The name of our internal specs repo
+  specs_repo_name = "3squared"
+
   # Then release
   sh "git commit #{podspec_path} CHANGELOG.md -m 'Release #{spec_version}'"
   sh "git tag -a #{spec_version} -m 'Release #{spec_version}'"
   sh "git push origin master"
   sh "git push origin --tags"
-  sh "pod push master #{podspec_path}"
+  sh "pod push #{spec_repo_name} #{podspec_path}"
 end
 
 # @return [Pod::Version] The version as reported by the Podspec.
