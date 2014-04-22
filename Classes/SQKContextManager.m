@@ -77,7 +77,7 @@
         return _mainContext;
     }
     
-    _mainContext = [[NSManagedObjectContext alloc] init];
+    _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     _mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return _mainContext;
 }

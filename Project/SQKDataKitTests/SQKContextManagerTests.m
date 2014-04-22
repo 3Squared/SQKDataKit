@@ -76,6 +76,11 @@
     XCTAssertEqualObjects(firstContext, secondContext, @"");
 }
 
+- (void)testProvidesMainContextWithMainConcurrencyType {
+    NSManagedObjectContext *mainContext = [self.contextManager mainContext];
+    XCTAssertEqual((NSInteger)mainContext.concurrencyType, (NSInteger)NSMainQueueConcurrencyType, @"");
+}
+
 - (void)testProvidesANewPrivateContext {
     NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
     XCTAssertNotNil(privateContext, @"");

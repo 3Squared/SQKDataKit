@@ -80,7 +80,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
     
-    if (!(context.concurrencyType == NSPrivateQueueConcurrencyType || context.concurrencyType ==  NSMainQueueConcurrencyType)) {
+    if (context.concurrencyType != NSPrivateQueueConcurrencyType) {
         // Check error pointer is not NULL
         if (error) {
             *error = [self errorForUnsupportedQueueConcurencyType];

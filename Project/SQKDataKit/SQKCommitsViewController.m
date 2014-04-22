@@ -131,5 +131,4 @@
     cell.messageLabel.text = commit.message;
 }
 
-
 @end
