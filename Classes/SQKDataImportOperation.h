@@ -49,6 +49,7 @@
         
         [self.operationQueue addOperation:importOperation];
  *      ```
+ *  Inspired by the obj-c.io article on threading and concurrency. http://www.objc.io/issue-2/concurrency-apis-and-pitfalls.html
  */
 @interface SQKDataImportOperation : NSOperation
 
