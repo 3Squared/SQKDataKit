@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
+#import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "SQKContextManager.h"
 
 /**
@@ -105,6 +106,22 @@
     XCTAssertTrue([self.contextManager mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
 }
 
+
+- (void)testAccessingMainContextOffMainThreadThrowsException {
+    __block BOOL exceptionThrown = NO;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @try {
+            [self.contextManager.mainContext save:nil];
+        }
+        @catch (NSException *exception) {
+            exceptionThrown = YES;
+        }
+    });
+    
+    AGWW_WAIT_WHILE(!exceptionThrown, 2.0);
+    XCTAssertTrue(exceptionThrown, @"");
+}
+
 #pragma mark - Saving
 
 - (void)testSavesWhenThereAreChanges {
@@ -132,6 +149,5 @@
     XCTAssertFalse(didSave, @"");
     [contextWithoutChanges verify];
 }
-
 
 @end

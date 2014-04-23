@@ -54,25 +54,32 @@
 }
 
 - (void)contextSaveNotificationReceived:(NSNotification *)notifcation {
-	
-	/**
-	 *  If NSManagedObjectContext from the notitification is a private context
-	 *	then merge the changes into the main context.
-	 */
-	NSManagedObjectContext *managedObjectContext = [notifcation object];
-	if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
-		
-		for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
-			[[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
-		}
-		[managedObjectContext performBlock:^{
-			[self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
-		}];
-		
-	}
+    /**
+     *  Ensure mainContext is accessed on the main thread.
+     */
+    dispatch_async(dispatch_get_main_queue(), ^{
+        /**
+         *  If NSManagedObjectContext from the notitification is a private context
+         *	then merge the changes into the main context.
+         */
+        NSManagedObjectContext *managedObjectContext = [notifcation object];
+        if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
+            
+            for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
+                [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+            }
+            [managedObjectContext performBlock:^{
+                [self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
+            }];
+        }
+    });
 }
 
 - (NSManagedObjectContext *)mainContext {
+    if (![NSThread isMainThread]) {
+        @throw [NSException exceptionWithName:NSObjectInaccessibleException reason:@"mainContext is only accessible from the main thread!" userInfo:nil];
+    }
+
     if (_mainContext != nil) {
         return _mainContext;
     }
@@ -90,7 +97,6 @@
 
 - (BOOL)saveMainContext:(NSError **)error {
     if ([self.mainContext hasChanges]) {
-        // TODO: Perform on main thread?
         [self.mainContext save:error];
         return YES;
     }
