@@ -64,9 +64,16 @@
          */
         NSManagedObjectContext *managedObjectContext = [notifcation object];
         if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
-            
+            /**
+             *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
+             *
+             *  NSManagedObjectContext doesn't event fire NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge, only inserted.
+             *
+             *  SEE: http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
+             *  May also have memory implications.
+             */
             for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
-                [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+                [[self.mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
             }
             
             [self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
