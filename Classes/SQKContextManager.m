@@ -68,9 +68,8 @@
             for (NSManagedObject *object in [[notifcation userInfo] objectForKey:NSUpdatedObjectsKey]) {
                 [[managedObjectContext objectWithID:[object objectID]] willAccessValueForKey:nil];
             }
-            [managedObjectContext performBlock:^{
-                [self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
-            }];
+            
+            [self.mainContext mergeChangesFromContextDidSaveNotification:notifcation];
         }
     });
 }

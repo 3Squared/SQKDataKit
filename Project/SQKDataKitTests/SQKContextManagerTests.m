@@ -150,4 +150,30 @@
     [contextWithoutChanges verify];
 }
 
+- (void)testChangesMergedIntoMainContextWhenPrivateContextIsSaved {
+    id mockMainContext = [OCMockObject mockForClass:[NSManagedObjectContext class]];
+    [[mockMainContext expect] mergeChangesFromContextDidSaveNotification:[OCMArg any]];
+    self.contextManager.mainContext = mockMainContext;
+
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
+    [privateContext save:nil];
+    
+    /**
+     *  Because the merge happens asyncronously, we have to wait to verify it.
+     *  I don't want to add a property just for that. Which leads to this ugly mess.
+     *  Keep trying to verify that the mergeChangesFromContextDidSaveNotification: was called, until 2 seconds have elapsed.
+     */
+    BOOL (^succeeded)() = ^{
+        @try {
+            [mockMainContext verify];
+            return YES;
+        }
+        @catch (NSException *exception) {
+            return NO;
+        }
+    };
+    
+    AGWW_WAIT_WHILE(!succeeded(), 2.0);
+}
+
 @end
