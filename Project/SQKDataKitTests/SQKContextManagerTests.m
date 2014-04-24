@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
+#import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "SQKContextManager.h"
 
 /**
@@ -105,6 +106,22 @@
     XCTAssertTrue([self.contextManager mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
 }
 
+
+- (void)testAccessingMainContextOffMainThreadThrowsException {
+    __block BOOL exceptionThrown = NO;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @try {
+            [self.contextManager.mainContext save:nil];
+        }
+        @catch (NSException *exception) {
+            exceptionThrown = YES;
+        }
+    });
+    
+    AGWW_WAIT_WHILE(!exceptionThrown, 2.0);
+    XCTAssertTrue(exceptionThrown, @"");
+}
+
 #pragma mark - Saving
 
 - (void)testSavesWhenThereAreChanges {
@@ -133,5 +150,30 @@
     [contextWithoutChanges verify];
 }
 
+- (void)testChangesMergedIntoMainContextWhenPrivateContextIsSaved {
+    id mockMainContext = [OCMockObject mockForClass:[NSManagedObjectContext class]];
+    [[mockMainContext expect] mergeChangesFromContextDidSaveNotification:[OCMArg any]];
+    self.contextManager.mainContext = mockMainContext;
+
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
+    [privateContext save:nil];
+    
+    /**
+     *  Because the merge happens asyncronously, we have to wait to verify it.
+     *  I don't want to add a property just for that. Which leads to this ugly mess.
+     *  Keep trying to verify that the mergeChangesFromContextDidSaveNotification: was called, until 2 seconds have elapsed.
+     */
+    BOOL (^succeeded)() = ^{
+        @try {
+            [mockMainContext verify];
+            return YES;
+        }
+        @catch (NSException *exception) {
+            return NO;
+        }
+    };
+    
+    AGWW_WAIT_WHILE(!succeeded(), 2.0);
+}
 
 @end
