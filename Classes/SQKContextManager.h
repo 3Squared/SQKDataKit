@@ -41,14 +41,14 @@
 - (instancetype)initWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
 
 /**
- *  The main managed object context to be used for UI based Core Data work (on the main thread). A `SQKContextManager` instance has a single main managed object context which is returned here.
+ *  The main managed object context to be used for UI based Core Data work (on the main thread). A `SQKContextManager` instance has a single main managed object context which is returned here. **Do not use the main mamaged object context in a background thread.**
  *
  *  @return The main managed object context to be used for UI based Core Data work (on the main thread).
  */
 - (NSManagedObjectContext *)mainContext;
 
 /**
- *  A new private context (concurrency type `NSPrivateQueueConcurrencyType`) Core Data work on background threads. 
+ *  A new private context (concurrency type `NSPrivateQueueConcurrencyType`) for Core Data work on background threads. 
  *  A private context should be used whenever you are doing work off the main thread.
  *  Saving this context merges any changes back into the main managed object context.
  *

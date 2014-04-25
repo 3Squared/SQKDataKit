@@ -16,7 +16,7 @@ Collection of classes to make working with Core Data easier and help DRY-up your
 
 #### Initialisation
 
-You should only ever use a single `SQKContextManager` as it maintains the `NSPersistentStoreCoordinator` instance for your Core Data stack. It is recommended you create it during the initial load of the app, for example in your AppDelegate. Initalise a context manager with a concurrency type and a `NSManagedObjectModel`:
+You should only ever use a single `SQKContextManager` as it maintains the persistent store coordinator instance for your Core Data stack. It is recommended you create it during the initial load of the app, for example in your AppDelegate. Initalise a context manager with a concurrency type and a managed object model:
 
 ```
 `#import <SQKDataKit/SQKDataKit.h>`
@@ -27,20 +27,55 @@ You should only ever use a single `SQKContextManager` as it maintains the `NSPer
 
 @implementation SQKAppDelegate
 
-- (SQKContextManager *)contextManager {
-    if (!_contextManager) {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self setupContextManager];
+    
+    return YES;
+}
+
+- (void)setupContextManager {
+    if (!self.contextManager) {
         NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-        _contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:model];
+        self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType managedObjectModel:model];
     }
-    return _contextManager;
 }
 
 @end
 ```
 
-For a SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with the `NSInMemoryStoreType` is useful as changes are not persisted between test suit runs, and side effects from your production SQLite database do not effect tests.
+For a SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with `NSInMemoryStoreType` is useful as changes are not persisted between test suit runs, and side effects from your production SQLite database do not effect tests.
 
 If you only have a single Data Model then `[NSManagedObjectModel mergedModelFromBundles:nil]` will return this.
+
+The context manager provides a convenient way to obtain 2 kinds of `NSManagedObjectContext` objects that are commonly used.
+
+#### Using the main context
+
+There is only ever one main context and is obtained through the `mainContext` method. You should use this context for any interaction with Core Data while on the main thread, such as using controllers and UI objects that are required to be used only on the main thread.. This context is initialised with `NSMainQueueConcurrencyType`and should therefore only be used while on the main thread. 
+
+**Do not use the main context while in a background thread.** Failure to use the main context on the main thread will result inconsistent behaviour and possible crashes.
+
+#### Using private contexts
+
+Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to be perform Core Data work off the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial, in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
+
+Obtain a private context from the `newPrivateContext` method. This will create a new private context based on the current state of the persistent store. Conceptually you can think of the main context being "branched" into another (private) context. 
+
+Any work you perform with the private context, and any changes you make, stay independent to the state of the main context. When you save a private context your SQKContextManager instance will listen for the save notification and merge the changes back into the main context on your behalf. UI controllers and object using the main context will then get these updates automatically.
+
+Make sure to retain the private context in a property. To quote the Apple Doc:
+
+> Managed objects know what managed object context they’re associated with, and managed object contexts know what managed objects they contain. By default, though, the references between a managed object and its context are weak. This means that in general you cannot rely on a context to ensure the longevity of a managed object instance, and you cannot rely on the existence of a managed object to ensure the longevity of a context. Put another way, just because you fetched an object doesn’t mean it will stay around.
+
+#### Concurency 
+
+Quoting the Apple Doc for 
+
+> Core Data uses thread (or serialized queue) confinement to protect managed objects and managed object contexts (see “Concurrency with Core Data”). A consequence of this is that a context assumes the default owner is the thread or queue that allocated it—this is determined by the thread that calls its init method. You should not, therefore, initialize a context on one thread then pass it to a different thread. Instead, you should pass a reference to a persistent store coordinator and have the receiving thread/queue create a new context derived from that. If you use NSOperation, you must create the context in main (for a serial queue) or start (for a concurrent queue).
+
+In the case of SQKDataKit you do not need to pass a reference to a persistent store coordinator. Simply pass the instance of the SQKContextManager (as this maintains the persistent store coordinator). Ask the SQKContextManager for a newPrivateContext:` from the thread / queue you intend to perform your Core Data work on.
+
+
 
 
 ### `NSPersistentStoreCoordinator+SQKAdditions`
