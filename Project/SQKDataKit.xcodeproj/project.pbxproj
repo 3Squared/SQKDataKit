@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22E626D2190A99DD00D5A307 /* NSArray+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E626CF190A99DD00D5A307 /* NSArray+SQKAdditions.m */; };
+		22E626D3190A99DD00D5A307 /* SQKManagedObjectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E626D1190A99DD00D5A307 /* SQKManagedObjectController.m */; };
+		22E626D5190A9B5900D5A307 /* SQKManagedObjectControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E626D4190A9B5900D5A307 /* SQKManagedObjectControllerTests.m */; };
 		22ECBB151861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 22ECBB141861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m */; };
 		92CAC9F51A4D406BAD472FED /* libPods-SQKDataKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */; };
 		A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */; };
@@ -54,6 +57,11 @@
 /* Begin PBXFileReference section */
 		16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKDataKitTests.xcconfig"; path = "Pods/Pods-SQKDataKitTests.xcconfig"; sourceTree = "<group>"; };
 		181B6BA918966D2300DFB44B /* SQKDataKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SQKDataKit.h; path = ../../Classes/SQKDataKit.h; sourceTree = "<group>"; };
+		22E626CE190A99DD00D5A307 /* NSArray+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+SQKAdditions.h"; path = "../../Classes/NSArray+SQKAdditions.h"; sourceTree = "<group>"; };
+		22E626CF190A99DD00D5A307 /* NSArray+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+SQKAdditions.m"; path = "../../Classes/NSArray+SQKAdditions.m"; sourceTree = "<group>"; };
+		22E626D0190A99DD00D5A307 /* SQKManagedObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKManagedObjectController.h; path = ../../Classes/SQKManagedObjectController.h; sourceTree = "<group>"; };
+		22E626D1190A99DD00D5A307 /* SQKManagedObjectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKManagedObjectController.m; path = ../../Classes/SQKManagedObjectController.m; sourceTree = "<group>"; };
+		22E626D4190A9B5900D5A307 /* SQKManagedObjectControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKManagedObjectControllerTests.m; sourceTree = "<group>"; };
 		22ECBB131861C8E9000D863F /* SQKInsertOrUpdateDataOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKInsertOrUpdateDataOperation.h; sourceTree = "<group>"; };
 		22ECBB141861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKInsertOrUpdateDataOperation.m; sourceTree = "<group>"; };
 		59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,12 +245,16 @@
 				A30F0DD518574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.h */,
 				A30F0DD618574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m */,
 				A30F0DD718574D4B00CEE72D /* SQKContextManager.h */,
-				181B6BA918966D2300DFB44B /* SQKDataKit.h */,
 				A30F0DD818574D4B00CEE72D /* SQKContextManager.m */,
+				181B6BA918966D2300DFB44B /* SQKDataKit.h */,
 				A30F0DD918574D4B00CEE72D /* SQKDataImportOperation.h */,
 				A30F0DDA18574D4B00CEE72D /* SQKDataImportOperation.m */,
 				22ECBB131861C8E9000D863F /* SQKInsertOrUpdateDataOperation.h */,
 				22ECBB141861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m */,
+				22E626CE190A99DD00D5A307 /* NSArray+SQKAdditions.h */,
+				22E626CF190A99DD00D5A307 /* NSArray+SQKAdditions.m */,
+				22E626D0190A99DD00D5A307 /* SQKManagedObjectController.h */,
+				22E626D1190A99DD00D5A307 /* SQKManagedObjectController.m */,
 			);
 			path = SQKDataKit;
 			sourceTree = "<group>";
@@ -261,6 +273,7 @@
 		A34BF3C2184F41D400F2E3B4 /* SQKDataKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				22E626D4190A9B5900D5A307 /* SQKManagedObjectControllerTests.m */,
 				A34BF3D3184F456B00F2E3B4 /* SQKContextManagerTests.m */,
 				A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */,
 				A328BAC01850921000267F2E /* NSManagedObjectTests.m */,
@@ -413,9 +426,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				22ECBB151861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m in Sources */,
+				22E626D3190A99DD00D5A307 /* SQKManagedObjectController.m in Sources */,
 				A30F0DDC18574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */,
+				22E626D2190A99DD00D5A307 /* NSArray+SQKAdditions.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
 				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
 				A31AB0E71857769D00B240AB /* Commit.m in Sources */,
@@ -437,6 +452,7 @@
 			files = (
 				A328BAC11850921000267F2E /* NSManagedObjectTests.m in Sources */,
 				A34BF42B184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m in Sources */,
+				22E626D5190A9B5900D5A307 /* SQKManagedObjectControllerTests.m in Sources */,
 				A34BF3D4184F456B00F2E3B4 /* SQKContextManagerTests.m in Sources */,
 				A30FAE8F1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m in Sources */,
 			);
