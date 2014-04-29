@@ -185,8 +185,6 @@
     AGWW_WAIT_WHILE(!self.deletionDone && !blockDeleteDone, 60.0);
     
     // On deletion the context is nilled out. isDeleted returns NO, though.
-    XCTAssertTrue(self.commit.isDeleted, @"");
-    XCTAssertNil(self.commit.managedObjectContext, @"");
     XCTAssertTrue(self.commit.isFault, @"");
     XCTAssertFalse(self.commit.isInserted, @"");
 
