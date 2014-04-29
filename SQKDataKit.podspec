@@ -21,11 +21,13 @@ Pod::Spec.new do |s|
 
   s.osx.platform    = :osx, '10.9' 
   s.ios.platform    = :ios, '6.0'
+  s.ios.deployment_target = '6.0'
+  s.osx.deployment_target = '10.9' 
 
   s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
 
   s.source_files  = 'Classes/**/*{h,m}'
-  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKDataImportOperation.h", "Classes/SQKDataKit.h"]
+  s.public_header_files = ["Classes/SQKManagedObjectController.h", "Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKDataImportOperation.h", "Classes/SQKDataKit.h"]
 
   s.framework  = 'CoreData'
 
