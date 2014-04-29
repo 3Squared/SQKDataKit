@@ -177,6 +177,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         NSIndexSet *updatedIndexes = [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject* existingObject, NSUInteger idx, BOOL *stop) {
             for (NSManagedObject *updatedObject in updatedObjects) {
                 if ([updatedObject.objectID isEqual:existingObject.objectID]) {
+                    [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
                     return YES;
                 }
             }
@@ -199,6 +200,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         NSIndexSet *deletedIndexes = [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject* existingObject, NSUInteger idx, BOOL *stop) {
             for (NSManagedObject *deletedObject in deletedObjects) {
                 if ([deletedObject.objectID isEqual:existingObject.objectID]) {
+                    [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
                     return YES;
                 }
             }
