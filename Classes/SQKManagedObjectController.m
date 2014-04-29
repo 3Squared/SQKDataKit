@@ -149,6 +149,19 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return error ? NO : YES;
 }
 
+-(void)deleteObjectsAsynchronously
+{
+    NSArray *objectIDs = [self.managedObjects valueForKey:@"objectID"];
+    [self.queue addOperationWithBlock:^{
+        NSManagedObjectContext *privateContext = [self newPrivateContext];
+        [privateContext performBlockAndWait:^{
+            for (NSManagedObjectID *objectID in objectIDs) {
+                [privateContext deleteObject:[privateContext existingObjectWithID:objectID error:nil]];
+            }
+            [privateContext save:nil];
+        }];
+    }];
+}
 #pragma mark - NSNotifications
 
 - (void)contextDidSave:(NSNotification*)notification
