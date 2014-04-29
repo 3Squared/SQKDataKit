@@ -156,7 +156,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         NSManagedObjectContext *privateContext = [self newPrivateContext];
         [privateContext performBlockAndWait:^{
             for (NSManagedObjectID *objectID in objectIDs) {
-                [privateContext deleteObject:[privateContext existingObjectWithID:objectID error:nil]];
+                [privateContext deleteObject:[privateContext objectWithID:objectID]];
             }
             [privateContext save:nil];
         }];

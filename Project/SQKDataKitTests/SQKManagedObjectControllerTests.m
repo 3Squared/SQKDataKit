@@ -37,7 +37,8 @@
     self.deletionDone = NO;
     self.localControllerUpdateDone = NO;
     
-    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:[NSManagedObjectModel mergedModelFromBundles:nil]];
+    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
     
     self.commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
@@ -100,7 +101,7 @@
         }];
     });
     
-    AGWW_WAIT_WHILE(!self.updateDone && !blockUpdateDone, 60.0);
+    AGWW_WAIT_WHILE(!self.updateDone && !blockUpdateDone, 20.0);
     
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[self.controller managedObjects] firstObject] sha], @"dcba", @"");
@@ -172,6 +173,9 @@
 {
     [self.controller performFetch:nil];
     
+    
+    XCTAssertFalse(self.commit.isDeleted, @"");
+    
     __block bool blockDeleteDone = NO;
     self.controller.deletedObjectsBlock = ^void(NSIndexSet *indexes)
     {
@@ -182,28 +186,25 @@
     
     [self.controller deleteObjectsAsynchronously];
     
-    AGWW_WAIT_WHILE(!self.deletionDone && !blockDeleteDone, 60.0);
+    AGWW_WAIT_WHILE(!self.deletionDone && !blockDeleteDone, 2.0);
     
-    // On deletion the context is nilled out. isDeleted returns NO, though.
-    XCTAssertTrue(self.commit.isFault, @"");
-    XCTAssertFalse(self.commit.isInserted, @"");
+    // At this point the object should be pending deletion
+    XCTAssertTrue(self.commit.isDeleted, @"");
+
 
     NSError *error = nil;
-    // Changing a deleted object causes Core Data to throw an exception:
-    // "CoreData could not fulfill a fault"
-    BOOL exceptionThrown = NO;
-    @try {
-        self.commit.sha = @"Deleted!";
-        XCTFail(@"Core Data should throw exception with error 'CoreData could not fulfill a fault'.");
-    }
-    @catch (NSException *exception) {
-        exceptionThrown = YES;
-    }
-    
-    XCTAssertTrue(exceptionThrown, @"");
-    
     [[self.contextManager mainContext] save:&error];
     XCTAssertNil(error, @"");
+    
+    // On deletion the context is nilled out. isDeleted returns NO, though.
+    XCTAssertNil(self.commit.managedObjectContext, @"");
+    XCTAssertFalse(self.commit.isInserted, @"");
+    XCTAssertFalse(self.commit.isDeleted, @"");
+    XCTAssertTrue(self.commit.isFault, @"");
+
+    // Changing a deleted object causes Core Data to throw an exception:
+    // "CoreData could not fulfill a fault"
+    XCTAssertThrows([self.commit setSha:@"Deleted"], @"");
 }
 
 /**

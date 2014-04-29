@@ -205,8 +205,6 @@
     }];
     
     AGWW_WAIT_WHILE(!edited, 2.0);
-    XCTAssertEqualObjects([fetchedObject sha], @"Insert test", @"");
-    [self.contextManager.mainContext refreshObject:fetchedObject mergeChanges:NO];
     XCTAssertEqualObjects([fetchedObject sha], @"Edit test", @"");
     
     
