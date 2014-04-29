@@ -144,7 +144,6 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     for (NSManagedObject *object in self.managedObjects) {
         [self.managedObjectContext deleteObject:object];
     }
-    [self.managedObjectContext save:error];
     
     return error ? NO : YES;
 }

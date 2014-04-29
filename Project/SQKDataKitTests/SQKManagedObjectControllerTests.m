@@ -141,9 +141,9 @@
     
     NSError *error = nil;
     [self.controller deleteObjects:&error];
-    
     XCTAssertNil(error, @"");
-    
+    [self.controller.managedObjectContext save:nil];
+
     // On deletion the context is nilled out. isDeleted returns NO, though.
     XCTAssertNil(self.commit.managedObjectContext, @"");
     XCTAssertTrue(self.commit.isFault, @"");
