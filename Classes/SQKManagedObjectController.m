@@ -148,7 +148,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return error ? NO : YES;
 }
 
--(void)deleteObjectsAsynchronously
+- (void)deleteObjectsAsynchronously
 {
     NSArray *objectIDs = [self.managedObjects valueForKey:@"objectID"];
     [self.queue addOperationWithBlock:^{
@@ -164,7 +164,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 #pragma mark - Private context
 
--(NSManagedObjectContext*) newPrivateContext
+- (NSManagedObjectContext*) newPrivateContext
 {
     NSManagedObjectContext* privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     privateContext.persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
@@ -173,7 +173,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 #pragma mark - Lazy initialisers
 
--(NSOperationQueue *)queue
+- (NSOperationQueue*)queue
 {
     if (_queue) {
         return _queue;
