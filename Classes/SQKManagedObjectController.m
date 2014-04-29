@@ -15,6 +15,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 @property (nonatomic, strong) NSFetchRequest *fetchRequest;
 @property (nonatomic, strong) NSArray *managedObjects;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
 
@@ -104,9 +105,8 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSManagedObjectContext* privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        privateContext.persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
+    [self.queue addOperationWithBlock:^{
+        NSManagedObjectContext* privateContext = [self newPrivateContext];
         
         __block NSArray *fetchedObjects;
         __block NSError *error = nil;
@@ -116,7 +116,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         
         NSArray *managedObjectIds = [fetchedObjects valueForKey:@"objectID"];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSMutableArray *objectsToReturn = [NSMutableArray array];
             for (NSManagedObjectID *objectID in managedObjectIds) {
                 [objectsToReturn addObject:[self.managedObjectContext objectWithID:objectID]];
@@ -125,9 +125,9 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
             if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)]) {
                 [self.delegate controller:self fetchedObjects:[self.managedObjects sqk_indexesOfObjects] error:&error];
             }
-        });
+        }];
         
-    });
+    }];
 }
 
 #pragma mark - Operations
@@ -162,6 +162,27 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
     }];
 }
+
+#pragma mark - Private context
+
+-(NSManagedObjectContext*) newPrivateContext
+{
+    NSManagedObjectContext* privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    privateContext.persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
+    return privateContext;
+}
+
+#pragma mark - Lazy initialisers
+
+-(NSOperationQueue *)queue
+{
+    if (_queue) {
+        return _queue;
+    }
+    _queue = [[NSOperationQueue alloc] init];
+    return _queue;
+}
+
 #pragma mark - NSNotifications
 
 - (void)contextDidSave:(NSNotification*)notification
@@ -185,14 +206,14 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
         
         if (updatedIndexes.count > 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 if ([self.delegate respondsToSelector:@selector(controller:updatedObjects:)]) {
                     [self.delegate controller:self updatedObjects:updatedIndexes];
                 }
                 if (self.updatedObjectsBlock) {
                     self.updatedObjectsBlock(updatedIndexes);
                 }
-            });
+            }];
         }
     }
     
@@ -208,16 +229,17 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
         
         if (deletedIndexes.count > 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 if ([self.delegate respondsToSelector:@selector(controller:deletedObjects:)]) {
                     [self.delegate controller:self deletedObjects:deletedIndexes];
                 }
                 if (self.deletedObjectsBlock) {
                     self.deletedObjectsBlock(deletedIndexes);
                 }
-            });
+            }];
         }
     }
 }
+
 
 @end
