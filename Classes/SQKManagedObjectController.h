@@ -85,7 +85,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
  *  The fetch request is not executed until performFetch:/performFetchAsync is called.
  *
  *  @param fetchRequest A fetch request that specifies the search criteria for the fetch. Must not be nil.
- *  @param context      The managed object context to use. Must not be nil.
+ *  @param context      The managed object context to use. Must be created with NSMainQueueConcurrencyType, and must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
@@ -96,7 +96,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
  *  Used when you want to monitor changes on already-fetched objects.
  *  performFetch:/performFetchAsync are non-op for this controller.
  *
- *  @param managedObjects An array of NSManagedObjects. Must not be nil.
+ *  @param managedObjects An array of NSManagedObjects created on a context with NSMainQueueConcurrencyType. Must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
@@ -107,7 +107,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
  *  Used when you want to monitor changes on an already-fetched object.
  *  performFetch:/performFetchAsync are non-op for this controller.
  *
- *  @param managedObjects A NSManagedObject. Must not be nil.
+ *  @param managedObjects A NSManagedObject created on a context with NSMainQueueConcurrencyType. Must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
@@ -115,7 +115,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
 
 /**
  *  Execute the fetch request and store the results in self.managedObjects.
- *  Blocks the main thread.
+ *  Blocks the main thread. On returning, fetchedObjects will be available.
  *
  *  @param error If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  *
@@ -125,12 +125,16 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
 
 /**
  *  Execute the fetch request in a background thread and store the results in self.managedObjects.
+ *  Provide a delegate or set fetchedObjectsBlock to perfom an action once the objects are fetched.
+ *  You must call [managedObjectContext save:] to commit these changes.
  */
 - (void)performFetchAsynchronously;
 
 /**
  *  Deleted the fetched objects from self.managedObjectContext and saves.
  *  self.managedObjects must contain objects.
+ *  You must call [managedObjectContext save:] to commit these changes.
+ *  Blocks the main thread. On returning, fetchedObjects will have been deleted.
  *
  *  @param error If there is a problem deleting, upon return contains an instance of NSError that describes the problem.
  *
@@ -140,6 +144,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
 
 /**
  *  Perform a deletion in a background thread.
+ *  Provide a delegate or set deletedObjectsBlock to perfom an action once the objects are deleted.
  */
 - (void)deleteObjectsAsynchronously;
 
