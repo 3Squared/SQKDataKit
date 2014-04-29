@@ -54,23 +54,10 @@
 }
 
 
-/**
- *  Remove saved posts, nil out the controller.
- */
 - (void)tearDown
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-//    NSFetchRequest *request = [Commit SQK_fetchRequest];
-//    NSArray *managedObjects = [[self.contextManager mainContext] executeFetchRequest:request error:nil];
-//    for (NSManagedObject *object in managedObjects) {
-//        [[self.contextManager mainContext] deleteObject:object];
-//    }
-//    NSError *error = nil;
-//    [[self.contextManager mainContext] save:&error];
-//    NSLog(@"%s %d %s: %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [error localizedDescription]);
-//    self.controller.delegate = nil;
-//    self.controller = nil;
 }
 
 /**
@@ -262,6 +249,7 @@
 -(void)testInitialisingWithObjects
 {
     [self.controller performFetch:nil];
+    self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
     objectsController.delegate = self;
     
@@ -289,6 +277,7 @@
 -(void)testInitialisingWithObject
 {
     [self.controller performFetch:nil];
+    self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
     objectsController.delegate = self;
     
@@ -316,6 +305,7 @@
 -(void)testInitialisingWithObjectAsync
 {
     [self.controller performFetch:nil];
+    self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
     objectsController.delegate = self;
     
