@@ -20,7 +20,7 @@ This class provides a simpler way to replicate the often-used pattern of a searc
  *  @param context The managed object context to use when query Core Data.
  *  @param style   A constant that specifies the style of table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  *
- *  @return An initialized SJOSearchableFetchedResultsController object or nil if the object couldn’t be created.
+ *  @return An initialized SQKFetchedTableViewController object or nil if the object couldn’t be created.
  */
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext style:(UITableViewStyle)style;
 
@@ -97,7 +97,7 @@ Forces the fetched results controllers to be recreated, causing performFetch to 
 /**
  *  Returns the section key path string to use when constructing new NSFetchedResultsControllers. nil by default, so without overriding NSFetchedResultsControllers will have no sections. NOTE: if `searchIsActive` is YES then the return value will be ignored and nil used regardless. This is because A a section index should not be shown while searching, and B executed fetch requests take longer when sections are used. When searching this is especially noticable as a new fetch request is executed upon each key stroke during search.
  *
- *  @param controller The SJOSearchableFetchedResultsController creating the NSFetchedResultsController for which a sectionKeyPath is needed.
+ *  @param controller The SQKFetchedTableViewController creating the NSFetchedResultsController for which a sectionKeyPath is needed.
  *
  *  @return The sectionKeyPath to use in constructing a NSFetchedResultsController, or nil for no sections.
  */
