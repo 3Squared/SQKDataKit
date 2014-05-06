@@ -159,7 +159,7 @@ Asynchronous variants of `performFetch` and `deleteObjects` are available. Try t
 
 In general this class is designed for from the main thread only. Your mileage may vary in any other circumstance.
 
-## SQKFetchedTableViewController
+## `SQKFetchedTableViewController`
 
 Above, I told you that you should be using `NSFetchedResultsController` if you have a Core Data backed table view. "But there's so much _boilerplate_!", you whinge. "If only there was a simpler way to create a Core Data-backed searchable, filterable UITableView Controller!".
 
