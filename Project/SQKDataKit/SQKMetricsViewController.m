@@ -181,7 +181,7 @@ static NSString *CellIdentifier = @"Cell";
     [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-#pragma mark - Data manipulation
+#pragma mark - Data import
 
 - (void)insertOrUpdateWithNaiveOperation {
     
@@ -218,6 +218,8 @@ static NSString *CellIdentifier = @"Cell";
     
     [self.queue addOperation:importOperation];
 }
+
+#pragma mark - Data delete
 
 - (void)deleteAll {
     NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{

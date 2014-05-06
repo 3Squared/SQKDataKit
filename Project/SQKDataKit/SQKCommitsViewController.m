@@ -11,72 +11,66 @@
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
 #import "SQKAppDelegate.h"
-#import "FetchedResultsControllerDataSource.h"
 #import "SQKCommitCell.h"
 
-@interface SQKCommitsViewController () <FetchedResultsControllerDataSourceDelegate, UITextFieldDelegate>
-@property (nonatomic, strong) FetchedResultsControllerDataSource *fetchedResultsControllerDataSource;
+@interface SQKCommitsViewController ()
 @end
 
 @implementation SQKCommitsViewController
 
-- (instancetype)init {
-    self = [super initWithStyle:UITableViewStylePlain];
+- (instancetype)initWithContext:(NSManagedObjectContext *)context {
+    self = [super initWithContext:context style:UITableViewStylePlain];
     if (self) {
-        self.title = @"List";
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"list"] tag:0];
+		self.title = @"List";
+		self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"list"] tag:0];
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self setupFetchedResultsController];
+	[super viewDidLoad];
+    [self.tableView registerClass:[SQKCommitCell class] forCellReuseIdentifier:NSStringFromClass([SQKCommitCell class])];
 }
 
+#pragma mark - UITableViewDelegate
 
-- (void)setupFetchedResultsController {
-    self.fetchedResultsControllerDataSource = [[FetchedResultsControllerDataSource alloc] initWithTableView:self.tableView];
-    self.fetchedResultsControllerDataSource.fetchedResultsController = [self commitsFetchedResultsController];
-    self.fetchedResultsControllerDataSource.delegate = self;
-    self.fetchedResultsControllerDataSource.reuseIdentifier = @"Cell";
-    [self.tableView registerClass:[SQKCommitCell class] forCellReuseIdentifier:self.fetchedResultsControllerDataSource.reuseIdentifier];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return SQKCommitCellHeight;
 }
 
+#pragma mark - UITableViewDataSource
 
-- (NSFetchedResultsController *)commitsFetchedResultsController {
-    NSManagedObjectContext *mainContext = [self.contextManager mainContext];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class]) forIndexPath:indexPath];
+    [self fetchedResultsController:[self fetchedResultsControllerForTableView:tableView] configureCell:cell atIndexPath:indexPath];
+	return cell;
+}
+
+#pragma mark -
+
+-(NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString {
     NSFetchRequest *request = [Commit SQK_fetchRequest];
-    [request setFetchBatchSize:100];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
-    return [[NSFetchedResultsController alloc] initWithFetchRequest:request
-                                               managedObjectContext:mainContext
-                                                 sectionNameKeyPath:nil
-                                                          cacheName:nil];
+
+    NSPredicate* filterPredicate = nil;
+    if(searchString.length)
+    {
+        filterPredicate = [NSPredicate predicateWithFormat:@"authorName CONTAINS[cd] %@", searchString];
+    }
+    
+    [request setPredicate:filterPredicate];
+    
+    return request;
 }
 
-#pragma mark Fetched Results Controller Delegate
-
-- (void)configureCell:(id)theCell withObject:(id)object {
-    SQKCommitCell *cell = theCell;
-    Commit *commit = object;
+-(void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController configureCell:(UITableViewCell *)theCell atIndexPath:(NSIndexPath *)indexPath {
+    SQKCommitCell *cell = (SQKCommitCell*)theCell;
+    Commit *commit = [fetchedResultsController objectAtIndexPath:indexPath];
     cell.authorNameLabel.text = commit.authorName;
     cell.authorEmailLabel.text = commit.authorEmail;
     cell.dateLabel.text = [commit.date description];
     cell.shaLabel.text = commit.sha;
     cell.messageLabel.text = commit.message;
-}
-
-- (void)deleteObject:(id)object {
-    Commit *commit = object;
-    NSString *actionName = [NSString stringWithFormat:NSLocalizedString(@"Delete \"%@\"", @"Delete undo action name"), commit.sha];
-    [self.undoManager setActionName:actionName];
-    [commit SQK_deleteObject];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
-    return SQKCommitCellHeight;
 }
 
 @end

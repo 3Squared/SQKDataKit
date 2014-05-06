@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SQKDataKit"
-  s.version      = "0.2.4"
+  s.version      = "0.2.7"
   s.summary      = "Lightweight Core Data helper to reduce boilerplate code."
 
   s.license = { :type => 'Custom', :file => 'LICENCE' }
@@ -19,12 +19,15 @@ Pod::Spec.new do |s|
 
   s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walker@3squared.com"}
 
-  s.platform     = :ios, '6.0', :osx, '10.9'
+  s.osx.platform    = :osx, '10.9' 
+  s.ios.platform    = :ios, '6.0'
+  s.ios.deployment_target = '6.0'
+  s.osx.deployment_target = '10.9' 
 
   s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
 
   s.source_files  = 'Classes/**/*{h,m}'
-  s.public_header_files = ["Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKJSONDataImportOperation.h", "Classes/SQKDataKit.h"]
+  s.public_header_files = ["Classes/SQKManagedObjectController.h", "Classes/NSManagedObject+SQKAdditions.h", "Classes/SQKContextManager.h", "Classes/SQKDataImportOperation.h", "Classes/SQKDataKit.h"]
 
   s.framework  = 'CoreData'
 

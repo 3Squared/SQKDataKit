@@ -33,6 +33,10 @@ CGFloat const SQKCommitCellHeight = 130.0f;
     return self;
 }
 
+- (void)prepareForReuse {
+	[super prepareForReuse];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     

@@ -64,7 +64,10 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     NSFetchRequest *fetchRequest = [self SQK_fetchRequest];
     NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
     if (localError) {
-        *error = localError;
+        // Check the passed error pointer is not NULL
+        if (error) {
+            *error = localError;
+        }
         return;
     }
     [objects makeObjectsPerformSelector:@selector(SQK_deleteObject)];
@@ -77,8 +80,11 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
     
-    if (!(context.concurrencyType == NSPrivateQueueConcurrencyType || context.concurrencyType ==  NSMainQueueConcurrencyType)) {
-        *error = [self errorForUnsupportedQueueConcurencyType];
+    if (context.concurrencyType != NSPrivateQueueConcurrencyType) {
+        // Check error pointer is not NULL
+        if (error) {
+            *error = [self errorForUnsupportedQueueConcurencyType];
+        }
         return;
     }
     
