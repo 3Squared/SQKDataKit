@@ -2,19 +2,19 @@
 
 Collection of classes to make working with Core Data easier and help DRY-up your code. Provides convenience methods and classes for working in a multi-threaded environment with `NSManagedObject`s and `NSManagedObjectContext`s. Codifies some good practises for importing large data sets efficiently.
 
-## Installation
+# Installation
 
 * Using [Cocoapods](http://cocoapods.org), add `pod SQKDataKit` to you Podfile.
 * `#import <SQKDataKit/SQKDataKit.h>` as necessary.
 
 
-## Usage
+# Usage
 
-### `SQKContextManager`
+## `SQKContextManager`
 
 `SQKContextManager` is you first point of entry for using SQKDataKit. It creates and manages `NSManagedObjectContext` instances for you. 
 
-#### Initialisation
+### Initialisation
 
 You should only ever use a single `SQKContextManager` as it maintains the persistent store coordinator instance for your Core Data stack. It is recommended you create it during the initial load of the app, for example in your AppDelegate. Initalise a context manager with a concurrency type and a managed object model:
 
@@ -49,13 +49,13 @@ If you only have a single Data Model then `[NSManagedObjectModel mergedModelFrom
 
 The context manager provides a convenient way to obtain 2 kinds of `NSManagedObjectContext` objects that are commonly used.
 
-#### Using the main context
+### Using the main context
 
 There is only ever one main context and is obtained through the `mainContext` method. You should use this context for any interaction with Core Data while on the main thread, such as using controllers and UI objects that are required to be used only on the main thread.. This context is initialised with `NSMainQueueConcurrencyType`and should therefore only be used while on the main thread. 
 
 **Do not use the main context while in a background thread.** Failure to use the main context on the main thread will result inconsistent behaviour and possible crashes.
 
-#### Using private contexts
+### Using private contexts
 
 Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to  perform Core Data work off the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial, in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
 
@@ -71,7 +71,7 @@ Note: the main context is retained by the context manager, unlike any private co
 
 
 
-#### Concurency 
+### Concurency 
 
 Quoting the Apple Doc for 
 
@@ -80,7 +80,7 @@ Quoting the Apple Doc for
 In the case of SQKDataKit you do not need to pass a reference to a persistent store coordinator. Simply pass the instance of the SQKContextManager (as this maintains the persistent store coordinator). Ask the SQKContextManager for a newPrivateContext:` from the thread / queue you intend to perform your Core Data work on.
 
 
-### `NSManagedObject+SQKAdditions`
+## `NSManagedObject+SQKAdditions`
 
 Additions to `NSManagedObject` to reduce boilerplate and simplify common operations, such as creating a fetch request or inserting a new instance of an object. These methods never should never be called directly on NSManagedObject (e.g. `[NSManagedObject sqk_entityName]`), but instead only on subclasses.
 
@@ -107,7 +107,7 @@ Includes a method for optimised batch insert-or-update, a common pattern in apps
 	                     error:&error];
 	                     
 
-### `SQKManagedObjectController`
+## `SQKManagedObjectController`
 
 It is important to keep track of any `NSManagedObjects` you have fetched. If you hold a reference to an object but it is deleted elsewhere (possibly as part of a background sync operation) then when you try to access it an exception will be raised and the app will probably crash. Maybe it is just edited in the background - but your detail view  doesn't know, so you're showing out of date information.
 
@@ -115,7 +115,7 @@ It is important to keep track of any `NSManagedObjects` you have fetched. If you
 
 In other situations an `NSFetchedResultsController` is a bit of a heavy solution.  An `SQKManagedObjectController` is like an FRC, but simpler - it manages the fetch request, holds onto the objects, and refreshes them on demand.
 
-#### Initialisation
+### Initialisation
 
 ```
 NSFetchRequest *request = [Commit SQK_fetchRequest];
@@ -154,12 +154,12 @@ The index set contains the indexes of objects in `controller.managedObjects` whi
 If you prefer blocks over delegates, you can set 
 `fetchedObjectsBlock`, `updatedObjectsBlock`, and `deletedObjectsBlock` as well as or instead of the delegate. Be aware that if both are set, the delegate methods will be called first.
 
-#### Concurrency
+### Concurrency
 Asynchronous variants of `performFetch` and `deleteObjects` are available. Try to only use these if you are dealing with large numbers of managed objects.
 
 In general this class is designed for from the main thread only. Your mileage may vary in any other circumstance.
 
-### SQKFetchedTableViewController
+## SQKFetchedTableViewController
 
 Above, I told you that you should be using `NSFetchedResultsController` if you have a Core Data backed table view. "But there's so much _boilerplate_!", you whinge. "If only there was a simpler way to create a Core Data-backed searchable, filterable UITableView Controller!".
 
@@ -167,7 +167,7 @@ Above, I told you that you should be using `NSFetchedResultsController` if you h
 
 See `SQKCommitsViewController` in the example project for an implementation.
 
-#### Usage
+### Usage
 
 Subclass `SQKFetchedTableViewController` and override the following methods:
 
@@ -185,7 +185,7 @@ And:
 Here you must return an `NSFetchRequest` for the specified search string. If searchString is nil, return your unfiltered dataset. This will be called multiple times as the user enters a search string.
 
 
-#### Section Indexes
+### Section Indexes
 
 To use a section index in a `SQKFetchedTableViewController` subclass:
 
@@ -223,7 +223,7 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 }
 ```
 
-### `SQKDataImportOperation`
+## `SQKDataImportOperation`
 
 Todo
 
