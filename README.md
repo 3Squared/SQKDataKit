@@ -107,6 +107,58 @@ Includes a method for optimised batch insert-or-update, a common pattern in apps
 	                     error:&error];
 	                     
 
+### `SQKManagedObjectController`
+
+It is important to keep track of any `NSManagedObjects` you have fetched. If you hold a reference to an object but it is deleted elsewhere (possibly as part of a background sync operation) then when you try to access it an exception will be raised and the app will probably crash. Maybe it is just edited in the background - but your detail view  doesn't know, so you're showing out of date information.
+
+`NSFetchedResultsController` avoids these issues as it listens to Core Data notifications and keeps itself updated. If you need a Core Data backed tableview, always use an `NSFetchedResultsController` if you can.
+
+In other situations an `NSFetchedResultsController` is a bit of a heavy solution.  An `SQKManagedObjectController` is like an FRC, but simpler - it manages the fetch request, holds onto the objects, and refreshes them on demand.
+
+#### Initialisation
+
+```
+NSFetchRequest *request = [Commit SQK_fetchRequest];
+self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
+                                                          managedObjectContext:[self.contextManager mainContext]];
+[self.controller performFetch:&error];                                                        
+```
+
+Or if you already have objects you want to manage (say they are passed to a detail view):
+
+```
+SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
+```
+
+### Delegate
+When objects are fetched (as a result of calling `performFetch:`), updated, or deleted, the controller's delegate methods are called. These are:
+
+```
+-(void)controller:(SQKManagedObjectController*)controller
+   fetchedObjects:(NSIndexSet*)fetchedObjectIndexes error:(NSError**)error;
+```
+
+```
+-(void)controller:(SQKManagedObjectController*)controller
+   updatedObjects:(NSIndexSet*)updatedObjectIndexes;
+```
+
+```
+-(void)controller:(SQKManagedObjectController*)controller
+   deletedObjects:(NSIndexSet*)deletedObjectIndexes;  
+```
+The index set contains the indexes of objects in `controller.managedObjects` which have been fetched, edited or deleted. These objects are automatically refreshed using `[managedObjectContext refreshObject:existingObject mergeChanges:NO]`. It is then up to you to decide what to do with that information - for instance, update some visible data, or pop a view controller from the stack.
+
+### Blocks
+
+If you prefer blocks over delegates, you can set 
+`fetchedObjectsBlock`, `updatedObjectsBlock`, and `deletedObjectsBlock` as well as or instead of the delegate. Be aware that if both are set, the delegate methods will be called first.
+
+#### Concurrency
+Asynchronous variants of `performFetch` and `deleteObjects` are available. Try to only use these if you are dealing with large numbers of managed objects.
+
+In general this class is designed for from the main thread only. Your mileage may vary in any other circumstance.
+
 ### `SQKDataImportOperation`
 
 Todo
