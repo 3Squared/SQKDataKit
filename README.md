@@ -159,6 +159,70 @@ Asynchronous variants of `performFetch` and `deleteObjects` are available. Try t
 
 In general this class is designed for from the main thread only. Your mileage may vary in any other circumstance.
 
+### SQKFetchedTableViewController
+
+Above, I told you that you should be using `NSFetchedResultsController` if you have a Core Data backed table view. "But there's so much _boilerplate_!", you whinge. "If only there was a simpler way to create a Core Data-backed searchable, filterable UITableView Controller!".
+
+`SQKFetchedTableViewController` provides a simpler way to replicate the often-used pattern of a searchable Core Data-backed table view. It must be subclassed.
+
+See `SQKCommitsViewController` in the example project for an implementation.
+
+#### Usage
+
+Subclass `SQKFetchedTableViewController` and override the following methods:
+
+```
+- (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+```
+This is where you configure a cell for display. You would then call this method from your own `tableView:cellForRowAtIndexPath:` method.
+
+And: 
+
+```
+- (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString;
+```
+
+Here you must return an `NSFetchRequest` for the specified search string. If searchString is nil, return your unfiltered dataset. This will be called multiple times as the user enters a search string.
+
+
+#### Section Indexes
+
+To use a section index in a `SQKFetchedTableViewController` subclass:
+
+```
+- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SJOSearchableFetchedResultsController *)controller 
+{
+    return @"uppercaseFirstLetterTitle"; // the sectionKeyPath
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
+{
+    // No section indexes if searching
+    if (self.searchIsActive) {
+        return nil;
+    }
+    return self.sectionIndexes;
+}
+
+ (NSString *)tableView:(UITableView *)tableView
+		titleForHeaderInSection:(NSInteger)section
+{
+    return [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView 
+{
+    return [[UILocalizedIndexedCollation currentCollation] sectionIndexTitles];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+	sectionForSectionIndexTitle:(NSString *)title
+               			atIndex:(NSInteger)index
+{
+    return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
+}
+```
+
 ### `SQKDataImportOperation`
 
 Todo
