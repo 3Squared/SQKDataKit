@@ -1,6 +1,6 @@
 # SQKDataKit
 
-Collection of classes to make working with Core Data easier and help DRY-up your own code. Provides convenience methods and classes for working in a multi-threaded environment with `NSManagedObject`s and `NSManagedObjectContext`s. Codifies some good practises for importing large data sets efficiently.
+Collection of classes to make working with Core Data easier and help DRY-up your code. Provides convenience methods and classes for working in a multi-threaded environment with `NSManagedObject`s and `NSManagedObjectContext`s. Codifies some good practises for importing large data sets efficiently.
 
 ## Installation
 
@@ -43,7 +43,7 @@ You should only ever use a single `SQKContextManager` as it maintains the persis
 @end
 ```
 
-For a SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with `NSInMemoryStoreType` is useful as changes are not persisted between test suit runs, and side effects from your production SQLite database do not effect tests.
+For a SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with `NSInMemoryStoreType` is useful as changes are not persisted between test suite runs, and side effects from your production SQLite database do not effect tests.
 
 If you only have a single Data Model then `[NSManagedObjectModel mergedModelFromBundles:nil]` will return this.
 
@@ -57,7 +57,7 @@ There is only ever one main context and is obtained through the `mainContext` me
 
 #### Using private contexts
 
-Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to be perform Core Data work off the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial, in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
+Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to  perform Core Data work off the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial, in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
 
 Obtain a private context from the `newPrivateContext` method. This will create a new private context based on the current state of the persistent store. Conceptually you can think of the main context being "branched" into another (private) context. 
 
@@ -66,6 +66,10 @@ Any work you perform with the private context, and any changes you make, stay in
 Make sure to retain the private context in a property. To quote the Apple Doc:
 
 > Managed objects know what managed object context they’re associated with, and managed object contexts know what managed objects they contain. By default, though, the references between a managed object and its context are weak. This means that in general you cannot rely on a context to ensure the longevity of a managed object instance, and you cannot rely on the existence of a managed object to ensure the longevity of a context. Put another way, just because you fetched an object doesn’t mean it will stay around.
+
+Note: the main context is retained by the context manager, unlike any private contexts that it creates.
+
+
 
 #### Concurency 
 
@@ -78,7 +82,7 @@ In the case of SQKDataKit you do not need to pass a reference to a persistent st
 
 
 
-### `NSPersistentStoreCoordinator+SQKAdditions`
+### `NSManagedObject+SQKAdditions`
 
 Todo
 
