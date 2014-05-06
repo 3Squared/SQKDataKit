@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SQKFetchedTableViewController.h"
 
-@interface SQKCommitsViewController : UITableViewController
-@property (nonatomic, strong, readonly) NSManagedObjectContext *context;
+@interface SQKCommitsViewController : SQKFetchedTableViewController
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)context;
 
