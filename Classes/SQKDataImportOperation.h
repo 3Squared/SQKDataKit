@@ -11,7 +11,7 @@
 @class SQKContextManager;
 
 /**
- *  Use an SQKDataImportOperation when you need to import data into Core Data off the main thread. You need to subclass and must override the `updateContext:usingData:` method, which is where you should perform your data import logic. The operation will use it's `SQKContextManager` to obtain a private managed object context. This is passed to the `updateContext:usingData:` method for your to use during import. Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc must be done in a background thread, and using the correct operation queue will ensure that.
+ *  Use an SQKDataImportOperation when you need to import data into Core Data off the main thread. You need to subclass and must override the `updateContext:usingData:` method, which is where you should perform your data import logic. The operation will use it's `SQKContextManager` to obtain a private managed object context. This is passed to the `updateContext:usingData:` method for you to use during import. Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc must be done in a background thread, and using the correct operation queue will ensure that.
  *  @discussion Subclass example:
  *      ```
         #import "CustomDataImportOperation.h"
@@ -36,6 +36,7 @@
                                  error:&error];
             [context save:nil];
         }
+        @end
         ```
  *      Using:
  *      ```

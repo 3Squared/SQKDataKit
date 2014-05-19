@@ -16,7 +16,7 @@ Collection of classes to make working with Core Data easier and help DRY-up your
 
 ### Initialisation
 
-You should only ever use a single `SQKContextManager` as it maintains the persistent store coordinator instance for your Core Data stack. It is recommended you create it during the initial load of the app, for example in your AppDelegate. Initalise a context manager with a concurrency type and a managed object model:
+You should only ever use a single `SQKContextManager` as it maintains the persistent store coordinator instance for your Core Data stack. It is recommended you create it during the initial load of the app, for example in your AppDelegate. Initialise a context manager with a concurrency type and a managed object model:
 
 ```
 `#import <SQKDataKit/SQKDataKit.h>`
@@ -71,7 +71,7 @@ Note: the main context is retained by the context manager, unlike any private co
 
 
 
-### Concurency 
+### Concurrency 
 
 Quoting the Apple Doc for 
 
@@ -225,7 +225,59 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 
 ## `SQKDataImportOperation`
 
-Todo
+Use an SQKDataImportOperation when you need to import data into Core Data off the main thread. 
+
+You need to subclass and must override the `updateContext:usingData:` method, which is where you should perform your data import logic. The operation uses a `SQKContextManager` instance to obtain a private managed object context. This is passed to the `updateContext:usingData:` method for you to use during import. 
+
+Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc **must be done in a background thread**, and using the correct operation queue will ensure that.
+
+### Usage
+
+How to subclass:
+
+```
+#import "CustomDataImportOperation.h"
+#import "Animal.h"
+#import "NSManagedObject+SQKAdditions.h"
+
+@interface CustomDataImportOperation ()
+@end
+
+@implementation CustomDataImportOperation
+
+- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
+    [Animal SQK_insertOrUpdate:data
+                uniqueModelKey:@"animalID"
+               uniqueRemoteKey:@"IDAnimal"
+           propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+               Animal *animal = (Animal *)managedObject;
+               animal.name = dictionary[@"Name"];
+               animal.age = dictionary[@"Age"];
+           }
+                privateContext:self.privateContext
+                         error:NULL];
+    [context save:NULL];
+}
+@end
+```
+
+Using with an operation queue.
+
+```
+NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init]; // background thread queue
+id JSON = ...; // data to import (NSArray or NSDictionary typically)
+
+CustomDataImportOperation *importOperation = [[CustomDataImportOperation alloc] initWithContextManager:self.contextManager data:JSON];
+[importOperation setCompletionBlock:^{
+    // Completion logic here
+	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+    // You may want to perform this on the main thread
+	}];
+
+}];
+
+[self.operationQueue addOperation:importOperation];
+```
 
 # Licence
 
