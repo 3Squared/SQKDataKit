@@ -42,9 +42,11 @@
     
     self.commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
+    self.commit.date = [NSDate date];
     [self.contextManager saveMainContext:nil];
     
     NSFetchRequest *request = [Commit SQK_fetchRequest];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
     
     self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
                                                           managedObjectContext:[self.contextManager mainContext]];
@@ -217,6 +219,7 @@
     
     Commit* commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Another test!";
+    commit.date = [NSDate date];
     [[self.contextManager mainContext] save:nil];
     
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
