@@ -43,8 +43,13 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     
     NSError *localError = nil;
     NSArray *objects = [context executeFetchRequest:request error:&localError];
-    
-    // TODO return error
+    if (localError) {
+        // Check the passed error pointer is not nil
+        if (error) {
+            *error = localError;
+        }
+        return nil;
+    }
     
     id managedObject = [objects lastObject];
     if (!managedObject) {
@@ -64,7 +69,6 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     NSFetchRequest *fetchRequest = [self sqk_fetchRequest];
     NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
     if (localError) {
-        // Check the passed error pointer is not NULL
         if (error) {
             *error = localError;
         }
@@ -81,7 +85,6 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
                      error:(NSError **)error {
     
     if (context.concurrencyType != NSPrivateQueueConcurrencyType) {
-        // Check error pointer is not NULL
         if (error) {
             *error = [self errorForUnsupportedQueueConcurencyType];
         }
@@ -103,13 +106,14 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         NSError *localError = nil;
         NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
         if (localError) {
+            *error = localError;
             return;
         }
         
         NSEnumerator *objectEnumerator = [objectsMatchingKey objectEnumerator];
         NSEnumerator *dictionaryEnumerator = [sortedDictArray objectEnumerator];
         
-        NSDictionary* dictionary;
+        NSDictionary *dictionary;
         id object = [objectEnumerator nextObject];
         
         while (dictionary = [dictionaryEnumerator nextObject]) {
