@@ -12,6 +12,7 @@
 @interface SQKDataImportOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) id data;
+@property (nonatomic, strong, readwrite) NSManagedObjectContext *privateContext;
 @end
 
 @implementation SQKDataImportOperation
@@ -30,9 +31,9 @@
 }
 
 - (void)main {
-    NSManagedObjectContext *context = [self.contextManager newPrivateContext];
-    [context performBlockAndWait:^{
-        [self updateContext:context usingData:self.data];
+    self.privateContext = [self.contextManager newPrivateContext];
+    [self.privateContext performBlockAndWait:^{
+        [self updateContext:self.privateContext usingData:self.data];
     }];
 }
 
