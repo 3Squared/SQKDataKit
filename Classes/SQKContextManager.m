@@ -57,17 +57,16 @@
     /**
      *  Ensure mainContext is accessed on the main thread.
      */
-    [_mainContext performBlock:^{
-        NSManagedObjectContext *managedObjectContext = [notification object];
-        if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
+    NSManagedObjectContext *managedObjectContext = [notification object];
+    if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
+        [_mainContext performBlock:^{
             [managedObjectContext performBlock:^{
                 /**
                  *  If NSManagedObjectContext from the notitification is a private context
                  *	then merge the changes into the main context.
                  */
-                
                 [_mainContext mergeChangesFromContextDidSaveNotification:notification];
-    
+                
                 /**
                  *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
                  *
@@ -79,10 +78,9 @@
                 for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
                     [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                 }
-                
             }];
-        }
-    }];
+        }];
+    }
 }
 
 - (NSManagedObjectContext *)mainContext {
