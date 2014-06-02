@@ -27,7 +27,8 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(contextDidSave:)
-                                                     name:NSManagedObjectContextDidSaveNotification object:nil];
+                                                     name:NSManagedObjectContextDidSaveNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -94,47 +95,16 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         [self.delegate controller:self fetchedObjects:allIndexes error:error];
     }
     if (self.fetchedObjectsBlock) {
-        self.fetchedObjectsBlock(allIndexes, *error);
+        self.fetchedObjectsBlock(self, allIndexes, *error);
     }
     return error ? NO : YES;
-}
-
-- (void)performFetchAsynchronously
-{
-    if (!self.fetchRequest) {
-        return;
-    }
-    
-    [self.queue addOperationWithBlock:^{
-        NSManagedObjectContext* privateContext = [self newPrivateContext];
-        
-        __block NSArray *fetchedObjects;
-        __block NSError *error = nil;
-        [privateContext performBlockAndWait:^{
-            fetchedObjects = [privateContext executeFetchRequest:self.fetchRequest error:&error];
-        }];
-        
-        NSArray *managedObjectIds = [fetchedObjects valueForKey:@"objectID"];
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSMutableArray *objectsToReturn = [NSMutableArray array];
-            for (NSManagedObjectID *objectID in managedObjectIds) {
-                [objectsToReturn addObject:[self.managedObjectContext objectWithID:objectID]];
-            }
-            self.managedObjects = [NSArray arrayWithArray:objectsToReturn];
-            if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)]) {
-                [self.delegate controller:self fetchedObjects:[self.managedObjects sqk_indexesOfObjects] error:&error];
-            }
-        }];
-        
-    }];
 }
 
 #pragma mark - Operations
 
 - (BOOL)deleteObjects:(NSError**)error
 {
-    if (!self.managedObjects) {
+    if (!self.managedObjects && error) {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
                                      code:2
                                  userInfo:@{NSLocalizedDescriptionKey : @"No objects to delete! You must call performFetch: first."}];
@@ -148,19 +118,6 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return error ? NO : YES;
 }
 
-- (void)deleteObjectsAsynchronously
-{
-    NSArray *objectIDs = [self.managedObjects valueForKey:@"objectID"];
-    [self.queue addOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self newPrivateContext];
-        [privateContext performBlockAndWait:^{
-            for (NSManagedObjectID *objectID in objectIDs) {
-                [privateContext deleteObject:[privateContext objectWithID:objectID]];
-            }
-            [privateContext save:nil];
-        }];
-    }];
-}
 
 #pragma mark - Private context
 
@@ -186,14 +143,56 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 - (void)contextDidSave:(NSNotification*)notification
 {
-    if (!self.managedObjects && self.delegate) {
+    if (self.fetchRequest) {
+        NSArray *insertedObjects = [[notification userInfo] objectForKey:NSInsertedObjectsKey];
+        
+        if (insertedObjects) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:self.managedObjects];
+            for (NSManagedObject *insertedObject in insertedObjects) {
+                if (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObjects]) {
+                    NSManagedObject *localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID] error:nil];
+                    if (localObject) {
+                        [array addObject:localObject];
+                    }
+                }
+            }
+            
+            if (self.fetchRequest.sortDescriptors) {
+                [array sortUsingDescriptors:self.fetchRequest.sortDescriptors];
+            }
+            
+            self.managedObjects = [NSArray arrayWithArray:array];
+            
+            NSIndexSet *insertedIndexes = [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject* existingObject, NSUInteger idx, BOOL *stop) {
+                for (NSManagedObject *insertedObject in insertedObjects) {
+                    if ([insertedObject.objectID isEqual:existingObject.objectID]) {
+                        return YES;
+                    }
+                }
+                return NO;
+            }];
+            
+            if (insertedIndexes.count > 0) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    if ([self.delegate respondsToSelector:@selector(controller:didInsertObjects:)]) {
+                        [self.delegate controller:self didInsertObjects:insertedIndexes];
+                    }
+                    if (self.insertedObjectsBlock) {
+                        self.insertedObjectsBlock(self, insertedIndexes);
+                    }
+                }];
+            }
+        }
+    }
+
+    if (!self.managedObjects) {
         return;
     }
     
     NSArray *updatedObjects = [[notification userInfo] objectForKey:NSUpdatedObjectsKey];
     NSArray *deletedObjects = [[notification userInfo] objectForKey:NSDeletedObjectsKey];
     
-    if (([self.delegate respondsToSelector:@selector(controller:updatedObjects:)] || self.updatedObjectsBlock) && updatedObjects && updatedObjects.count > 0) {
+    if (([self.delegate respondsToSelector:@selector(controller:didSaveObjects:)] || self.savedObjectsBlock) && updatedObjects && updatedObjects.count > 0) {
         NSIndexSet *updatedIndexes = [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject* existingObject, NSUInteger idx, BOOL *stop) {
             for (NSManagedObject *updatedObject in updatedObjects) {
                 if ([updatedObject.objectID isEqual:existingObject.objectID]) {
@@ -206,17 +205,17 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         
         if (updatedIndexes.count > 0) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if ([self.delegate respondsToSelector:@selector(controller:updatedObjects:)]) {
-                    [self.delegate controller:self updatedObjects:updatedIndexes];
+                if ([self.delegate respondsToSelector:@selector(controller:didSaveObjects:)]) {
+                    [self.delegate controller:self didSaveObjects:updatedIndexes];
                 }
-                if (self.updatedObjectsBlock) {
-                    self.updatedObjectsBlock(updatedIndexes);
+                if (self.savedObjectsBlock) {
+                    self.savedObjectsBlock(self, updatedIndexes);
                 }
             }];
         }
     }
     
-    if (([self.delegate respondsToSelector:@selector(controller:deletedObjects:)] || self.deletedObjectsBlock) && deletedObjects && deletedObjects.count > 0) {
+    if (([self.delegate respondsToSelector:@selector(controller:didDeleteObjects:)] || self.deletedObjectsBlock) && deletedObjects && deletedObjects.count > 0) {
         NSIndexSet *deletedIndexes = [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject* existingObject, NSUInteger idx, BOOL *stop) {
             for (NSManagedObject *deletedObject in deletedObjects) {
                 if ([deletedObject.objectID isEqual:existingObject.objectID]) {
@@ -229,15 +228,17 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         
         if (deletedIndexes.count > 0) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                if ([self.delegate respondsToSelector:@selector(controller:deletedObjects:)]) {
-                    [self.delegate controller:self deletedObjects:deletedIndexes];
+                if ([self.delegate respondsToSelector:@selector(controller:didDeleteObjects:)]) {
+                    [self.delegate controller:self didDeleteObjects:deletedIndexes];
                 }
                 if (self.deletedObjectsBlock) {
-                    self.deletedObjectsBlock(deletedIndexes);
+                    self.deletedObjectsBlock(self, deletedIndexes);
                 }
             }];
         }
     }
+    
+
 }
 
 

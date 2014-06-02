@@ -13,15 +13,10 @@
 #import "SQKContextManager.h"
 #import "NSManagedObject+SQKAdditions.h"
 
-@interface SQKManagedObjectControllerTests : XCTestCase <SQKManagedObjectControllerDelegate>
+@interface SQKManagedObjectControllerTests : XCTestCase
 @property (strong, nonatomic) Commit *commit;
 @property (strong, nonatomic) SQKManagedObjectController *controller;
 @property (strong, nonatomic) SQKContextManager *contextManager;
-
-@property (assign) BOOL fetchDone;
-@property (assign) BOOL updateDone;
-@property (assign) BOOL deletionDone;
-@property (assign) BOOL localControllerUpdateDone;
 @end
 
 @implementation SQKManagedObjectControllerTests
@@ -32,10 +27,6 @@
 - (void)setUp
 {
     [super setUp];
-    self.fetchDone = NO;
-    self.updateDone = NO;
-    self.deletionDone = NO;
-    self.localControllerUpdateDone = NO;
     
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
@@ -50,8 +41,7 @@
     
     self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
                                                           managedObjectContext:[self.contextManager mainContext]];
-    self.controller.delegate = self;
-    self.controller.updatedObjectsBlock = nil;
+    self.controller.savedObjectsBlock = nil;
     self.controller.fetchedObjectsBlock = nil;
     self.controller.deletedObjectsBlock = nil;
 }
@@ -61,6 +51,7 @@
 {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+    [self.controller deleteObjects:nil];
 }
 
 /**
@@ -84,7 +75,7 @@
     NSError *error = nil;
     
     __block bool blockUpdateDone = NO;
-    self.controller.updatedObjectsBlock = ^void(NSIndexSet *indexes)
+    self.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
@@ -99,37 +90,33 @@
             commit.sha = @"dcba";
             NSError *error = nil;
             [privateContext save:&error];
-            NSLog(@"%s %d %s: %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [error localizedDescription]);
         }];
     });
     
-    AGWW_WAIT_WHILE(!self.updateDone && !blockUpdateDone, 20.0);
-    
+    AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[self.controller managedObjects] firstObject] sha], @"dcba", @"");
 }
 
-
 /**
- *  Test that objects are updated and the delegate is called if the fetch is performed off the main thread.
+ *  Test block is called when object changed.
  */
--(void)testAsyncFetching
+- (void)testInsertRefresh
 {
-    __block bool blockFetchDone = NO;
-    self.controller.fetchedObjectsBlock = ^void(NSIndexSet *indexes, NSError *error)
+    __block bool blockUpdateDone = NO;
+    self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockFetchDone = YES;
+        blockUpdateDone = YES;
     };
-
-    [self.controller performFetchAsynchronously];
     
-    XCTAssertNil([self.controller managedObjects], @"");
-    AGWW_WAIT_WHILE(!self.fetchDone && !blockFetchDone, 2.0);
-    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
+    Commit *commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    commit.sha = @"Inserted";
+    commit.date = [NSDate date];
+    [self.contextManager saveMainContext:nil];
     
-    Commit *commit = [[self.controller managedObjects] firstObject];
-    XCTAssertEqualObjects(commit.managedObjectContext, [self.contextManager mainContext], @"");
+    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+    XCTAssertTrue([self.controller.managedObjects containsObject:commit], @"");
 }
 
 /**
@@ -168,69 +155,6 @@
     XCTAssertNil(error, @"");
 }
 
-/**
- *  Test that the asyncrounous batch deletion method correctly removes objects from the persistant store and the the delegate is notified.
- */
--(void)testAsyncDeletion
-{
-    [self.controller performFetch:nil];
-    
-    
-    XCTAssertFalse(self.commit.isDeleted, @"");
-    
-    __block bool blockDeleteDone = NO;
-    self.controller.deletedObjectsBlock = ^void(NSIndexSet *indexes)
-    {
-        XCTAssertTrue([NSThread isMainThread], @"");
-        blockDeleteDone = YES;
-    };
-
-    
-    [self.controller deleteObjectsAsynchronously];
-    
-    AGWW_WAIT_WHILE(!self.deletionDone && !blockDeleteDone, 2.0);
-    
-    // At this point the object should be pending deletion
-    XCTAssertTrue(self.commit.isDeleted, @"");
-
-
-    NSError *error = nil;
-    [[self.contextManager mainContext] save:&error];
-    XCTAssertNil(error, @"");
-    
-    // On deletion the context is nilled out. isDeleted returns NO, though.
-    XCTAssertNil(self.commit.managedObjectContext, @"");
-    XCTAssertFalse(self.commit.isInserted, @"");
-    XCTAssertFalse(self.commit.isDeleted, @"");
-    XCTAssertTrue(self.commit.isFault, @"");
-
-    // Changing a deleted object causes Core Data to throw an exception:
-    // "CoreData could not fulfill a fault"
-    XCTAssertThrows([self.commit setSha:@"Deleted"], @"");
-}
-
-/**
- *  Test that calling performFetch: a second time causes the managedObjects property to be updated.
- */
--(void)testFetchToRefresh
-{
-    [self.controller performFetch:nil];
-    
-    
-    Commit* commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
-    commit.sha = @"Another test!";
-    commit.date = [NSDate date];
-    [[self.contextManager mainContext] save:nil];
-    
-    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
-    
-    [self.controller performFetch:nil];
-    
-    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)2, @"");
-    
-    XCTAssertEqualObjects([[[self.controller managedObjects] firstObject] sha], @"Another test!", @"");
-}
-
 #pragma mark - Other Initialisers
 
 /**
@@ -253,10 +177,9 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
-    objectsController.delegate = self;
     
     __block bool blockUpdateDone = NO;
-    objectsController.updatedObjectsBlock = ^void(NSIndexSet *indexes)
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
@@ -267,9 +190,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
     
-    XCTAssertTrue(!self.localControllerUpdateDone, @"");
-    AGWW_WAIT_WHILE(!self.localControllerUpdateDone && !blockUpdateDone, 2.0);
-    XCTAssertTrue(self.localControllerUpdateDone, @"");
+    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
 }
 
@@ -281,10 +202,9 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
-    objectsController.delegate = self;
     
     __block bool blockUpdateDone = NO;
-    objectsController.updatedObjectsBlock = ^void(NSIndexSet *indexes)
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
@@ -295,9 +215,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
     
-    XCTAssertTrue(!self.localControllerUpdateDone, @"");
-    AGWW_WAIT_WHILE(!self.localControllerUpdateDone && !blockUpdateDone, 2.0);
-    XCTAssertTrue(self.localControllerUpdateDone, @"");
+    AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
 }
 
@@ -309,10 +227,9 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
-    objectsController.delegate = self;
     
     __block bool blockUpdateDone = NO;
-    objectsController.updatedObjectsBlock = ^void(NSIndexSet *indexes)
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
@@ -327,41 +244,11 @@
         }];
     });
 
-    XCTAssertTrue(!self.localControllerUpdateDone, @"");
-    AGWW_WAIT_WHILE(!self.localControllerUpdateDone && !blockUpdateDone, 2.0);
-    XCTAssertTrue(self.localControllerUpdateDone, @"");
+    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
     XCTAssertEqual([[objectsController managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
 
 }
 
-#pragma mark - Delegate
-
--(void)controller:(SQKManagedObjectController *)controller fetchedObjects:(NSIndexSet *)fetchedObjectIndexes error:(NSError **)error
-{
-    XCTAssertTrue([NSThread isMainThread], @"");
-    if (controller == self.controller) {
-        self.fetchDone = YES;
-    }
-}
-
--(void)controller:(SQKManagedObjectController *)controller updatedObjects:(NSIndexSet *)changedObjectIndexes
-{
-    XCTAssertTrue([NSThread isMainThread], @"");
-    if (controller == self.controller) {
-        self.updateDone = YES;
-    } else {
-        self.localControllerUpdateDone = YES;
-    }
-}
-
-
--(void)controller:(SQKManagedObjectController *)controller deletedObjects:(NSIndexSet *)deletedObjectIndexes
-{
-    XCTAssertTrue([NSThread isMainThread], @"");
-    if (controller == self.controller) {
-        self.deletionDone = YES;
-    }
-}
 
 @end

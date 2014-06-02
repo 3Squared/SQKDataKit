@@ -13,8 +13,8 @@
 
 extern NSString* const SQKManagedObjectControllerErrorDomain;
 
-typedef void (^SQKManagedObjectControllerObjectsChangedBlock)(NSIndexSet *changedObjectIndexes);
-typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *changedObjectIndexes, NSError *error);
+typedef void (^SQKManagedObjectControllerObjectsChangedBlock)(SQKManagedObjectController *controller, NSIndexSet *changedObjectIndexes);
+typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectController *controller, NSIndexSet *changedObjectIndexes, NSError *error);
 
 
 /**
@@ -39,19 +39,37 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
  *  Called when objects are updated after the main context is saved or changes are merged from a background thread.
  *
  *  @param controller           The SQKManagedObjectController where the changes occured.
+ *  @param savedObjectIndexes The indexes of the updated objects.
+ */
+-(void)controller:(SQKManagedObjectController*)controller
+   didSaveObjects:(NSIndexSet*)savedObjectIndexes;
+
+/**
+ *  Called when objects are changed in the current managed object context.
+ *
+ *  @param controller           The SQKManagedObjectController where the changes occured.
  *  @param changedObjectIndexes The indexes of the updated objects.
  */
 -(void)controller:(SQKManagedObjectController*)controller
-   updatedObjects:(NSIndexSet*)updatedObjectIndexes;
+   didChangeObjects:(NSIndexSet*)savedObjectIndexes;
+
+/**
+ *  Called when objects are inserted that match the fetch request in the current managed object context.
+ *
+ *  @param controller           The SQKManagedObjectController where the changes occured.
+ *  @param insertedObjectIndexes The indexes of the inserted objects.
+ */
+-(void)controller:(SQKManagedObjectController*)controller
+ didInsertObjects:(NSIndexSet*)insertedObjectIndexes;
 
 /**
  *  Called when objects are deleted after the main context is saved or changes are merged from a background thread.
  *
  *  @param controller           The SQKManagedObjectController where the deletions occured.
- *  @param changedObjectIndexes The indexes of the deleted objects.
+ *  @param deletedObjectIndexes The indexes of the deleted objects.
  */
 -(void)controller:(SQKManagedObjectController*)controller
-   deletedObjects:(NSIndexSet*)deletedObjectIndexes;
+   didDeleteObjects:(NSIndexSet*)deletedObjectIndexes;
 @end
 
 /**
@@ -71,14 +89,19 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
 @property (nonatomic, copy) SQKManagedObjectControllerObjectsFetchedBlock fetchedObjectsBlock;
 
 /**
- *  A block callback to be called when objects are updated.
+ *  A block callback to be called when objects are saved.
  */
-@property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock updatedObjectsBlock;
+@property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock savedObjectsBlock;
 
 /**
  *  A block callback to be called when objects are deleted.
  */
 @property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock deletedObjectsBlock;
+
+/**
+ *  A block callback to be called when objects are inserted that match the fetch request.
+ */
+@property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock insertedObjectsBlock;
 
 /**
  *  Returns a SQKManagedObjectController set up with the given fetch request and context.
@@ -124,13 +147,6 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
 - (BOOL)performFetch:(NSError**)error;
 
 /**
- *  Execute the fetch request in a background thread and store the results in self.managedObjects.
- *  Provide a delegate or set fetchedObjectsBlock to perfom an action once the objects are fetched.
- *  You must call [managedObjectContext save:] to commit these changes.
- */
-- (void)performFetchAsynchronously;
-
-/**
  *  Deleted the fetched objects from self.managedObjectContext and saves.
  *  self.managedObjects must contain objects.
  *  You must call [managedObjectContext save:] to commit these changes.
@@ -142,10 +158,5 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(NSIndexSet *change
  */
 - (BOOL)deleteObjects:(NSError**)error;
 
-/**
- *  Perform a deletion in a background thread.
- *  Provide a delegate or set deletedObjectsBlock to perfom an action once the objects are deleted.
- */
-- (void)deleteObjectsAsynchronously;
 
 @end
