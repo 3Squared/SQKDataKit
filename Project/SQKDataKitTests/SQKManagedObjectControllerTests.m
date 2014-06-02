@@ -103,6 +103,8 @@
  */
 - (void)testInsertRefresh
 {
+    [self.controller performFetch:nil];
+    
     __block bool blockUpdateDone = NO;
     self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
     {
@@ -111,12 +113,20 @@
     };
     
     Commit *commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
-    commit.sha = @"Inserted";
+    commit.sha = @"Insert 1";
     commit.date = [NSDate date];
+    
+    Commit *commit2 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    commit2.sha = @"Insert 2";
+    commit2.date = [NSDate date];
+
     [self.contextManager saveMainContext:nil];
     
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
+    XCTAssertTrue([self.controller.managedObjects containsObject:self.commit], @"");
     XCTAssertTrue([self.controller.managedObjects containsObject:commit], @"");
+    XCTAssertTrue([self.controller.managedObjects containsObject:commit2], @"");
 }
 
 /**
