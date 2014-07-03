@@ -33,7 +33,6 @@
         self.storeType = storeType;
         self.managedObjectModel = managedObjectModel;
         self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
-        [self observeForSavedNotification];
     }
     return self;
 }
@@ -44,45 +43,6 @@
         validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
     }
     return validStoreTypes;
-}
-
-- (void)observeForSavedNotification {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(contextSaveNotificationReceived:)
-												 name:NSManagedObjectContextDidSaveNotification
-											   object:nil];
-}
-
-- (void)contextSaveNotificationReceived:(NSNotification *)notification {
-    /**
-     *  Ensure mainContext is accessed on the main thread.
-     */
-    [_mainContext performBlock:^{
-        NSManagedObjectContext *managedObjectContext = [notification object];
-        if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
-            [managedObjectContext performBlock:^{
-                /**
-                 *  If NSManagedObjectContext from the notitification is a private context
-                 *	then merge the changes into the main context.
-                 */
-                
-                [_mainContext mergeChangesFromContextDidSaveNotification:notification];
-    
-                /**
-                 *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
-                 *
-                 *  NSManagedObjectContext doesn't event fire NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge, only inserted.
-                 *
-                 *  SEE: http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
-                 *  May also have memory implications.
-                 */
-                for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
-                    [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
-                }
-                
-            }];
-        }
-    }];
 }
 
 - (NSManagedObjectContext *)mainContext {
@@ -113,8 +73,5 @@
     return NO;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
-}
 
 @end
