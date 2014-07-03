@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
 *
 *  @return The name of the entity.
 */
-+ (NSString *)SQK_entityName;
++ (NSString *)sqk_entityName;
 
 /**
  *  A convenience method for obtaining a new NSEntityDescription.
@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
  *
  *  @return The entity for the calling class from the managed object model associated with context’s persistent store coordinator.
  */
-+ (NSEntityDescription *)SQK_entityDescriptionInContext:(NSManagedObjectContext *)context;
++ (NSEntityDescription *)sqk_entityDescriptionInContext:(NSManagedObjectContext *)context;
 
 /**
  *  @name Insertion.
@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
  *
  *  @return A new, autoreleased, fully configured instance of the class. The instance has its entity description set and is inserted it into context.
  */
-+ (instancetype)SQK_insertInContext:(NSManagedObjectContext *)context;
++ (instancetype)sqk_insertInContext:(NSManagedObjectContext *)context;
 
 /**
  *  Find an instance of NSManagedObject subclass in the NSManagedObjectContext matching the key and value. If no match is found, a new object is inserted with the it's key value set appropriately.
@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
  *
  *  @return A managed object retrieved from the context, or a new object inserted to the context with key set to value.
  */
-+ (instancetype)SQK_insertOrFetchWithKey:(NSString *)key
++ (instancetype)sqk_insertOrFetchWithKey:(NSString *)key
                                    value:(id)value
                                  context:(NSManagedObjectContext *)context
                                    error:(NSError **)error;
@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, SQKDataKitError) {
  *  @discussion This method provides a convenient way to create a fetch request without having to retrieve an NSEntityDescription object.
  *  @return A fetch request configured to fetch using the subclass' entity.
  */
-+ (NSFetchRequest *)SQK_fetchRequest;
++ (NSFetchRequest *)sqk_fetchRequest;
 
 /**
  *  @name Insert or update.
@@ -115,7 +115,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
         self.privateContext = [self.contextManager newPrivateContext];
 
         NSError *error = nil;
-        [Animal SQK_insertOrUpdate:dictArray
+        [Animal sqk_insertOrUpdate:dictArray
                     uniqueModelKey:@"animalID"
                    uniqueRemoteKey:@"IDAnimal"
                propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
@@ -133,7 +133,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
  *  @param privateContext      A managed object context that must have the concurrency type NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain one.
  *  @param error               If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  */
-+ (void)SQK_insertOrUpdate:(NSArray *)dictArray
++ (void)sqk_insertOrUpdate:(NSArray *)dictArray
             uniqueModelKey:(NSString *)modelKey
            uniqueRemoteKey:(NSString *)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
@@ -147,7 +147,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
 /**
  *  Delete the NSManagedObject from its current context.
  */
-- (void)SQK_deleteObject;
+- (void)sqk_deleteObject;
 
 /**
  *  Remove all objects of the class from the store asynchronously.
@@ -155,7 +155,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
  *  @param context The managed object context to use. Must not be nil.
  *  @param error   If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  */
-+ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
++ (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
 /**
  *  @name Property description.
@@ -169,6 +169,6 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
  *
  *  @return A property description configured for property name.
  */
-+ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString *) name context:(NSManagedObjectContext *)context;
++ (NSPropertyDescription *)sqk_propertyDescriptionForName:(NSString *) name context:(NSManagedObjectContext *)context;
 
 @end

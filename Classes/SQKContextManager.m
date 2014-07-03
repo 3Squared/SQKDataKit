@@ -32,7 +32,7 @@
     if (self) {
         self.storeType = storeType;
         self.managedObjectModel = managedObjectModel;
-        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
         [self observeForSavedNotification];
     }
     return self;

@@ -49,7 +49,7 @@
 #pragma mark -
 
 -(NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString {
-    NSFetchRequest *request = [Commit SQK_fetchRequest];
+    NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
 
     NSPredicate* filterPredicate = nil;

@@ -19,13 +19,13 @@
 - (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
     self.startDate = [NSDate date];
     [data enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
-        NSFetchRequest *fetchRequest = [Commit SQK_fetchRequest];
+        NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
         fetchRequest.predicate = [NSPredicate predicateWithFormat:@"sha == %@", dictionary[@"sha"]];
         fetchRequest.fetchLimit = 1;
         NSArray *objects = [context executeFetchRequest:fetchRequest error:nil];
         Commit *commit = [objects lastObject];
         if (!commit) {
-            commit = [Commit SQK_insertInContext:context];
+            commit = [Commit sqk_insertInContext:context];
             commit.sha = dictionary[@"sha"];
             commit.authorName = dictionary[@"commit"][@"committer"][@"name"];
             commit.authorEmail = dictionary[@"commit"][@"committer"][@"email"];

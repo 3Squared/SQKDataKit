@@ -18,7 +18,7 @@
 
 - (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
     self.startDate = [NSDate date];
-    [Commit SQK_insertOrUpdate:data
+    [Commit sqk_insertOrUpdate:data
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {

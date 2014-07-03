@@ -160,7 +160,7 @@
 - (void)testMergePropagatesChangesWhenPrivateContextIsSaved {
     // Don't mock, testing IRL behavior.
     
-    NSArray *initialObjects = [self.contextManager.mainContext executeFetchRequest:[Commit SQK_fetchRequest] error:nil];
+    NSArray *initialObjects = [self.contextManager.mainContext executeFetchRequest:[Commit sqk_fetchRequest] error:nil];
     XCTAssertTrue(initialObjects.count == 0, @"");
 
     __block BOOL inserted = NO;
@@ -170,7 +170,7 @@
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
             NSError *error = nil;
-            Commit *commit = [Commit SQK_insertInContext:privateContext];
+            Commit *commit = [Commit sqk_insertInContext:privateContext];
             commit.sha = @"Insert test";
             [privateContext save:&error];
             if (error) {
@@ -182,7 +182,7 @@
     
     AGWW_WAIT_WHILE(!inserted, 2.0);
     
-    NSArray *fetchedObjects = [self.contextManager.mainContext executeFetchRequest:[Commit SQK_fetchRequest] error:nil];
+    NSArray *fetchedObjects = [self.contextManager.mainContext executeFetchRequest:[Commit sqk_fetchRequest] error:nil];
     XCTAssertTrue(fetchedObjects.count == 1, @"");
     Commit *fetchedObject = fetchedObjects.firstObject;
     XCTAssertEqualObjects([fetchedObject sha], @"Insert test", @"");

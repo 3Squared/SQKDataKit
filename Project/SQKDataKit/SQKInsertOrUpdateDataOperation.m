@@ -30,7 +30,7 @@
 
 
 - (void)updateContext:(NSManagedObjectContext *)context usingData:(id)json {
-    [Commit SQK_insertOrUpdate:json
+    [Commit sqk_insertOrUpdate:json
                 uniqueModelKey:self.uniqueModelKey
                uniqueRemoteKey:self.uniqueRemoteKey
            propertySetterBlock:self.propertySetterBlock

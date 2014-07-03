@@ -24,7 +24,7 @@
         @implementation CustomDataImportOperation
 
         - (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
-            [Animal SQK_insertOrUpdate:data
+            [Animal sqk_insertOrUpdate:data
                         uniqueModelKey:@"animalID"
                        uniqueRemoteKey:@"IDAnimal"
                    propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
