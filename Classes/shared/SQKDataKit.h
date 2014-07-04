@@ -10,3 +10,8 @@
 #import "NSManagedObject+SQKAdditions.h"
 #import "SQKDataImportOperation.h"
 #import "NSManagedObjectContext+SQKAdditions.h"
+#import "SQKManagedObjectController.h"
+
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#import "SQKFetchedTableViewController.h"
+#endif
