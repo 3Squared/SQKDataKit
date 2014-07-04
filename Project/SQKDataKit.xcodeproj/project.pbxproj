@@ -12,6 +12,7 @@
 		22BB628E1919256B00EEEFCE /* SQKManagedObjectControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22BB628D1919256B00EEEFCE /* SQKManagedObjectControllerTests.m */; };
 		22ECBB151861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 22ECBB141861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m */; };
 		22F4ED6E1910EC1100F2DA19 /* SQKFetchedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F4ED6D1910EC1100F2DA19 /* SQKFetchedTableViewController.m */; };
+		4D71AADAFF4C4498A8534E50 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F38F269A45CB4055B76E11F2 /* libPods.a */; };
 		92CAC9F51A4D406BAD472FED /* libPods-SQKDataKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */; };
 		A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */; };
 		A30F0DDC18574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A30F0DD618574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m */; };
@@ -39,6 +40,7 @@
 		A34BF42B184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */; };
 		A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */; };
 		A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */; };
+		A3D15E5B1966B971000F2268 /* NSManagedObjectContext+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15E5A1966B971000F2268 /* NSManagedObjectContext+SQKAdditions.m */; };
 		A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */; };
 		A3DC7CA018687E2E00C45DB0 /* data_1500.json in Resources */ = {isa = PBXBuildFile; fileRef = A3DC7C9F18687E2E00C45DB0 /* data_1500.json */; };
 		A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */; };
@@ -68,6 +70,7 @@
 		22F4ED6C1910EC1100F2DA19 /* SQKFetchedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKFetchedTableViewController.h; path = ../../Classes/SQKFetchedTableViewController.h; sourceTree = "<group>"; };
 		22F4ED6D1910EC1100F2DA19 /* SQKFetchedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKFetchedTableViewController.m; path = ../../Classes/SQKFetchedTableViewController.m; sourceTree = "<group>"; };
 		59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CFA99AD54C24F388E92E29F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		A30F0DD218574D4B00CEE72D /* SQKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKBundle.h; path = ../../Classes/SQKBundle.h; sourceTree = "<group>"; };
 		A30F0DD318574D4B00CEE72D /* NSManagedObject+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "NSManagedObject+SQKAdditions.h"; path = "../../Classes/NSManagedObject+SQKAdditions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A30F0DD418574D4B00CEE72D /* NSManagedObject+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "NSManagedObject+SQKAdditions.m"; path = "../../Classes/NSManagedObject+SQKAdditions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -108,6 +111,8 @@
 		A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NaiveImportOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitDataImportOperation.h; sourceTree = "<group>"; };
 		A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitDataImportOperation.m; sourceTree = "<group>"; };
+		A3D15E591966B971000F2268 /* NSManagedObjectContext+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+SQKAdditions.h"; path = "../../Classes/NSManagedObjectContext+SQKAdditions.h"; sourceTree = "<group>"; };
+		A3D15E5A1966B971000F2268 /* NSManagedObjectContext+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectContext+SQKAdditions.m"; path = "../../Classes/NSManagedObjectContext+SQKAdditions.m"; sourceTree = "<group>"; };
 		A3DC7C991868731100C45DB0 /* SQKJSONLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKJSONLoader.h; sourceTree = "<group>"; };
 		A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKJSONLoader.m; sourceTree = "<group>"; };
 		A3DC7C9F18687E2E00C45DB0 /* data_1500.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_1500.json; sourceTree = "<group>"; };
@@ -115,6 +120,7 @@
 		A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKCommitCell.m; sourceTree = "<group>"; };
 		A3F70A8E185A041D00C0A389 /* SQKMetricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKMetricsViewController.h; sourceTree = "<group>"; };
 		A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKMetricsViewController.m; sourceTree = "<group>"; };
+		F38F269A45CB4055B76E11F2 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +132,7 @@
 				A34BF39D184F41D300F2E3B4 /* CoreGraphics.framework in Frameworks */,
 				A34BF39F184F41D300F2E3B4 /* UIKit.framework in Frameworks */,
 				A34BF39B184F41D300F2E3B4 /* Foundation.framework in Frameworks */,
+				4D71AADAFF4C4498A8534E50 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,6 +221,7 @@
 				A34BF399184F41D300F2E3B4 /* Frameworks */,
 				A34BF398184F41D300F2E3B4 /* Products */,
 				16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */,
+				8CFA99AD54C24F388E92E29F /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -235,6 +243,7 @@
 				A34BF39E184F41D300F2E3B4 /* UIKit.framework */,
 				A34BF3BC184F41D400F2E3B4 /* XCTest.framework */,
 				59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */,
+				F38F269A45CB4055B76E11F2 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -260,6 +269,8 @@
 				22BB628819190CD000EEEFCE /* NSArray+SQKAdditions.m */,
 				22BB628919190CD000EEEFCE /* SQKManagedObjectController.h */,
 				22BB628A19190CD000EEEFCE /* SQKManagedObjectController.m */,
+				A3D15E591966B971000F2268 /* NSManagedObjectContext+SQKAdditions.h */,
+				A3D15E5A1966B971000F2268 /* NSManagedObjectContext+SQKAdditions.m */,
 			);
 			path = SQKDataKit;
 			sourceTree = "<group>";
@@ -304,9 +315,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A34BF3CC184F41D500F2E3B4 /* Build configuration list for PBXNativeTarget "SQKDataKit" */;
 			buildPhases = (
+				2BEE98A915D74B4E941C7F44 /* Check Pods Manifest.lock */,
 				A34BF393184F41D300F2E3B4 /* Sources */,
 				A34BF394184F41D300F2E3B4 /* Frameworks */,
 				A34BF395184F41D300F2E3B4 /* Resources */,
+				524F531019F74D7884F4E426 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -393,6 +406,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2BEE98A915D74B4E941C7F44 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		524F531019F74D7884F4E426 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		CC7F3093A3AB4BD98726B1EC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -433,6 +476,7 @@
 				22ECBB151861C8E9000D863F /* SQKInsertOrUpdateDataOperation.m in Sources */,
 				A30F0DDC18574D4B00CEE72D /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
+				A3D15E5B1966B971000F2268 /* NSManagedObjectContext+SQKAdditions.m in Sources */,
 				A30F0DDB18574D4B00CEE72D /* NSManagedObject+SQKAdditions.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
 				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
@@ -570,6 +614,7 @@
 		};
 		A34BF3CD184F41D500F2E3B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8CFA99AD54C24F388E92E29F /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -587,6 +632,7 @@
 		};
 		A34BF3CE184F41D500F2E3B4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8CFA99AD54C24F388E92E29F /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

@@ -156,8 +156,8 @@
     XCTAssertFalse(didSave, @"");
     [contextWithoutChanges verify];
 }
- 
-- (void)testMergePropagatesChangesWhenPrivateContextIsSaved {
+
+- (void)testMergePropagatesChangesWhenMergingPrivateContextIsSaved {
     // Don't mock, testing IRL behavior.
     
     NSArray *initialObjects = [self.contextManager.mainContext executeFetchRequest:[Commit sqk_fetchRequest] error:nil];

@@ -16,7 +16,7 @@
 
 @implementation NaiveImportOperation
 
-- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
     self.startDate = [NSDate date];
     [data enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
         NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
@@ -34,7 +34,7 @@
             commit.url = dictionary[@"html_url"];
         }
     }];
-    [context save:nil];
+    [self completeOperationBySavingContext:context];
 }
 
 - (NSDate *)dateFromJSONString:(NSString *)jsonString {
