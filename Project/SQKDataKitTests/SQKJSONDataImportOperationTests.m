@@ -34,7 +34,7 @@
     [super setUp];
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
-    self.context = [self.contextManager newMergingPrivateContext];
+    self.context = [self.contextManager newPrivateContext];
 }
 
 - (void)testInitialisesWithContextAndJSON {

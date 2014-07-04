@@ -14,6 +14,9 @@
 
 - (BOOL)shouldMergeOnSave {
     NSNumber *wrappedBool = objc_getAssociatedObject(self, @selector(shouldMergeOnSave));
+    if (wrappedBool == nil) {
+        return YES;
+    }
     return [wrappedBool boolValue];
 }
 

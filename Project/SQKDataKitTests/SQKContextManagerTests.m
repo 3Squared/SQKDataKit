@@ -90,14 +90,14 @@
 }
 
 - (void)testProvidesANewPrivateContext {
-    NSManagedObjectContext *privateContext = [self.contextManager newMergingPrivateContext];
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
     XCTAssertNotNil(privateContext, @"");
     XCTAssertEqual((NSInteger)privateContext.concurrencyType, (NSInteger)NSPrivateQueueConcurrencyType, @"");
 }
 
 - (void)testMainContextAndPrivateContextUseSamePersistentStoreCoordinator {
     NSManagedObjectContext *mainContext = [self.contextManager mainContext];
-    NSManagedObjectContext *privateContext = [self.contextManager newMergingPrivateContext];
+    NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
     XCTAssertEqualObjects(mainContext.persistentStoreCoordinator, privateContext.persistentStoreCoordinator, @"");
 }
 
@@ -105,9 +105,8 @@
     XCTAssertNotNil([self.contextManager mainContext].persistentStoreCoordinator, @"");
 }
 
-- (void)testPrivateContextsHaveAStoreCoordinator {
-    XCTAssertNotNil([self.contextManager newMergingPrivateContext].persistentStoreCoordinator, @"");
-    XCTAssertNotNil([self.contextManager newUnmergingPrivateContext].persistentStoreCoordinator, @"");
+- (void)testPrivateContextHasAStoreCoordinator {
+    XCTAssertNotNil([self.contextManager newPrivateContext].persistentStoreCoordinator, @"");
 }
 
 - (void)testStoreCoordinatorHasASingleStore {
@@ -168,7 +167,7 @@
     
     NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
     [privateQueue addOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self.contextManager newMergingPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
             NSError *error = nil;
             Commit *commit = [Commit sqk_insertInContext:privateContext];
@@ -192,7 +191,7 @@
     NSManagedObjectID *objectID = fetchedObject.objectID;
     __block BOOL edited = NO;
     [privateQueue addOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self.contextManager newMergingPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
             NSError *error = nil;
             Commit *commit = (Commit*)[privateContext objectWithID:objectID];
@@ -211,7 +210,7 @@
     
     __block BOOL deleted = NO;
     [privateQueue addOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self.contextManager newMergingPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
             NSError *error = nil;
             Commit *commit = (Commit*)[privateContext objectWithID:objectID];
