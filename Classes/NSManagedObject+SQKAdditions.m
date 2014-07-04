@@ -12,7 +12,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
 
 @implementation NSManagedObject (SQKAdditions)
 
-+ (NSString *)SQK_entityName {
++ (NSString *)sqk_entityName {
     
     if ([self class]== [NSManagedObject class]) {
         return nil;
@@ -20,60 +20,64 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     return NSStringFromClass([self class]);
 }
 
-+ (NSEntityDescription *)SQK_entityDescriptionInContext:(NSManagedObjectContext *)context {
-    return [NSEntityDescription entityForName:[self SQK_entityName] inManagedObjectContext:context];
++ (NSEntityDescription *)sqk_entityDescriptionInContext:(NSManagedObjectContext *)context {
+    return [NSEntityDescription entityForName:[self sqk_entityName] inManagedObjectContext:context];
 }
 
-+ (instancetype)SQK_insertInContext:(NSManagedObjectContext *)context {
-    return [NSEntityDescription insertNewObjectForEntityForName:[self SQK_entityName] inManagedObjectContext:context];
++ (instancetype)sqk_insertInContext:(NSManagedObjectContext *)context {
+    return [NSEntityDescription insertNewObjectForEntityForName:[self sqk_entityName] inManagedObjectContext:context];
 }
 
-+ (NSFetchRequest *)SQK_fetchRequest {
-    return [NSFetchRequest fetchRequestWithEntityName:[self SQK_entityName]];
++ (NSFetchRequest *)sqk_fetchRequest {
+    return [NSFetchRequest fetchRequestWithEntityName:[self sqk_entityName]];
 }
 
-+ (instancetype)SQK_insertOrFetchWithKey:(NSString *)key
++ (instancetype)sqk_insertOrFetchWithKey:(NSString *)key
                                 value:(id)value
                               context:(NSManagedObjectContext *)context
                                 error:(NSError **)error {
-    NSFetchRequest *request = [self SQK_fetchRequest];
+    NSFetchRequest *request = [self sqk_fetchRequest];
     [request setFetchLimit:1];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K = %@", key, value];
     [request setPredicate:predicate];
     
     NSError *localError = nil;
     NSArray *objects = [context executeFetchRequest:request error:&localError];
-    
-    // TODO return error
+    if (localError) {
+        // Check the passed error pointer is not nil
+        if (error) {
+            *error = localError;
+        }
+        return nil;
+    }
     
     id managedObject = [objects lastObject];
     if (!managedObject) {
-        managedObject = [self SQK_insertInContext:context];
+        managedObject = [self sqk_insertInContext:context];
         [managedObject setValue:value forKey:key];
     }
     
     return managedObject;
 }
 
-- (void)SQK_deleteObject {
+- (void)sqk_deleteObject {
     [self.managedObjectContext deleteObject:self];
 }
 
-+ (void)SQK_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error {
++ (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error {
     NSError *localError = nil;
-    NSFetchRequest *fetchRequest = [self SQK_fetchRequest];
+    NSFetchRequest *fetchRequest = [self sqk_fetchRequest];
     NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
     if (localError) {
-        // Check the passed error pointer is not NULL
         if (error) {
             *error = localError;
         }
         return;
     }
-    [objects makeObjectsPerformSelector:@selector(SQK_deleteObject)];
+    [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
 }
 
-+ (void)SQK_insertOrUpdate:(NSArray *)dictArray
++ (void)sqk_insertOrUpdate:(NSArray *)dictArray
             uniqueModelKey:(NSString *)modelKey
            uniqueRemoteKey:(NSString *)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
@@ -81,7 +85,6 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
                      error:(NSError **)error {
     
     if (context.concurrencyType != NSPrivateQueueConcurrencyType) {
-        // Check error pointer is not NULL
         if (error) {
             *error = [self errorForUnsupportedQueueConcurencyType];
         }
@@ -94,7 +97,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
         
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:[self SQK_entityDescriptionInContext:context]];
+        [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
         [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
         
         NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
@@ -103,13 +106,14 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         NSError *localError = nil;
         NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
         if (localError) {
+            *error = localError;
             return;
         }
         
         NSEnumerator *objectEnumerator = [objectsMatchingKey objectEnumerator];
         NSEnumerator *dictionaryEnumerator = [sortedDictArray objectEnumerator];
         
-        NSDictionary* dictionary;
+        NSDictionary *dictionary;
         id object = [objectEnumerator nextObject];
         
         while (dictionary = [dictionaryEnumerator nextObject]) {
@@ -120,7 +124,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
                 object = [objectEnumerator nextObject];
             }
             else {
-                id newObject = [[self class] SQK_insertInContext:context];
+                id newObject = [[self class] sqk_insertInContext:context];
                 [newObject setValue:dictionary[remoteDataKey] forKey:modelKey];
                 if (propertySetterBlock) {
                     propertySetterBlock(dictionary, newObject);
@@ -130,8 +134,8 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     }];
 }
 
-+ (NSPropertyDescription *)SQK_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context {
-    return [[[[self class] SQK_entityDescriptionInContext:context] propertiesByName] objectForKey:name];
++ (NSPropertyDescription *)sqk_propertyDescriptionForName:(NSString*) name context:(NSManagedObjectContext *)context {
+    return [[[[self class] sqk_entityDescriptionInContext:context] propertiesByName] objectForKey:name];
 }
 
 #pragma mark - Private

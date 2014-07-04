@@ -39,17 +39,17 @@
 #pragma mark - Testing Commitname
 
 - (void)testEntityName {
-    XCTAssertEqualObjects([Commit SQK_entityName], @"Commit", @"");
+    XCTAssertEqualObjects([Commit sqk_entityName], @"Commit", @"");
 }
 
 - (void)testReturnsNilEntityNameWhenCalledOnNSManagedObject {
-    XCTAssertNil([NSManagedObject SQK_entityName], @"");
+    XCTAssertNil([NSManagedObject sqk_entityName], @"");
 }
 
 #pragma mark - Testing Commitdescription
 
 - (void)testEntityDescriptionInContext {
-    NSEntityDescription *entityDescription = [Commit SQK_entityDescriptionInContext:self.mainContext];
+    NSEntityDescription *entityDescription = [Commit sqk_entityDescriptionInContext:self.mainContext];
     
     XCTAssertEqualObjects(entityDescription.name, @"Commit", @"");
 }
@@ -57,14 +57,14 @@
 #pragma mark - Testing property descrition
 
 - (void)testPropertyDescription {
-    NSPropertyDescription *propertyDescription = [Commit SQK_propertyDescriptionForName:@"sha" context:self.mainContext];
+    NSPropertyDescription *propertyDescription = [Commit sqk_propertyDescriptionForName:@"sha" context:self.mainContext];
     XCTAssertEqualObjects(propertyDescription.name, @"sha", @"");
 }
 
 #pragma mark - Test fetch request
 
 - (void)testFetchRequest {
-    NSFetchRequest *fetchRequest = [Commit SQK_fetchRequest];
+    NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
     XCTAssertNotNil(fetchRequest, @"");
     XCTAssertEqualObjects(fetchRequest.entityName, @"Commit", @"");
 }
@@ -72,12 +72,12 @@
 #pragma mark - Test basic insertion
 
 - (void)testInsertsIntoContext {
-    Commit *commit = [Commit SQK_insertInContext:self.mainContext];
+    Commit *commit = [Commit sqk_insertInContext:self.mainContext];
     XCTAssertNotNil(commit, @"");
     
     commit.sha = @"abcd";
     
-    NSEntityDescription *entityDescription = [Commit SQK_entityDescriptionInContext:self.mainContext];
+    NSEntityDescription *entityDescription = [Commit sqk_entityDescriptionInContext:self.mainContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
@@ -94,7 +94,7 @@
 
 - (void)testUsesInsertNewEntityWhenUnique {
     NSError *error = nil;
-    Commit *commit = [Commit SQK_insertOrFetchWithKey:@"sha" value:@"abcd" context:self.mainContext error:&error];
+    Commit *commit = [Commit sqk_insertOrFetchWithKey:@"sha" value:@"abcd" context:self.mainContext error:&error];
     
     XCTAssertNil(error, @"");
     XCTAssertNotNil(commit, @"");
@@ -102,11 +102,11 @@
 }
 
 - (void)testUsesFetchWhenNotUnique {
-    Commit *existingCommit = [Commit SQK_insertInContext:self.mainContext];
+    Commit *existingCommit = [Commit sqk_insertInContext:self.mainContext];
     existingCommit.sha = @"wxyz";
     
     NSError *error = nil;
-    Commit *newCommit = [Commit SQK_insertOrFetchWithKey:@"sha" value:@"wxyz" context:self.mainContext error:&error];
+    Commit *newCommit = [Commit sqk_insertOrFetchWithKey:@"sha" value:@"wxyz" context:self.mainContext error:&error];
     XCTAssertNil(error, @"");
     XCTAssertNotNil(newCommit, @"");
     XCTAssertEqualObjects(newCommit.sha, @"wxyz", @"");
@@ -116,10 +116,10 @@
 #pragma mark - Test deletion
 
 - (void)testDeletesObject {
-    Commit *commit = [Commit SQK_insertInContext:self.mainContext];
+    Commit *commit = [Commit sqk_insertInContext:self.mainContext];
     id objectID = commit.objectID;
     
-    [commit SQK_deleteObject];
+    [commit sqk_deleteObject];
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Commit" inManagedObjectContext:self.mainContext]];
@@ -132,11 +132,11 @@
 
 - (void)testDeleteAllObjectsInContext {
     for (NSInteger i = 0; i < 10; ++i) {
-        [Commit SQK_insertInContext:self.mainContext];
+        [Commit sqk_insertInContext:self.mainContext];
     }
     
     NSError *deleteError = nil;
-    [Commit SQK_deleteAllObjectsInContext:self.mainContext error:&deleteError];
+    [Commit sqk_deleteAllObjectsInContext:self.mainContext error:&deleteError];
     XCTAssertNil(deleteError, @"");
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -162,7 +162,7 @@
                            @{@"sha" : @"789"}
                            ];
     NSError *error = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:propertySetterBlock
@@ -185,7 +185,7 @@
     NSArray *dictArray = @[propertyDictionary];
     
     NSError *error = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:propertySetterBlock
@@ -204,7 +204,7 @@
                            @{@"sha" : @"789"}
                            ];
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:nil
@@ -228,7 +228,7 @@
                            @{@"sha" : @"789"}
                            ];
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:nil
@@ -264,7 +264,7 @@
                            @{@"remote-sha" : @"789"}
                            ];
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"remote-sha"
            propertySetterBlock:nil
@@ -282,7 +282,7 @@
 }
 
 - (void)testUpdatesExistingObjectsWithSameLocalAndRemoteKeys {
-    Commit *existingCommit = [Commit SQK_insertInContext:self.privateContext];
+    Commit *existingCommit = [Commit sqk_insertInContext:self.privateContext];
     existingCommit.sha = @"123";
     existingCommit.message = @"existing";
     
@@ -294,7 +294,7 @@
                           @{@"sha" : @"123", @"message" : @"updated"},
                           ];
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:propertySetterBlock
@@ -308,7 +308,7 @@
 }
 
 - (void)testUpdatesObjectsWithDifferingLocalAndRemoteKeys {
-    Commit *existingCommit = [Commit SQK_insertInContext:self.privateContext];
+    Commit *existingCommit = [Commit sqk_insertInContext:self.privateContext];
     existingCommit.sha = @"123";
     existingCommit.message = @"existing";
     
@@ -320,7 +320,7 @@
                           @{@"remote-sha" : @"123", @"message" : @"updated"}
                           ];
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:dictArray
+    [Commit sqk_insertOrUpdate:dictArray
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"remote-sha"
            propertySetterBlock:propertySetterBlock
@@ -337,7 +337,7 @@
 
 - (void)testInsertOrUpdateFailsWithUnsupportedConcurencyTypeError {
     NSError *insertOrUpdateError = nil;
-    [Commit SQK_insertOrUpdate:@[]
+    [Commit sqk_insertOrUpdate:@[]
                 uniqueModelKey:@"unusedKey"
                uniqueRemoteKey:@"unusedKey"
            propertySetterBlock:nil
@@ -353,7 +353,7 @@
     /**
      *  Necessary as there was a bug where not passing an error pointer caused a exc_bad_access crash.
      */
-    [Commit SQK_insertOrUpdate:@[]
+    [Commit sqk_insertOrUpdate:@[]
                 uniqueModelKey:@"unusedKey"
                uniqueRemoteKey:@"unusedKey"
            propertySetterBlock:nil

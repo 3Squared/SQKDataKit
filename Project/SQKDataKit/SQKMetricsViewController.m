@@ -224,7 +224,8 @@ static NSString *CellIdentifier = @"Cell";
 - (void)deleteAll {
     NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
-        [Commit SQK_deleteAllObjectsInContext:privateContext error:nil];
+        privateContext.shouldMergeOnSave = YES;
+        [Commit sqk_deleteAllObjectsInContext:privateContext error:nil];
         [privateContext save:nil];
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{

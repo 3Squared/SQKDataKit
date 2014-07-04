@@ -24,7 +24,7 @@
         @implementation CustomDataImportOperation
 
         - (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
-            [Animal SQK_insertOrUpdate:data
+            [Animal sqk_insertOrUpdate:data
                         uniqueModelKey:@"animalID"
                        uniqueRemoteKey:@"IDAnimal"
                    propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
@@ -75,11 +75,23 @@
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data;
 
 /**
+ *  MUST call this method when data import has finished. Saves the managed object context, merges changes into main context and finishes operation.
+ *
+ *  @param managedObjectContext The managed object context save to and merge.
+ */
+- (void)completeOperationBySavingContext:(NSManagedObjectContext *)managedObjectContext;
+
+/**
  *  Called from the `main` method when the operation is executed. You must override this method and provide an implementation that performs the necessary import logic.
  *
  *  @param context A private managed object context to use for data import.
  *  @param data    The data to import, as specified in the constructor.
  */
-- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data;
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data;
+
+/**
+ *  Override to return any error that occurred during the import operation.
+ */
+- (NSError *)error;
 
 @end

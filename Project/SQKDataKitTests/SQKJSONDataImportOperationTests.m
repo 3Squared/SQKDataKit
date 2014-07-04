@@ -19,7 +19,7 @@
 @interface ConcreteDataImportOperation : SQKDataImportOperation
 @end
 @implementation ConcreteDataImportOperation
-- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
 }
 @end
 
@@ -54,7 +54,7 @@
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
     ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager data:@{}];
-    XCTAssertThrowsSpecificNamed([dataImportOperation updateContext:self.context usingData:@{}], NSException, NSInternalInconsistencyException, @"");
+    XCTAssertThrowsSpecificNamed([dataImportOperation performWorkPrivateContext:nil usingData:nil], NSException, NSInternalInconsistencyException, @"");
 }
 
 - (void)testCallsUpdateWhenOperationIsStarted {
@@ -62,7 +62,7 @@
     
     ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
     id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
-    [[dataImportOperationPartialMock expect] updateContext:[OCMArg any] usingData:json];
+    [[dataImportOperationPartialMock expect] performWorkPrivateContext:[OCMArg any] usingData:json];
     
     [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
     

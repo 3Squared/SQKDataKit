@@ -20,7 +20,7 @@
 - (void)setUp {
     [super setUp];
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    self.persitentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:NSSQLiteStoreType managedObjectModel:self.managedObjectModel];
+    self.persitentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType managedObjectModel:self.managedObjectModel];
 }
 
 - (void)testCorrectManagedObjectModel {

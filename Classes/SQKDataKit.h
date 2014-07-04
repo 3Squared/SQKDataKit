@@ -9,3 +9,4 @@
 #import "SQKContextManager.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "SQKDataImportOperation.h"
+#import "NSManagedObjectContext+SQKAdditions.h"

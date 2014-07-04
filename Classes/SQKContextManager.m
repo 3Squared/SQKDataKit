@@ -8,6 +8,7 @@
 
 #import "SQKContextManager.h"
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
+#import "NSManagedObjectContext+SQKAdditions.h"
 
 @interface SQKContextManager ()
 @property (nonatomic, strong, readwrite) NSString *storeType;
@@ -30,9 +31,9 @@
     
     self = [super init];
     if (self) {
-        self.storeType = storeType;
-        self.managedObjectModel = managedObjectModel;
-        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        _storeType = storeType;
+        _managedObjectModel = managedObjectModel;
+        _persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
         [self observeForSavedNotification];
     }
     return self;
@@ -59,7 +60,7 @@
      */
     [_mainContext performBlock:^{
         NSManagedObjectContext *managedObjectContext = [notification object];
-        if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
+        if ([managedObjectContext shouldMergeOnSave] && managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
             [managedObjectContext performBlock:^{
                 /**
                  *  If NSManagedObjectContext from the notitification is a private context
@@ -67,7 +68,7 @@
                  */
                 
                 [_mainContext mergeChangesFromContextDidSaveNotification:notification];
-    
+                
                 /**
                  *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
                  *
@@ -116,5 +117,6 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 }
+
 
 @end

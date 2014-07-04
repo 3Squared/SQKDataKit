@@ -40,12 +40,12 @@
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
     
-    self.commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
     self.commit.date = [NSDate date];
     [self.contextManager saveMainContext:nil];
     
-    NSFetchRequest *request = [Commit SQK_fetchRequest];
+    NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
     
     self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
@@ -217,7 +217,7 @@
     [self.controller performFetch:nil];
     
     
-    Commit* commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit* commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Another test!";
     commit.date = [NSDate date];
     [[self.contextManager mainContext] save:nil];
