@@ -8,13 +8,13 @@
 
 #import "SQKContextManager.h"
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
+#import "NSManagedObjectContext+SQKAdditions.h"
 
 @interface SQKContextManager ()
 @property (nonatomic, strong, readwrite) NSString *storeType;
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext* mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator* persistentStoreCoordinator;
-@property (nonatomic, strong, readwrite) NSMutableArray *managedObjectContextsToMerge;
 @end
 
 @implementation SQKContextManager
@@ -34,7 +34,6 @@
         _storeType = storeType;
         _managedObjectModel = managedObjectModel;
         _persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
-        _managedObjectContextsToMerge = [NSMutableArray array];
         [self observeForSavedNotification];
     }
     return self;
@@ -61,7 +60,7 @@
      */
     [_mainContext performBlock:^{
         NSManagedObjectContext *managedObjectContext = [notification object];
-        if ([self.managedObjectContextsToMerge containsObject:managedObjectContext]) {
+        if ([managedObjectContext shouldMergeOnSave] && managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
             [managedObjectContext performBlock:^{
                 /**
                  *  If NSManagedObjectContext from the notitification is a private context
@@ -99,16 +98,6 @@
     _mainContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     _mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return _mainContext;
-}
-
-- (NSManagedObjectContext*)newMergingPrivateContext {
-    NSManagedObjectContext* privateContext = [self newPrivateContext];
-    [self.managedObjectContextsToMerge addObject:privateContext];
-    return privateContext;
-}
-
-- (NSManagedObjectContext*)newUnmergingPrivateContext {
-    return [self newPrivateContext];
 }
 
 - (NSManagedObjectContext*)newPrivateContext {

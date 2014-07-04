@@ -7,7 +7,7 @@
 //
 
 #import "SQKDataImportOperation.h"
-#import "SQKContextManager.h"
+#import "SQKDataKit.h"
 
 @interface SQKDataImportOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
@@ -58,7 +58,8 @@
     self.executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    self.managedObjectContextToMerge = [self.contextManager newUnmergingPrivateContext];
+    self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
+    self.managedObjectContextToMerge.shouldMergeOnSave = NO;
     [self.managedObjectContextToMerge performBlockAndWait:^{
         [self performWorkPrivateContext:self.managedObjectContextToMerge usingData:self.data];
     }];
