@@ -222,18 +222,11 @@ static NSString *CellIdentifier = @"Cell";
 #pragma mark - Data delete
 
 - (void)deleteAll {
-    NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
-        [Commit sqk_deleteAllObjectsInContext:privateContext error:nil];
-        [privateContext save:nil];
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.isDeleting = NO;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }];
-    }];
+    [Commit sqk_deleteAllObjectsInContext:[self.contextManager mainContext] error:NULL];
+    [[self.contextManager mainContext] save:NULL];
     
-    [self.queue addOperation:deleteOperation];
+    self.isDeleting = NO;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 
