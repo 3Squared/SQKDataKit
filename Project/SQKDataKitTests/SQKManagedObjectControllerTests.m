@@ -93,7 +93,7 @@
     [self.controller performFetch:&error];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSManagedObjectContext* privateContext = [self.contextManager newPrivateContext];
+        NSManagedObjectContext* privateContext = [self.contextManager newMergingPrivateContext];
         [privateContext performBlockAndWait:^{
             Commit *commit = (Commit*)[privateContext objectWithID:self.commit.objectID];
             commit.sha = @"dcba";
@@ -319,7 +319,7 @@
     };
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSManagedObjectContext* privateContext = [self.contextManager newPrivateContext];
+        NSManagedObjectContext* privateContext = [self.contextManager newMergingPrivateContext];
         [privateContext performBlockAndWait:^{
             Commit *commit = (Commit*)[privateContext objectWithID:self.commit.objectID];
             commit.sha = @"Can you see me?";

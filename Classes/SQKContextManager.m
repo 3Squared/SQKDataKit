@@ -14,6 +14,7 @@
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext* mainContext;
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator* persistentStoreCoordinator;
+@property (nonatomic, strong, readwrite) NSMutableArray *managedObjectContextsToMerge;
 @end
 
 @implementation SQKContextManager
@@ -30,9 +31,11 @@
     
     self = [super init];
     if (self) {
-        self.storeType = storeType;
-        self.managedObjectModel = managedObjectModel;
-        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        _storeType = storeType;
+        _managedObjectModel = managedObjectModel;
+        _persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        _managedObjectContextsToMerge = [NSMutableArray array];
+        [self observeForSavedNotification];
     }
     return self;
 }
@@ -43,6 +46,45 @@
         validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
     }
     return validStoreTypes;
+}
+
+- (void)observeForSavedNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(contextSaveNotificationReceived:)
+												 name:NSManagedObjectContextDidSaveNotification
+											   object:nil];
+}
+
+- (void)contextSaveNotificationReceived:(NSNotification *)notification {
+    /**
+     *  Ensure mainContext is accessed on the main thread.
+     */
+    [_mainContext performBlock:^{
+        NSManagedObjectContext *managedObjectContext = [notification object];
+        if ([self.managedObjectContextsToMerge containsObject:managedObjectContext]) {
+            [managedObjectContext performBlock:^{
+                /**
+                 *  If NSManagedObjectContext from the notitification is a private context
+                 *	then merge the changes into the main context.
+                 */
+                
+                [_mainContext mergeChangesFromContextDidSaveNotification:notification];
+                
+                /**
+                 *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
+                 *
+                 *  NSManagedObjectContext doesn't event fire NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge, only inserted.
+                 *
+                 *  SEE: http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
+                 *  May also have memory implications.
+                 */
+                for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+                    [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+                }
+                
+            }];
+        }
+    }];
 }
 
 - (NSManagedObjectContext *)mainContext {
@@ -59,6 +101,16 @@
     return _mainContext;
 }
 
+- (NSManagedObjectContext*)newMergingPrivateContext {
+    NSManagedObjectContext* privateContext = [self newPrivateContext];
+    [self.managedObjectContextsToMerge addObject:privateContext];
+    return privateContext;
+}
+
+- (NSManagedObjectContext*)newUnmergingPrivateContext {
+    return [self newPrivateContext];
+}
+
 - (NSManagedObjectContext*)newPrivateContext {
     NSManagedObjectContext* context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     context.persistentStoreCoordinator = self.persistentStoreCoordinator;
@@ -71,6 +123,10 @@
         return YES;
     }
     return NO;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 }
 
 

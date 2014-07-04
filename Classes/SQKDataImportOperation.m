@@ -58,7 +58,7 @@
     self.executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
-    self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
+    self.managedObjectContextToMerge = [self.contextManager newUnmergingPrivateContext];
     [self.managedObjectContextToMerge performBlockAndWait:^{
         [self performWorkPrivateContext:self.managedObjectContextToMerge usingData:self.data];
     }];

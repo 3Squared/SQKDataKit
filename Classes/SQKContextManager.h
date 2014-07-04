@@ -54,7 +54,17 @@
  *
  *  @return A new private context (concurrency type `NSPrivateQueueConcurrencyType`) Core Data work on background threads.
  */
-- (NSManagedObjectContext *)newPrivateContext;
+- (NSManagedObjectContext *)newMergingPrivateContext;
+
+/**
+ *  A new private context (concurrency type `NSPrivateQueueConcurrencyType`) for Core Data work on background threads.
+ *  A private context should be used whenever you are doing work off the main thread.
+ *  Saving this context DOES NOT MERGE any changes back into the main managed object context. It is your responsibilty to
+ *  this when ever is aprropriate for your user case.
+ *
+ *  @return A new private context (concurrency type `NSPrivateQueueConcurrencyType`) Core Data work on background threads.
+ */
+- (NSManagedObjectContext*)newUnmergingPrivateContext;
 
 /**
  *  A convenience method to save the main managed object context.

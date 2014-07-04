@@ -25,7 +25,7 @@
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
     SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:model];
-    self.privateContext = [contextManager newPrivateContext];
+    self.privateContext = [contextManager newMergingPrivateContext];
     self.mainContext = [contextManager mainContext];
 }
 
