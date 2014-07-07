@@ -11,8 +11,24 @@
 
 @interface GitDataImportOperation ()
 @property (nonatomic, strong, readwrite) NSDate *startDate;
+@property (nonatomic, strong) id data;
 @end
 
 @implementation GitDataImportOperation
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data {
+    if (self = [super initWithContextManager:contextManager]) {
+        self.data = data;
+    }
+    return self;
+}
+
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+    [self performWorkPrivateContext:context usingData:self.data];
+}
+
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo:nil];
+}
 
 @end

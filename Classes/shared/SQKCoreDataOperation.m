@@ -1,29 +1,27 @@
 //
-//  SQKJSONDataImportOperation.m
+//  SQKCoreDataOperation.m
 //  SQKDataKit
 //
 //  Created by Luke Stringer on 09/12/2013.
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKDataImportOperation.h"
+#import "SQKCoreDataOperation.h"
 #import "SQKDataKit.h"
 
-@interface SQKDataImportOperation ()
+@interface SQKCoreDataOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
-@property (nonatomic, strong, readwrite) id data;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContextToMerge;
 @property (nonatomic, assign) BOOL executing;
 @property (nonatomic, assign) BOOL finished;
 @end
 
-@implementation SQKDataImportOperation
+@implementation SQKCoreDataOperation
 
-- (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data {
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager {
     self = [super init];
     if (self) {
         _contextManager = contextManager;
-        _data = data;
         _executing = NO;
         _finished = NO;
     }
@@ -36,7 +34,7 @@
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo:nil];
 }
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)] userInfo:nil];
 }
 
@@ -61,7 +59,7 @@
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
     self.managedObjectContextToMerge.shouldMergeOnSave = NO;
     [self.managedObjectContextToMerge performBlockAndWait:^{
-        [self performWorkPrivateContext:self.managedObjectContextToMerge usingData:self.data];
+        [self performWorkPrivateContext:self.managedObjectContextToMerge];
     }];
 }
 
@@ -136,6 +134,8 @@
             [mainContext mergeChangesFromContextDidSaveNotification:notifcation];
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
+            
+            // Operation is finished only when changes from private context are merged into the main context
             [self finishOperation];
         }
     });
