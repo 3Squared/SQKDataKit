@@ -11,7 +11,7 @@
 
 @implementation NSPersistentStoreCoordinator (SQKAdditions)
 
-+ (instancetype)SQK_storeCoordinatorWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel {
++ (instancetype)sqk_storeCoordinatorWithStoreType:(NSString *)storeType managedObjectModel:(NSManagedObjectModel *)managedObjectModel {
     
     NSURL *storeURL = [self storeURL];
     

@@ -31,12 +31,12 @@
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
     
-    self.commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
     self.commit.date = [NSDate date];
     [self.contextManager saveMainContext:nil];
     
-    NSFetchRequest *request = [Commit SQK_fetchRequest];
+    NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
     
     self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
@@ -90,6 +90,7 @@
             commit.sha = @"dcba";
             NSError *error = nil;
             [privateContext save:&error];
+            NSLog(@"%s %d %s: %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [error localizedDescription]);
         }];
     });
     
@@ -112,11 +113,11 @@
         blockUpdateDone = YES;
     };
     
-    Commit *commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
     
-    Commit *commit2 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit *commit2 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
 
@@ -266,11 +267,11 @@
         return NO;
     };
     
-    Commit *commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
     
-    Commit *commit2 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit *commit2 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
     
@@ -281,7 +282,7 @@
     
     // ****
     
-    Commit *commit3 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    Commit *commit3 = [Commit sqk_insertInContext   :[self.contextManager mainContext]];
     commit3.sha = @"Insert 3";
     commit3.date = [NSDate date];
     [self.contextManager saveMainContext:nil];

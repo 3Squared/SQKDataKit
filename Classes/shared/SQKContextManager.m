@@ -8,6 +8,7 @@
 
 #import "SQKContextManager.h"
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
+#import "NSManagedObjectContext+SQKAdditions.h"
 
 @interface SQKContextManager ()
 @property (nonatomic, strong, readwrite) NSString *storeType;
@@ -30,9 +31,9 @@
     
     self = [super init];
     if (self) {
-        self.storeType = storeType;
-        self.managedObjectModel = managedObjectModel;
-        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator SQK_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
+        _storeType = storeType;
+        _managedObjectModel = managedObjectModel;
+        _persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType managedObjectModel:managedObjectModel];
         [self observeForSavedNotification];
     }
     return self;
@@ -57,9 +58,9 @@
     /**
      *  Ensure mainContext is accessed on the main thread.
      */
-    NSManagedObjectContext *managedObjectContext = [notification object];
-    if (managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
-        [_mainContext performBlock:^{
+    [_mainContext performBlock:^{
+        NSManagedObjectContext *managedObjectContext = [notification object];
+        if ([managedObjectContext shouldMergeOnSave] && managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
             [managedObjectContext performBlock:^{
                 /**
                  *  If NSManagedObjectContext from the notitification is a private context
@@ -79,10 +80,10 @@
                     [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                 }
             }];
-        }];
-    }
+        }
+    }];
 }
-
+     
 - (NSManagedObjectContext *)mainContext {
     if (![NSThread isMainThread]) {
         @throw [NSException exceptionWithName:NSObjectInaccessibleException reason:@"mainContext is only accessible from the main thread!" userInfo:nil];
@@ -114,5 +115,6 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:nil];
 }
+
 
 @end

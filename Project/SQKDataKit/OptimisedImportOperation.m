@@ -16,9 +16,9 @@
 
 @implementation OptimisedImportOperation
 
-- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
     self.startDate = [NSDate date];
-    [Commit SQK_insertOrUpdate:data
+    [Commit sqk_insertOrUpdate:data
                 uniqueModelKey:@"sha"
                uniqueRemoteKey:@"sha"
            propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
@@ -30,7 +30,7 @@
            }
                 privateContext:context
                          error:nil];
-    [context save:nil];
+    [self completeOperationBySavingContext:context];
 }
 
 - (NSDate *)dateFromJSONString:(NSString *)jsonString {
