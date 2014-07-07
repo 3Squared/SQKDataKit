@@ -8,18 +8,18 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import "SQKDataImportOperation.h"
+#import "SQKCoreDataOperation.h"
 #import "SQKContextManager.h"
 
-@interface ConcreteDataImportOperationWithoutOverride : SQKDataImportOperation
+@interface ConcreteDataImportOperationWithoutOverride : SQKCoreDataOperation
 @end
 @implementation ConcreteDataImportOperationWithoutOverride
 @end
 
-@interface ConcreteDataImportOperation : SQKDataImportOperation
+@interface ConcreteDataImportOperation : SQKCoreDataOperation
 @end
 @implementation ConcreteDataImportOperation
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
 }
 @end
 
@@ -38,31 +38,26 @@
 }
 
 - (void)testInitialisesWithContextAndJSON {
-    NSDictionary *json = @{};
-    SQKDataImportOperation *dataImportOperation = [[SQKDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
+    SQKCoreDataOperation *dataImportOperation = [[SQKCoreDataOperation alloc] initWithContextManager:self.contextManager];
     
     XCTAssertNotNil(dataImportOperation, @"");
 }
 
 - (void)testStoresConstructorParametersInProperties {
-    NSDictionary *json = @{};
-    SQKDataImportOperation *dataImportOperation = [[SQKDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
+    SQKCoreDataOperation *dataImportOperation = [[SQKCoreDataOperation alloc] initWithContextManager:self.contextManager];
     
     XCTAssertEqual(dataImportOperation.contextManager, self.contextManager, @"");
-    XCTAssertEqual(dataImportOperation.data, json, @"");
 }
 
 - (void)testThrowsExpectionIfUpdateMethodNotOverridden {
-    ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager data:@{}];
-    XCTAssertThrowsSpecificNamed([dataImportOperation performWorkPrivateContext:nil usingData:nil], NSException, NSInternalInconsistencyException, @"");
+    ConcreteDataImportOperationWithoutOverride *dataImportOperation = [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager];
+    XCTAssertThrowsSpecificNamed([dataImportOperation performWorkPrivateContext:nil], NSException, NSInternalInconsistencyException, @"");
 }
 
 - (void)testCallsUpdateWhenOperationIsStarted {
-    id json = @{@"key" : @"value"};
-    
-    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager data:json];
+    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
     id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
-    [[dataImportOperationPartialMock expect] performWorkPrivateContext:[OCMArg any] usingData:json];
+    [[dataImportOperationPartialMock expect] performWorkPrivateContext:[OCMArg any]];
     
     [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
     

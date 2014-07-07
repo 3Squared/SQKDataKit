@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
 	s.ios.source_files  = ["Classes/shared/**/*{h,m}", "Classes/ios/**/*{h,m}"]
 	s.osx.source_files  = ["Classes/shared/**/*{h,m}", "Classes/osx/**/*{h,m}"]
 
-	s.public_header_files = ["Classes/shared/SQKManagedObjectController.h", "Classes/shared/NSManagedObject+SQKAdditions.h", "Classes/shared/SQKContextManager.h", "Classes/shared/SQKDataImportOperation.h", "Classes/shared/SQKDataKit.h", "Classes/shared/NSManagedObjectContext+SQKAdditions.h", "Classes/ios/SQKFetchedTableViewController.h"]
+	s.public_header_files = ["Classes/shared/SQKManagedObjectController.h", "Classes/shared/NSManagedObject+SQKAdditions.h", "Classes/shared/SQKContextManager.h", "Classes/shared/SQKCoreDataOperation.h", "Classes/shared/SQKDataKit.h", "Classes/shared/NSManagedObjectContext+SQKAdditions.h", "Classes/ios/SQKFetchedTableViewController.h"]
 
 	s.framework  = 'CoreData'
 
