@@ -69,6 +69,8 @@ Make sure to retain the private context in a property. To quote the Apple Doc:
 
 Note: the main context is retained by the context manager, unlike new private contexts which **you** have the responsibility of retaining.
 
+### Automatic Merging
+Coming soon
 
 
 ### Concurrency 
@@ -131,33 +133,38 @@ SQKManagedObjectController *objectsController = [[SQKManagedObjectController all
 ```
 
 ### Delegate
-When objects are fetched (as a result of calling `performFetch:`), updated, or deleted, the controller's delegate methods are called. These are:
+When objects are fetched (as a result of calling `performFetch:`), changed, inserted or deleted, the controller's delegate methods are called. These are:
 
 ```
 -(void)controller:(SQKManagedObjectController*)controller
-   fetchedObjects:(NSIndexSet*)fetchedObjectIndexes error:(NSError**)error;
+		fetchedObjects:(NSIndexSet*)fetchedObjectIndexes error:(NSError**)error;
 ```
-
-```
--(void)controller:(SQKManagedObjectController*)controller
-   updatedObjects:(NSIndexSet*)updatedObjectIndexes;
-```
-
 ```
 -(void)controller:(SQKManagedObjectController*)controller
-   deletedObjects:(NSIndexSet*)deletedObjectIndexes;  
+   		didSaveObjects:(NSIndexSet*)savedObjectIndexes;
 ```
-The index set contains the indexes of objects in `controller.managedObjects` which have been fetched, edited or deleted. These objects are automatically refreshed using `[managedObjectContext refreshObject:existingObject mergeChanges:NO]`. It is then up to you to decide what to do with that information - for instance, update some visible data, or pop a view controller from the stack.
+```
+-(void)controller:(SQKManagedObjectController*)controller
+   		didChangeObjects:(NSIndexSet*)savedObjectIndexes;
+```
+```
+-(void)controller:(SQKManagedObjectController*)controller
+ 		didInsertObjects:(NSIndexSet*)insertedObjectIndexes;
+```
+```
+-(void)controller:(SQKManagedObjectController*)controller
+  		didDeleteObjects:(NSIndexSet*)deletedObjectIndexes;
+```
+
+The index set contains the indexes of objects in `controller.managedObjects` which have been fetched, inserted, edited or deleted. The set of objects is automatically up-to-date by monitoring the save notifications - new objects that match the specified fetch request are added, existing ones are refreshed with `refreshObject:mergeChanges:`. It is then up to you to decide what to do with that information - for instance, update some visible data, or pop a view controller from the stack.
 
 ### Blocks
 
 If you prefer blocks over delegates, you can set 
-`fetchedObjectsBlock`, `updatedObjectsBlock`, and `deletedObjectsBlock` as well as or instead of the delegate. Be aware that if both are set, the delegate methods will be called first.
+`fetchedObjectsBlock`, `savedObjectsBlock`, `insertedObjectsBlock`, and `deletedObjectsBlock` as well as or instead of the delegate. Be aware that if both are set, the delegate methods will be called first.
 
 ### Concurrency
-Asynchronous variants of `performFetch` and `deleteObjects` are available. Try to only use these if you are dealing with large numbers of managed objects.
-
-In general this class is designed for from the main thread only. Your mileage may vary in any other circumstance.
+In general this class is designed for use from the main thread only, using objects in a main thread context. Your mileage may vary in any other circumstances.
 
 ## `SQKFetchedTableViewController`
 
