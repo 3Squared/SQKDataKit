@@ -145,10 +145,6 @@ When objects are fetched (as a result of calling `performFetch:`), changed, inse
 ```
 ```
 -(void)controller:(SQKManagedObjectController*)controller
-   		didChangeObjects:(NSIndexSet*)savedObjectIndexes;
-```
-```
--(void)controller:(SQKManagedObjectController*)controller
  		didInsertObjects:(NSIndexSet*)insertedObjectIndexes;
 ```
 ```
