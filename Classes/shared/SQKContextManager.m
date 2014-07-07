@@ -66,7 +66,6 @@
                  *  If NSManagedObjectContext from the notitification is a private context
                  *	then merge the changes into the main context.
                  */
-                
                 [_mainContext mergeChangesFromContextDidSaveNotification:notification];
                 
                 /**
@@ -80,12 +79,11 @@
                 for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
                     [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                 }
-                
             }];
         }
     }];
 }
-
+     
 - (NSManagedObjectContext *)mainContext {
     if (![NSThread isMainThread]) {
         @throw [NSException exceptionWithName:NSObjectInaccessibleException reason:@"mainContext is only accessible from the main thread!" userInfo:nil];

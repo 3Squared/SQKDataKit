@@ -2,7 +2,7 @@ PODS:
   - AGAsyncTestHelper (1.0):
     - AGAsyncTestHelper/Core
   - AGAsyncTestHelper/Core (1.0)
-  - OCMock (2.2.1)
+  - OCMock (2.2.4)
 
 DEPENDENCIES:
   - AGAsyncTestHelper (~> 1.0)
@@ -10,6 +10,6 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AGAsyncTestHelper: fc9d44460933d8167ae431f466ab3a09a5121582
-  OCMock: 0647d3c53ce945e6f1dbaf072a66848aeb376a40
+  OCMock: 6db79185520e24f9f299548f2b8b07e41d881bd5
 
-COCOAPODS: 0.32.1
+COCOAPODS: 0.33.1

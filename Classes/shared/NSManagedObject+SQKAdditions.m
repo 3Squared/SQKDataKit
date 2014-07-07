@@ -78,8 +78,8 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
 }
 
 + (void)sqk_insertOrUpdate:(NSArray *)dictArray
-            uniqueModelKey:(NSString *)modelKey
-           uniqueRemoteKey:(NSString *)remoteDataKey
+            uniqueModelKey:(id)modelKey
+           uniqueRemoteKey:(id)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error {
@@ -117,7 +117,7 @@ NSString * const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         id object = [objectEnumerator nextObject];
         
         while (dictionary = [dictionaryEnumerator nextObject]) {
-            if (object && [[object valueForKey:modelKey] isEqualToString:dictionary[remoteDataKey]]) {
+            if (object && [[object valueForKey:modelKey] isEqual:dictionary[remoteDataKey]]) {
                 if (propertySetterBlock) {
                     propertySetterBlock(dictionary, object);
                 }
