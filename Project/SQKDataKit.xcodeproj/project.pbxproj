@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		22BB628E1919256B00EEEFCE /* SQKManagedObjectControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22BB628D1919256B00EEEFCE /* SQKManagedObjectControllerTests.m */; };
-		4D71AADAFF4C4498A8534E50 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F38F269A45CB4055B76E11F2 /* libPods.a */; };
 		92CAC9F51A4D406BAD472FED /* libPods-SQKDataKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */; };
 		A30FAE8F1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A30FAE8E1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m */; };
 		A31AB0E71857769D00B240AB /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = A31AB0E61857769D00B240AB /* Commit.m */; };
@@ -57,10 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKDataKitTests.xcconfig"; path = "Pods/Pods-SQKDataKitTests.xcconfig"; sourceTree = "<group>"; };
 		22BB628D1919256B00EEEFCE /* SQKManagedObjectControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKManagedObjectControllerTests.m; sourceTree = "<group>"; };
 		59B139092C7446D08E91F4A0 /* libPods-SQKDataKitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8CFA99AD54C24F388E92E29F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		A30FAE8E1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKJSONDataImportOperationTests.m; sourceTree = "<group>"; };
 		A31AB0E51857769D00B240AB /* Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commit.h; sourceTree = "<group>"; };
 		A31AB0E61857769D00B240AB /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
@@ -129,7 +126,6 @@
 				A34BF39D184F41D300F2E3B4 /* CoreGraphics.framework in Frameworks */,
 				A34BF39F184F41D300F2E3B4 /* UIKit.framework in Frameworks */,
 				A34BF39B184F41D300F2E3B4 /* Foundation.framework in Frameworks */,
-				4D71AADAFF4C4498A8534E50 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,8 +213,6 @@
 				A34BF3C2184F41D400F2E3B4 /* SQKDataKitTests */,
 				A34BF399184F41D300F2E3B4 /* Frameworks */,
 				A34BF398184F41D300F2E3B4 /* Products */,
-				16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */,
-				8CFA99AD54C24F388E92E29F /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -310,11 +304,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A34BF3CC184F41D500F2E3B4 /* Build configuration list for PBXNativeTarget "SQKDataKit" */;
 			buildPhases = (
-				2BEE98A915D74B4E941C7F44 /* Check Pods Manifest.lock */,
 				A34BF393184F41D300F2E3B4 /* Sources */,
 				A34BF394184F41D300F2E3B4 /* Frameworks */,
 				A34BF395184F41D300F2E3B4 /* Resources */,
-				524F531019F74D7884F4E426 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -329,11 +321,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A34BF3CF184F41D500F2E3B4 /* Build configuration list for PBXNativeTarget "SQKDataKitTests" */;
 			buildPhases = (
-				CC7F3093A3AB4BD98726B1EC /* Check Pods Manifest.lock */,
 				A34BF3B7184F41D400F2E3B4 /* Sources */,
 				A34BF3B8184F41D400F2E3B4 /* Frameworks */,
 				A34BF3B9184F41D400F2E3B4 /* Resources */,
-				E6E589A77B0246FF853B6D68 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -399,69 +389,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		2BEE98A915D74B4E941C7F44 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		524F531019F74D7884F4E426 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CC7F3093A3AB4BD98726B1EC /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		E6E589A77B0246FF853B6D68 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-SQKDataKitTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A34BF393184F41D300F2E3B4 /* Sources */ = {
@@ -608,7 +535,6 @@
 		};
 		A34BF3CD184F41D500F2E3B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8CFA99AD54C24F388E92E29F /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -626,7 +552,6 @@
 		};
 		A34BF3CE184F41D500F2E3B4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8CFA99AD54C24F388E92E29F /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -644,7 +569,6 @@
 		};
 		A34BF3D0184F41D500F2E3B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKDataKit.app/SQKDataKit";
@@ -668,7 +592,6 @@
 		};
 		A34BF3D1184F41D500F2E3B4 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 16334E8D86634655B56CA73D /* Pods-SQKDataKitTests.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKDataKit.app/SQKDataKit";
