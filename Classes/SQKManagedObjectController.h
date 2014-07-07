@@ -103,6 +103,14 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  */
 @property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock insertedObjectsBlock;
 
+
+/**
+ *  Use the provided block to filter the array of fetched objects before adding them to managedObjects.
+ *  Useful if a predicate is not expressive enough for you.
+ */
+@property (nonatomic, copy) BOOL (^filterReturnedObjectsBlock)(id managedObject);
+
+
 /**
  *  Returns a SQKManagedObjectController set up with the given fetch request and context.
  *  The fetch request is not executed until performFetch:/performFetchAsync is called.

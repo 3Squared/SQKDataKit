@@ -260,5 +260,56 @@
 
 }
 
+-(void)testFilteringBlock
+{
+    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) {
+        return NO;
+    };
+    
+    Commit *commit = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    commit.sha = @"Insert 1";
+    commit.date = [NSDate date];
+    
+    Commit *commit2 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    commit2.sha = @"Insert 2";
+    commit2.date = [NSDate date];
+    
+    [self.contextManager saveMainContext:nil];
+    
+    
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
+    
+    // ****
+    
+    Commit *commit3 = [Commit SQK_insertInContext:[self.contextManager mainContext]];
+    commit3.sha = @"Insert 3";
+    commit3.date = [NSDate date];
+    [self.contextManager saveMainContext:nil];
+
+    
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
+
+    // ****
+    
+    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) {
+        return YES;
+    };
+    
+    [self.controller performFetch:nil];
+    
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)4, @"");
+
+    // ****
+    
+    self.controller.filterReturnedObjectsBlock = ^BOOL(Commit *obj) {
+        return [obj.sha rangeOfString:@"Insert"].location != NSNotFound;
+    };
+    
+    [self.controller performFetch:nil];
+
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
+
+}
+
 
 @end

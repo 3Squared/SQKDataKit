@@ -29,6 +29,10 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                                                  selector:@selector(contextDidSave:)
                                                      name:NSManagedObjectContextDidSaveNotification
                                                    object:nil];
+        
+        self.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) {
+            return YES;
+        };
     }
     return self;
 }
@@ -38,7 +42,6 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     if (!fetchRequest || !context) {
         return nil;
     }
-    
     self = [self init];
     if (self) {
         _fetchRequest = fetchRequest;
@@ -89,7 +92,13 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         return NO;
     }
     
-    self.managedObjects = [self.managedObjectContext executeFetchRequest:self.fetchRequest error:error];
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:self.fetchRequest error:error];
+    
+    NSIndexSet *indexes = [fetchedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject *obj, NSUInteger idx, BOOL *stop) {
+        return self.filterReturnedObjectsBlock(obj);
+    }];
+    self.managedObjects = [fetchedObjects objectsAtIndexes:indexes];
+    
     NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
     if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)]) {
         [self.delegate controller:self fetchedObjects:allIndexes error:error];
@@ -151,7 +160,7 @@ NSString* const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
             for (NSManagedObject *insertedObject in insertedObjects) {
                 if (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObjects]) {
                     NSManagedObject *localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID] error:nil];
-                    if (localObject) {
+                    if (localObject && self.filterReturnedObjectsBlock(localObject)) {
                         [array addObject:localObject];
                     }
                 }
