@@ -12,6 +12,7 @@
 #import "Commit.h"
 #import "SQKAppDelegate.h"
 #import "SQKCommitCell.h"
+#import "SQKCommitDetailViewController.h"
 
 @interface SQKCommitsViewController ()
 @end
@@ -36,6 +37,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return SQKCommitCellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Commit *commit = [[self activeFetchedResultsController] objectAtIndexPath:indexPath];
+    SQKCommitDetailViewController *detailVC = [[SQKCommitDetailViewController alloc] initWithCommit:commit];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
