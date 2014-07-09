@@ -14,7 +14,7 @@
  *  It creates a persistent store coordinator behind the scenes.
  *  It provides a single `mainContext` to be used for UI based Core Data work (on the main thread).
  *  It creates private contexts (concurrency type `NSPrivateQueueConcurrencyType`) as you need them for Core Data work on background threads.
- *  Saving a private context automatically merges any changes back in to the main managed object context.
+ *  Saving a private context automatically merges any changes back in to the main managed object context. (To disable automatic merging set the `shouldMergeOnSave` property of the private context to NO.)
  *  You should construct and use a single SQKContextManager throughout your app. Pass the instance to other objects that need to interact with Core Data.
  */
 @interface SQKContextManager : NSObject
