@@ -75,7 +75,7 @@ By default, any changes made in a private context are merged into the main conte
 
 ```
 self.privateContext = [self.contextManager newPrivateContext];
-Self.privateContext.shouldMergeOnSave = YES;
+Self.privateContext.shouldMergeOnSave = NO;
 ```
 
 ### Concurrency 
