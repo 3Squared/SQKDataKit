@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 	s.name         = "SQKDataKit"
-	s.version      = "0.4.0"
+	s.version      = "0.4.1"
 	s.summary      = "Lightweight Core Data helper to reduce boilerplate code."
 
 	s.license = { :type => 'Custom', :file => 'LICENCE' }
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 									Codifies some good practises for importing large data sets efficiently.
 									DESC
 
-	s.homepage     = "http://git.3squared.com/ios-libraries/sqkdatakit"
+	s.homepage     = "https://github.com/3squared/SQKDataKit"
 
 	s.authors      = { "Luke Stringer" => "luke.stringer@3squared.com", "Sam Oakley" => "sam.oakley@3squared.com", "Zack Brown" => "zack.brown@3squared.com", "Ken Boucher" => "ken.boucher@3squared.com", "Ste Prescott" => "ste.prescott@3squared.com", "Ben Walker" => "ben.walker@3squared.com"}
 
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 	s.ios.deployment_target = '6.0'
 	s.osx.deployment_target = '10.9' 
 
-	s.source       = { :git => "git@git.3squared.com:ios-libraries/sqkdatakit.git", :tag => "#{s.version}" }
+	s.source       = { :git => "https://github.com/3squared/SQKDataKit.git", :tag => "#{s.version}" }
 
 	s.ios.source_files  = ["Classes/shared/**/*{h,m}", "Classes/ios/**/*{h,m}"]
 	s.osx.source_files  = ["Classes/shared/**/*{h,m}", "Classes/osx/**/*{h,m}"]
