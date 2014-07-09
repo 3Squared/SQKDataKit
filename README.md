@@ -145,10 +145,6 @@ When objects are fetched (as a result of calling `performFetch:`), changed, inse
 ```
 ```
 -(void)controller:(SQKManagedObjectController*)controller
-   		didChangeObjects:(NSIndexSet*)savedObjectIndexes;
-```
-```
--(void)controller:(SQKManagedObjectController*)controller
  		didInsertObjects:(NSIndexSet*)insertedObjectIndexes;
 ```
 ```
@@ -232,9 +228,9 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 
 ## `SQKDataImportOperation`
 
-Use an SQKDataImportOperation when you need to import data into Core Data off the main thread. 
+Use an SQKDataImportOperation when you need to perform work with Core Data off the main thread. 
 
-You need to subclass and override the `updateContext:usingData:` method, which is where you should perform your data import logic. The operation uses a `SQKContextManager` instance to obtain a private managed object context. This is passed to the `updateContext:usingData:` method for you to use during import. 
+You need to subclass and must override the `performWorkPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use it's `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeOperationBySavingContext:` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
 
 Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc **must be done in a background thread**, and using the correct operation queue will ensure that.
 
@@ -243,17 +239,19 @@ Add the operation to an NSOperationQueue that is not the `mainQueue` so that the
 How to subclass:
 
 ```
-#import "CustomDataImportOperation.h"
+#import "AnimalImportOperation.h"
 #import "Animal.h"
 #import "NSManagedObject+SQKAdditions.h"
 
-@interface CustomDataImportOperation ()
+@interface AnimalImportOperation ()
 @end
 
-@implementation CustomDataImportOperation
+@implementation AnimalImportOperation
 
-- (void)updateContext:(NSManagedObjectContext *)context usingData:(id)data {
-    [Animal SQK_insertOrUpdate:data
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+    id animalJSON = [self animalJSONFromWebservice];
+    
+    [Animal SQK_insertOrUpdate:animalJSON
                 uniqueModelKey:@"animalID"
                uniqueRemoteKey:@"IDAnimal"
            propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
@@ -265,6 +263,20 @@ How to subclass:
                          error:NULL];
     [context save:NULL];
 }
+
+- (id)animalJSONFromWebservice {
+    NSURL *URL = [NSURL URLWithString:@"http://webservice.com/v1/animal"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    NSData *reponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:NULL error:NULL];
+    id JSON = reponseData != nil ? [NSJSONSerialization JSONObjectWithData:reponseData options:0 error:NULL] : nil;
+    
+    return JSON
+}
+
 @end
 ```
 
@@ -272,15 +284,14 @@ Using with an operation queue.
 
 ```
 NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init]; // background thread queue
-id JSON = ...; // data to import (NSArray or NSDictionary typically)
 
-CustomDataImportOperation *importOperation = [[CustomDataImportOperation alloc] initWithContextManager:self.contextManager data:JSON];
+AnimalImportOperation *importOperation = [[AnimalImportOperation alloc] initWithContextManager:self.contextManager];
+
 [importOperation setCompletionBlock:^{
     // Completion logic here
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-    // You may want to perform this on the main thread
+        // You may want to perform this on the main thread
 	}];
-
 }];
 
 [self.operationQueue addOperation:importOperation];

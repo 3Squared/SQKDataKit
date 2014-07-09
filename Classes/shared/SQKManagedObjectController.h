@@ -45,15 +45,6 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
    didSaveObjects:(NSIndexSet*)savedObjectIndexes;
 
 /**
- *  Called when objects are changed in the current managed object context.
- *
- *  @param controller           The SQKManagedObjectController where the changes occured.
- *  @param changedObjectIndexes The indexes of the updated objects.
- */
--(void)controller:(SQKManagedObjectController*)controller
-   didChangeObjects:(NSIndexSet*)savedObjectIndexes;
-
-/**
  *  Called when objects are inserted that match the fetch request in the current managed object context.
  *
  *  @param controller           The SQKManagedObjectController where the changes occured.

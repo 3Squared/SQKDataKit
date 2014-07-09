@@ -6,10 +6,14 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKDataImportOperation.h"
+#import "SQKCoreDataOperation.h"
 
-@interface GitDataImportOperation : SQKDataImportOperation
+@interface GitDataImportOperation : SQKCoreDataOperation
 
 @property (nonatomic, readonly) NSDate *startDate;
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager data:(id)data;
+
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data;
 
 @end
