@@ -70,8 +70,13 @@ Make sure to retain the private context in a property. To quote the Apple Doc:
 Note: the main context is retained by the context manager, unlike new private contexts which **you** have the responsibility of retaining.
 
 ### Automatic Merging
-Coming soon
 
+By default, any changes made in a private context are merged into the main context when the private context is saved. If you need to disable this for any reason you can set `shouldMergeOnSave` to NO. It will then be your responsibility to merge the changes when is appropriate for your use case.
+
+```
+self.privateContext = [self.contextManager newPrivateContext];
+Self.privateContext.shouldMergeOnSave = YES;
+```
 
 ### Concurrency 
 
