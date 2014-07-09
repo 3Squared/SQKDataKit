@@ -198,7 +198,7 @@ Here you must return an `NSFetchRequest` for the specified search string. If sea
 To use a section index in a `SQKFetchedTableViewController` subclass:
 
 ```
-- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SJOSearchableFetchedResultsController *)controller 
+- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedTableViewController *)controller 
 {
     return @"uppercaseFirstLetterTitle"; // the sectionKeyPath
 }
