@@ -302,6 +302,11 @@ AnimalImportOperation *importOperation = [[AnimalImportOperation alloc] initWith
 [self.operationQueue addOperation:importOperation];
 ```
 
+# Acknowledgements
+
+* [SJODataKit](https://github.com/blork/SJODataKit)
+* [SJOManagedObjectController](https://github.com/blork/SJOManagedObjectController)
+
 # Licence
 
 Copyright (c) 3Squared Ltd
