@@ -68,11 +68,11 @@
 }
 
 - (BOOL)isExecuting {
-    return self.executing;
+    return self.sqk_executing;
 }
 
 - (BOOL)isFinished {
-    return self.finished;
+    return self.sqk_finished;
 }
 
 
