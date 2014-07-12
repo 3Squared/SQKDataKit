@@ -12,8 +12,8 @@
 @interface SQKCoreDataOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContextToMerge;
-@property (nonatomic, assign) BOOL executing;
-@property (nonatomic, assign) BOOL finished;
+@property (nonatomic, assign) BOOL sqk_executing;
+@property (nonatomic, assign) BOOL sqk_finished;
 @end
 
 @implementation SQKCoreDataOperation
@@ -22,8 +22,8 @@
     self = [super init];
     if (self) {
         _contextManager = contextManager;
-        _executing = NO;
-        _finished = NO;
+        _sqk_executing = NO;
+        _sqk_finished = NO;
     }
     return self;
 }
@@ -47,13 +47,13 @@
         
         // Must move the operation to the finished state if it is canceled.
         [self willChangeValueForKey:@"isFinished"];
-        self.finished = YES;
+        self.sqk_finished = YES;
         [self didChangeValueForKey:@"isFinished"];
         return;
     }
     
     [self willChangeValueForKey:@"isExecuting"];
-    self.executing = YES;
+    self.sqk_executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
     
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
@@ -97,8 +97,8 @@
     [self willChangeValueForKey:@"isFinished"];
     [self willChangeValueForKey:@"isExecuting"];
     
-    self.executing = NO;
-    self.finished = YES;
+    self.sqk_executing = NO;
+    self.sqk_finished = YES;
     
     [self didChangeValueForKey:@"isExecuting"];
     [self didChangeValueForKey:@"isFinished"];
