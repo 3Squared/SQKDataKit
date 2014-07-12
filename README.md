@@ -1,10 +1,10 @@
-# SQKDataKit
+# SQKDataKit ![Version](https://cocoapod-badges.herokuapp.com/v/SQKDataKit/badge.png)&nbsp;![Platforms](https://cocoapod-badges.herokuapp.com/p/SQKDataKit/badge.png)
 
 Collection of classes to make working with Core Data easier and help DRY-up your code. Provides convenience methods and classes for working in a multi-threaded environment with `NSManagedObject`s and `NSManagedObjectContext`s. Codifies some good practises for importing large data sets efficiently.
 
 # Installation
 
-* Using [Cocoapods](http://cocoapods.org), add `pod SQKDataKit` to you Podfile.
+* Using [Cocoapods](http://cocoapods.org), add `pod SQKDataKit` to your Podfile.
 * `#import <SQKDataKit/SQKDataKit.h>` as necessary.
 
 
@@ -12,7 +12,7 @@ Collection of classes to make working with Core Data easier and help DRY-up your
 
 ## `SQKContextManager`
 
-`SQKContextManager` is you first point of entry for using SQKDataKit. It creates and manages `NSManagedObjectContext` instances for you. 
+`SQKContextManager` is your first point of entry for using SQKDataKit. It creates and manages `NSManagedObjectContext` instances for you. 
 
 ### Initialisation
 
@@ -43,7 +43,7 @@ You should only ever use a single `SQKContextManager` as it maintains the persis
 @end
 ```
 
-For a SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with `NSInMemoryStoreType` is useful as changes are not persisted between test suite runs, and side effects from your production SQLite database do not contaminate your tests.
+For an SQLite based persistent store specify `NSSQLiteStoreType`. If you are writing unit tests that interact with Core Data, then a context manager with `NSInMemoryStoreType` is useful as changes are not persisted between test suite runs, and side effects from your production SQLite database do not contaminate your tests.
 
 If you only have a single Data Model then `[NSManagedObjectModel mergedModelFromBundles:nil]` will return this.
 
@@ -51,31 +51,36 @@ The context manager provides a convenient way to obtain 2 kinds of `NSManagedObj
 
 ### Using the main context
 
-There is only ever one main context and is obtained through the `mainContext` method. You should use this context for any interaction with Core Data while on the main thread, such as using controllers and UI objects that are required to be used only on the main thread.. This context is initialised with `NSMainQueueConcurrencyType`and should therefore only be used while on the main thread. 
+There is only ever one main context and is obtained through the `mainContext` method. You should use this context for any interaction with Core Data on the UI thread, such as when using `NSFetchedResultsController`. This context is initialised with `NSMainQueueConcurrencyType`and should therefore only be used while on the main thread. 
 
-**Do not use the main context while in a background thread.** Failure to use the main context on the main thread will result inconsistent behaviour and possible crashes. To safe guard this an exception will be thrown if you ask the context manager for the main context while on a thread that is not the main context.
+**Do not use the main context while in a background thread.** Failure to use the main context on the main thread will result inconsistent behaviour and possible crashes. To safeguard this an exception will be thrown if you ask the context manager for the main context while on a non-main thread.
 
 ### Using private contexts
 
-Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to  perform Core Data work off the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial, in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
+Private contexts are initialised with `NSPrivateQueueConcurrencyType`. They are designed to  perform Core Data work off of the main thread. There are several situations in which performing operations with Core Data on a background thread or queue is beneficial; in particular if you want to ensure that your application’s user interface remains responsive while Core Data is undertaking a long-running task. 
 
 Obtain a private context from the `newPrivateContext` method. This will create a new private context based on the current state of the persistent store. Conceptually you can think of the main context being "branched" into another (private) context. **When you have a new private context you should only use it on the thread on which is was created.**
 
-Any work you perform with the private context, and any changes you make, stay independent to the state of the main context. When you save a private context your SQKContextManager instance will listen for the save notification and merge the changes back into the main context on your behalf. UI controllers and object using the main context will then get these updates automatically.
+Any work you perform with the private context, and any changes you make, are independent of the state of the main context. When you save a private context your `SQKContextManager` instance will listen for the save notification and merge the changes back into the main context on your behalf. UI controllers and object using the main context will then get these updates automatically.
 
-Make sure to retain the private context in a property. To quote the Apple Doc:
+Make sure to retain the private context in a property. Quoth the Apple Documentation:
 
 > Managed objects know what managed object context they’re associated with, and managed object contexts know what managed objects they contain. By default, though, the references between a managed object and its context are weak. This means that in general you cannot rely on a context to ensure the longevity of a managed object instance, and you cannot rely on the existence of a managed object to ensure the longevity of a context. Put another way, just because you fetched an object doesn’t mean it will stay around.
 
 Note: the main context is retained by the context manager, unlike new private contexts which **you** have the responsibility of retaining.
 
 ### Automatic Merging
-Coming soon
 
+By default, any changes made in a private context are merged into the main context when the private context is saved. If you need to disable this for any reason you can set `shouldMergeOnSave` to NO. It will then be your responsibility to merge the changes when is appropriate for your use case.
+
+```
+self.privateContext = [self.contextManager newPrivateContext];
+Self.privateContext.shouldMergeOnSave = NO;
+```
 
 ### Concurrency 
 
-Quoting the Apple Doc for 
+Quoth the Apple Documentation:
 
 > Core Data uses thread (or serialized queue) confinement to protect managed objects and managed object contexts (see “Concurrency with Core Data”). A consequence of this is that a context assumes the default owner is the thread or queue that allocated it—this is determined by the thread that calls its init method. You should not, therefore, initialize a context on one thread then pass it to a different thread. Instead, you should pass a reference to a persistent store coordinator and have the receiving thread/queue create a new context derived from that. If you use NSOperation, you must create the context in main (for a serial queue) or start (for a concurrent queue).
 
@@ -111,7 +116,7 @@ Includes a method for optimised batch insert-or-update, a common pattern in apps
 
 ## `SQKManagedObjectController`
 
-It is important to keep track of any `NSManagedObjects` you have fetched. If you hold a reference to an object but it is deleted elsewhere (possibly as part of a background sync operation) then when you try to access it an exception will be raised and the app will probably crash. Maybe it is just edited in the background - but your detail view  doesn't know, so you're showing out of date information.
+It is important to keep track of any `NSManagedObjects` you have fetched. If you hold a reference to an object but it is deleted elsewhere (possibly as part of a background sync operation) then when you try to access it an exception will be raised and the app will probably crash. Maybe it is just edited in the background - but your detail view doesn't know, so you're showing out of date information.
 
 `NSFetchedResultsController` avoids these issues as it listens to Core Data notifications and keeps itself updated. If you need a Core Data backed tableview, always use an `NSFetchedResultsController` if you can.
 
@@ -193,7 +198,7 @@ Here you must return an `NSFetchRequest` for the specified search string. If sea
 To use a section index in a `SQKFetchedTableViewController` subclass:
 
 ```
-- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SJOSearchableFetchedResultsController *)controller 
+- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedTableViewController *)controller 
 {
     return @"uppercaseFirstLetterTitle"; // the sectionKeyPath
 }
@@ -228,11 +233,11 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 
 ## `SQKDataImportOperation`
 
-Use an SQKDataImportOperation when you need to perform work with Core Data off the main thread. 
+Use an SQKDataImportOperation when you need to perform work with Core Data off of the main thread. 
 
-You need to subclass and must override the `performWorkPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use it's `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeOperationBySavingContext:` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
+You need to subclass and must override the `performWorkPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use its `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeOperationBySavingContext:` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
 
-Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc **must be done in a background thread**, and using the correct operation queue will ensure that.
+Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc. **must be done in a background thread**, and using the correct operation queue will ensure that.
 
 ### Usage
 
@@ -296,6 +301,11 @@ AnimalImportOperation *importOperation = [[AnimalImportOperation alloc] initWith
 
 [self.operationQueue addOperation:importOperation];
 ```
+
+# Acknowledgements
+
+* [SJODataKit](https://github.com/blork/SJODataKit)
+* [SJOManagedObjectController](https://github.com/blork/SJOManagedObjectController)
 
 # Licence
 
