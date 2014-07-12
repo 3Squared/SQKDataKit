@@ -22,7 +22,7 @@
 @implementation SQKFetchedTableViewController
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext style:(UITableViewStyle)style {
-	if ([super initWithStyle:style]) {
+    if (self = [super initWithStyle:style]) {
         self.managedObjectContext = managedObjectContext;
     }
     return self;
