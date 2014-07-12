@@ -134,8 +134,8 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary* dictionary, id managedObjec
  *  @param error               If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  */
 + (void)sqk_insertOrUpdate:(NSArray *)dictArray
-            uniqueModelKey:(NSString *)modelKey
-           uniqueRemoteKey:(NSString *)remoteDataKey
+            uniqueModelKey:(id)modelKey
+           uniqueRemoteKey:(id)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
                    privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error;
