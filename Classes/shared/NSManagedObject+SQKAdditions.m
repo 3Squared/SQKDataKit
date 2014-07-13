@@ -110,51 +110,55 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     }
 
     [context performBlockAndWait:^{
-        NSSortDescriptor *remoteDataSortDescriptor =
-            [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-        NSArray *sortedDictArray =
-            [dictArray sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
-        NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
-
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-        [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
-
-        NSSortDescriptor *localDataSortDescriptor =
-            [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
-        [fetchRequest setSortDescriptors:@[localDataSortDescriptor]];
-
-        NSError *localError = nil;
-        NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
-        if (localError)
+        @autoreleasepool
         {
-            *error = localError;
-            return;
-        }
+            NSSortDescriptor *remoteDataSortDescriptor =
+                [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+            NSArray *sortedDictArray =
+                [dictArray sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
+            NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
 
-        NSEnumerator *objectEnumerator = [objectsMatchingKey objectEnumerator];
-        NSEnumerator *dictionaryEnumerator = [sortedDictArray objectEnumerator];
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
+            [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
 
-        NSDictionary *dictionary;
-        id object = [objectEnumerator nextObject];
+            NSSortDescriptor *localDataSortDescriptor =
+                [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
+            [fetchRequest setSortDescriptors:@[localDataSortDescriptor]];
 
-        while (dictionary = [dictionaryEnumerator nextObject])
-        {
-            if (object && [[object valueForKey:modelKey] isEqual:dictionary[remoteDataKey]])
+            NSError *localError = nil;
+            NSArray *objectsMatchingKey =
+                [context executeFetchRequest:fetchRequest error:&localError];
+            if (localError)
             {
-                if (propertySetterBlock)
-                {
-                    propertySetterBlock(dictionary, object);
-                }
-                object = [objectEnumerator nextObject];
+                *error = localError;
+                return;
             }
-            else
+
+            NSEnumerator *objectEnumerator = [objectsMatchingKey objectEnumerator];
+            NSEnumerator *dictionaryEnumerator = [sortedDictArray objectEnumerator];
+
+            NSDictionary *dictionary;
+            id object = [objectEnumerator nextObject];
+
+            while (dictionary = [dictionaryEnumerator nextObject])
             {
-                id newObject = [[self class] sqk_insertInContext:context];
-                [newObject setValue:dictionary[remoteDataKey] forKey:modelKey];
-                if (propertySetterBlock)
+                if (object && [[object valueForKey:modelKey] isEqual:dictionary[remoteDataKey]])
                 {
-                    propertySetterBlock(dictionary, newObject);
+                    if (propertySetterBlock)
+                    {
+                        propertySetterBlock(dictionary, object);
+                    }
+                    object = [objectEnumerator nextObject];
+                }
+                else
+                {
+                    id newObject = [[self class] sqk_insertInContext:context];
+                    [newObject setValue:dictionary[remoteDataKey] forKey:modelKey];
+                    if (propertySetterBlock)
+                    {
+                        propertySetterBlock(dictionary, newObject);
+                    }
                 }
             }
         }
