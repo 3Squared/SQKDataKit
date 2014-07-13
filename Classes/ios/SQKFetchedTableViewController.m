@@ -172,7 +172,7 @@
 {
     UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
     
-    [self showEmptyView:([[[self fetchedResultsControllerForTableView:tableView] fetchedObjects] count] == 0)];
+        [self showEmptyView:([[controller fetchedObjects] count] == 0)];
     
     switch(type)
     {
