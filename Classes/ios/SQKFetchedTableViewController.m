@@ -128,21 +128,21 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController*)controller
 {
-	/**
-	 *  Callbacks could be on a non-main thread.
-	 */
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    /**
+     *  Callbacks could be on a non-main thread.
+     */
+    [self.managedObjectContext performBlockAndWait:^{
         UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
         [tableView beginUpdates];
-	}];
+    }];
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController*)controller
 {
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    [self.managedObjectContext performBlockAndWait:^{
         UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
         [tableView endUpdates];
-	}];
+    }];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
@@ -150,18 +150,21 @@
            atIndex:(NSUInteger)sectionIndex
      forChangeType:(NSFetchedResultsChangeType)type
 {
-    UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
-    
-    switch(type)
-    {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-            break;
-    }
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
+        
+        switch(type)
+        {
+            case NSFetchedResultsChangeInsert:
+                [tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+        }
+    }];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller
@@ -170,28 +173,31 @@
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
-    UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
-    
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
+        
         [self showEmptyView:([[controller fetchedObjects] count] == 0)];
-    
-    switch(type)
-    {
-        case NSFetchedResultsChangeInsert:
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-            
-        case NSFetchedResultsChangeDelete:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:theIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-        case NSFetchedResultsChangeUpdate:
-            [self fetchedResultsController:controller configureCell:[tableView cellForRowAtIndexPath:theIndexPath] atIndexPath:theIndexPath];
-            break;
-            
-        case NSFetchedResultsChangeMove:
-            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:theIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            break;
-    }
+        
+        switch(type)
+        {
+            case NSFetchedResultsChangeInsert:
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+                
+            case NSFetchedResultsChangeDelete:
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:theIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+            case NSFetchedResultsChangeUpdate:
+                [self fetchedResultsController:controller configureCell:[tableView cellForRowAtIndexPath:theIndexPath] atIndexPath:theIndexPath];
+                break;
+                
+            case NSFetchedResultsChangeMove:
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:theIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+                break;
+        }
+    }];
 }
 
 
@@ -207,16 +213,16 @@
 
 
 - (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedTableViewController *)controller {
-	return nil;
+    return nil;
 }
 
 - (NSFetchedResultsController *)newFetchedResultsControllerWithSearch:(NSString *)searchString
 {
-	NSString *sectionKeyPath;
+    NSString *sectionKeyPath;
     /**
      *  Only use a sectionKeyPath when not searching becuase:
-	 *		- A a section index should not be shown while searching, and
-	 *		- B executed fetch requests take longer when sections are used. When searching this is especially noticable as a new fetch request is executed upon each key stroke during search.
+     *		- A a section index should not be shown while searching, and
+     *		- B executed fetch requests take longer when sections are used. When searching this is especially noticable as a new fetch request is executed upon each key stroke during search.
      */
     if (!self.searchIsActive) {
         sectionKeyPath = [self sectionKeyPathForSearchableFetchedResultsController:self];
@@ -262,22 +268,22 @@
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
-	self.searchIsActive = YES;
-	[searchBar sizeToFit];
-	[searchBar setShowsCancelButton:YES animated:YES];
-	return YES;
+    self.searchIsActive = YES;
+    [searchBar sizeToFit];
+    [searchBar setShowsCancelButton:YES animated:YES];
+    return YES;
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
 {
-	[searchBar sizeToFit];
+    [searchBar sizeToFit];
     [searchBar resignFirstResponder];
-	return YES;
+    return YES;
 }
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-	self.searchIsActive = NO;
+    self.searchIsActive = NO;
     [self searchBarShouldEndEditing:searchBar];
 }
 
