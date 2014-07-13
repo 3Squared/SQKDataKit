@@ -105,14 +105,11 @@
 }
 
 - (BOOL)saveMainContext:(NSError **)error {
-    __block BOOL didSave = NO;
-    [_mainContext performBlockAndWait:^{
     if ([self.mainContext hasChanges]) {
         [self.mainContext save:error];
-            didSave = YES;
+        return YES;
     }
-    }];
-    return didSave;
+    return NO;
 }
 
 - (void)dealloc {
