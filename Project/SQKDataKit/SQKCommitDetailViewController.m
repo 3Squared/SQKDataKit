@@ -67,8 +67,10 @@
 
 - (void)deleteCommit
 {
-    [self.commit.managedObjectContext deleteObject:self.commit];
-    [self.commit.managedObjectContext save:nil];
+    [self.commit.managedObjectContext performBlock:^{
+        [self.commit.managedObjectContext deleteObject:self.commit];
+        [self.commit.managedObjectContext save:nil];
+    }];
 }
 
 #pragma mark - SQKManagedObjectControllerDelegate
