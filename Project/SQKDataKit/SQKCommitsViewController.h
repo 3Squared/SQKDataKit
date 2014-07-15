@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SQKFetchedTableViewController.h"
 
+@class SQKContextManager;
 @interface SQKCommitsViewController : SQKFetchedTableViewController
 
-- (instancetype)initWithContext:(NSManagedObjectContext *)context;
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager;
 
 @end
