@@ -36,7 +36,8 @@
                    commit.authorEmail = authorEmail;
                }
 
-               NSDate *date = [self dateFromJSONString:dictionary[@"commit"][@"committer"][@"date"]];
+               NSDate *date =
+                   [self dateFromJSONString:dictionary[@"commit"][@"committer"][@"date"]];
                if (![commit.date isEqualToDate:date])
                {
                    commit.date = date;
@@ -53,7 +54,6 @@
                {
                    commit.url = dictionary[@"html_url"];
                }
-               
            } privateContext:context
                          error:nil];
     [self completeOperationBySavingContext:context];

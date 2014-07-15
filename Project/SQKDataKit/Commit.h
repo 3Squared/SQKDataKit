@@ -12,11 +12,11 @@
 
 @interface Commit : NSManagedObject
 
-@property (nonatomic, retain) NSString * sha;
-@property (nonatomic, retain) NSString * authorName;
-@property (nonatomic, retain) NSString * authorEmail;
-@property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSString * message;
-@property (nonatomic, retain) NSString * url;
+@property (nonatomic, retain) NSString *sha;
+@property (nonatomic, retain) NSString *authorName;
+@property (nonatomic, retain) NSString *authorEmail;
+@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, retain) NSString *message;
+@property (nonatomic, retain) NSString *url;
 
 @end

@@ -31,7 +31,9 @@
     {
         self.contextManager = contextManager;
         self.title = @"List";
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:[UIImage imageNamed:@"list"] tag:0];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title
+                                                        image:[UIImage imageNamed:@"list"]
+                                                          tag:0];
         self.queue = [[NSOperationQueue alloc] init];
         self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
     }
@@ -42,22 +44,24 @@
 {
     [super viewDidLoad];
     [self.tableView registerClass:[SQKCommitCell class]
-           forCellReuseIdentifier:NSStringFromClass ([SQKCommitCell class])];
+           forCellReuseIdentifier:NSStringFromClass([SQKCommitCell class])];
 
     self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector (refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh:)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)refresh:(id)sender
 {
     [self.refreshControl beginRefreshing];
     OptimisedImportOperation *importOperation =
-        [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager data:self.json];
+        [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
+                                                            data:self.json];
     __weak typeof(self) weakSelf = self;
     [importOperation setCompletionBlock:^{
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [weakSelf.refreshControl endRefreshing];
-        }];
+        [[NSOperationQueue mainQueue]
+            addOperationWithBlock:^{ [weakSelf.refreshControl endRefreshing]; }];
     }];
 
     [self.queue addOperation:importOperation];
@@ -79,10 +83,12 @@
 
 #pragma mark - UITableViewDataSource
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass ([SQKCommitCell class])
-                                                                 forIndexPath:indexPath];
+    UITableViewCell *cell =
+        [self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
+                                             forIndexPath:indexPath];
     [self fetchedResultsController:[self fetchedResultsControllerForTableView:tableView]
                      configureCell:cell
                        atIndexPath:indexPath];

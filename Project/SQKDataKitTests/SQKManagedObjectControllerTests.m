@@ -27,20 +27,23 @@
 - (void)setUp
 {
     [super setUp];
-    
-    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
-    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:managedObjectModel];
-    
+
+    NSManagedObjectModel *managedObjectModel =
+        [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                                    managedObjectModel:managedObjectModel];
+
     self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
     self.commit.date = [NSDate date];
     [self.contextManager saveMainContext:nil];
-    
+
     NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
-    
-    self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
-                                                          managedObjectContext:[self.contextManager mainContext]];
+
+    self.controller =
+        [[SQKManagedObjectController alloc] initWithFetchRequest:request
+                                            managedObjectContext:[self.contextManager mainContext]];
     self.controller.savedObjectsBlock = nil;
     self.controller.fetchedObjectsBlock = nil;
     self.controller.deletedObjectsBlock = nil;
@@ -60,11 +63,11 @@
 /**
  *  Test a simple fetch.
  */
--(void)testFetching
+- (void)testFetching
 {
     NSError *error = nil;
     [self.controller performFetch:&error];
-    
+
     XCTAssertNil(error, @"");
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[self.controller managedObjects] firstObject], self.commit, @"");
@@ -76,27 +79,26 @@
 - (void)testUpdating
 {
     NSError *error = nil;
-    
+
     __block bool blockUpdateDone = NO;
-    self.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
-    {
+    self.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
     };
-    
+
     [self.controller performFetch:&error];
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSManagedObjectContext* privateContext = [self.contextManager newPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
-            Commit *commit = (Commit*)[privateContext objectWithID:self.commit.objectID];
+            Commit *commit = (Commit *)[privateContext objectWithID:self.commit.objectID];
             commit.sha = @"dcba";
             NSError *error = nil;
             [privateContext save:&error];
             NSLog(@"%s %d %s: %@", __FILE__, __LINE__, __PRETTY_FUNCTION__, [error localizedDescription]);
         }];
     });
-    
+
     AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[self.controller managedObjects] firstObject] sha], @"dcba", @"");
@@ -108,24 +110,23 @@
 - (void)testInsertRefresh
 {
     [self.controller performFetch:nil];
-    
+
     __block bool blockUpdateDone = NO;
-    self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
-    {
+    self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
     };
-    
+
     Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
-    
+
     Commit *commit2 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
 
     [self.contextManager saveMainContext:nil];
-    
+
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
     XCTAssertTrue([self.controller.managedObjects containsObject:self.commit], @"");
@@ -134,14 +135,15 @@
 }
 
 /**
- *  Test that the batch deletion method correctly removes objects from the persistant store and the the delegate is notified.
+ *  Test that the batch deletion method correctly removes objects from the persistant store and the
+ * the delegate is notified.
  */
--(void)testDeletion
+- (void)testDeletion
 {
     [self.controller performFetch:nil];
-    
+
     XCTAssertEqualObjects([[self.controller managedObjects] firstObject], self.commit, @"");
-    
+
     NSError *error = nil;
     [self.controller deleteObjects:&error];
     XCTAssertNil(error, @"");
@@ -155,16 +157,19 @@
     // Changing a deleted object causes Core Data to throw an exception:
     // "CoreData could not fulfill a fault"
     BOOL exceptionThrown = NO;
-    @try {
+    @try
+    {
         self.commit.sha = @"Deleted!";
-        XCTFail(@"Core Data should throw exception with error 'CoreData could not fulfill a fault'.");
+        XCTFail(
+            @"Core Data should throw exception with error 'CoreData could not fulfill a fault'.");
     }
-    @catch (NSException *exception) {
+    @catch (NSException *exception)
+    {
         exceptionThrown = YES;
     }
-    
+
     XCTAssertTrue(exceptionThrown, @"");
-    
+
     [[self.contextManager mainContext] save:&error];
     XCTAssertNil(error, @"");
 }
@@ -174,11 +179,16 @@
 /**
  *  Test that incorrect values cause init methods to return nil.
  */
--(void)testInitialisers
+- (void)testInitialisers
 {
-    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:nil managedObjectContext:nil], @"");
-    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:nil managedObjectContext:[self.contextManager mainContext]], @"");
-    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Post"] managedObjectContext:nil], @"");
+    XCTAssertNil(
+        [[SQKManagedObjectController alloc] initWithFetchRequest:nil managedObjectContext:nil], @"");
+    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:nil
+                                                     managedObjectContext:[self.contextManager mainContext]],
+                 @"");
+    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Post"]
+                                                     managedObjectContext:nil],
+                 @"");
     XCTAssertNil([[SQKManagedObjectController alloc] initWithWithManagedObject:nil], @"");
     XCTAssertNil([[SQKManagedObjectController alloc] initWithWithManagedObjects:nil], @"");
 }
@@ -186,73 +196,77 @@
 /**
  *  Test that the array wrapper initialiser causes the delegate to be called.
  */
--(void)testInitialisingWithObjects
+- (void)testInitialisingWithObjects
 {
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
-    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
-    
+    SQKManagedObjectController *objectsController =
+        [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
+
     __block bool blockUpdateDone = NO;
-    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
-    {
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
     };
-    
+
     XCTAssertNotNil(objectsController, @"");
-    
+
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
-    
+
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
-    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
+    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
+                          @"Can you see me?",
+                          @"");
 }
 
 /**
  *  Test that the object wrapper initialiser causes the delegate to be called.
  */
--(void)testInitialisingWithObject
+- (void)testInitialisingWithObject
 {
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
-    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
-    
+    SQKManagedObjectController *objectsController =
+        [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
+
     __block bool blockUpdateDone = NO;
-    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
-    {
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
     };
-    
+
     XCTAssertNotNil(objectsController, @"");
-    
+
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
-    
+
     AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
-    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
+    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
+                          @"Can you see me?",
+                          @"");
 }
 
 /**
  *  Test wrapping an existing object with background changes.
  */
--(void)testInitialisingWithObjectAsync
+- (void)testInitialisingWithObjectAsync
 {
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
-    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
-    
+    SQKManagedObjectController *objectsController =
+        [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
+
     __block bool blockUpdateDone = NO;
-    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes)
-    {
+    objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
         blockUpdateDone = YES;
     };
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSManagedObjectContext* privateContext = [self.contextManager newPrivateContext];
+        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
-            Commit *commit = (Commit*)[privateContext objectWithID:self.commit.objectID];
+            Commit *commit = (Commit *)[privateContext objectWithID:self.commit.objectID];
             commit.sha = @"Can you see me?";
             [privateContext save:nil];
         }];
@@ -260,59 +274,54 @@
 
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
     XCTAssertEqual([[objectsController managedObjects] count], (NSUInteger)1, @"");
-    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha], @"Can you see me?", @"");
-
+    XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
+                          @"Can you see me?",
+                          @"");
 }
 
--(void)testFilteringBlock
+- (void)testFilteringBlock
 {
-    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) {
-        return NO;
-    };
-    
+    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) { return NO; };
+
     Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
-    
+
     Commit *commit2 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
-    
+
     [self.contextManager saveMainContext:nil];
-    
-    
+
+
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
-    
+
     // ****
-    
-    Commit *commit3 = [Commit sqk_insertInContext   :[self.contextManager mainContext]];
+
+    Commit *commit3 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit3.sha = @"Insert 3";
     commit3.date = [NSDate date];
     [self.contextManager saveMainContext:nil];
 
-    
+
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
 
     // ****
-    
-    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) {
-        return YES;
-    };
-    
+
+    self.controller.filterReturnedObjectsBlock = ^BOOL(NSManagedObject *obj) { return YES; };
+
     [self.controller performFetch:nil];
-    
+
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)4, @"");
 
     // ****
-    
-    self.controller.filterReturnedObjectsBlock = ^BOOL(Commit *obj) {
-        return [obj.sha rangeOfString:@"Insert"].location != NSNotFound;
-    };
-    
+
+    self.controller.filterReturnedObjectsBlock
+        = ^BOOL(Commit *obj) { return [obj.sha rangeOfString:@"Insert"].location != NSNotFound; };
+
     [self.controller performFetch:nil];
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
-
 }
 
 

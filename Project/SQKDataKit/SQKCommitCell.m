@@ -23,7 +23,8 @@ CGFloat const SQKCommitCellHeight = 130.0f;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
+    if (self)
+    {
         self.authorNameLabel = [[UILabel alloc] init];
         self.authorEmailLabel = [[UILabel alloc] init];
         self.dateLabel = [[UILabel alloc] init];
@@ -33,22 +34,24 @@ CGFloat const SQKCommitCellHeight = 130.0f;
     return self;
 }
 
-- (void)prepareForReuse {
-	[super prepareForReuse];
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
 }
 
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     [super layoutSubviews];
-    
+
     CGFloat width = CGRectGetWidth(self.contentView.frame);
     CGFloat height = 20.0f;
-    
+
     self.authorNameLabel.frame = CGRectMake(8, 8, width, height);
     self.authorEmailLabel.frame = CGRectMake(8, CGRectGetMaxY(self.authorNameLabel.frame) + 4, width, height);
     self.dateLabel.frame = CGRectMake(8, CGRectGetMaxY(self.authorEmailLabel.frame) + 4, width, height);
     self.shaLabel.frame = CGRectMake(8, CGRectGetMaxY(self.dateLabel.frame) + 4, width, height);
     self.messageLabel.frame = CGRectMake(8, CGRectGetMaxY(self.shaLabel.frame) + 4, width, height);
-    
+
     [self.contentView addSubview:self.authorNameLabel];
     [self.contentView addSubview:self.authorEmailLabel];
     [self.contentView addSubview:self.dateLabel];

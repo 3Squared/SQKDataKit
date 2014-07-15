@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface NSArray (SQKAdditions)
--(NSIndexSet*) sqk_indexesOfObjects;
+- (NSIndexSet *)sqk_indexesOfObjects;
 @end

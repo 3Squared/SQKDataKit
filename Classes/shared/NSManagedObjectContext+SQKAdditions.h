@@ -11,8 +11,9 @@
 @interface NSManagedObjectContext (SQKAdditions)
 
 /**
- *  If set to YES SQKContextManager will merge changes into the main context automatically on save. 
- *  If set to NO it is your responsibility to merge the changes when is appropriate for your user case.
+ *  If set to YES SQKContextManager will merge changes into the main context automatically on save.
+ *  If set to NO it is your responsibility to merge the changes when is appropriate for your user
+ * case.
  *  Default value is YES.
  */
 @property (nonatomic, assign) BOOL shouldMergeOnSave;

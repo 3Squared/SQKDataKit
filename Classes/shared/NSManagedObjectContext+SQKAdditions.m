@@ -12,15 +12,18 @@
 @implementation NSManagedObjectContext (SQKAdditions)
 @dynamic shouldMergeOnSave;
 
-- (BOOL)shouldMergeOnSave {
+- (BOOL)shouldMergeOnSave
+{
     NSNumber *wrappedBool = objc_getAssociatedObject(self, @selector(shouldMergeOnSave));
-    if (wrappedBool == nil) {
+    if (wrappedBool == nil)
+    {
         return YES;
     }
     return [wrappedBool boolValue];
 }
 
-- (void)setShouldMergeOnSave:(BOOL)shouldMergeOnSave {
+- (void)setShouldMergeOnSave:(BOOL)shouldMergeOnSave
+{
     NSNumber *wrappedBool = @(shouldMergeOnSave);
     objc_setAssociatedObject(self, @selector(shouldMergeOnSave), wrappedBool, OBJC_ASSOCIATION_ASSIGN);
 }

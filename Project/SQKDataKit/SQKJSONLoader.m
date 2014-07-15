@@ -10,12 +10,11 @@
 
 @implementation SQKJSONLoader
 
-+ (id)loadJSONFileName:(NSString *)fileName {
++ (id)loadJSONFileName:(NSString *)fileName
+{
     NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
-    NSData* data = [NSData dataWithContentsOfFile:filePath];
-    return [NSJSONSerialization JSONObjectWithData:data
-                                           options:kNilOptions
-                                             error:nil];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 }
 
 @end

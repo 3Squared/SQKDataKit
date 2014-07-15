@@ -17,33 +17,39 @@
 
 @implementation NSPersistentStoreCoordinatorTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    self.persitentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType managedObjectModel:self.managedObjectModel];
+    self.persitentStoreCoordinator =
+        [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType
+                                                     managedObjectModel:self.managedObjectModel];
 }
 
-- (void)testCorrectManagedObjectModel {
+- (void)testCorrectManagedObjectModel
+{
     XCTAssertNotNil(self.persitentStoreCoordinator, @"");
     XCTAssertEqualObjects(self.persitentStoreCoordinator.managedObjectModel, _managedObjectModel, @"");
 }
 
-- (void)testHasOnePersistentStore {
+- (void)testHasOnePersistentStore
+{
     XCTAssertNotNil(self.persitentStoreCoordinator, @"");
     XCTAssertTrue([self.persitentStoreCoordinator persistentStores].count == 1, @"");
 }
 
-- (void)testCorrectStoreType {
+- (void)testCorrectStoreType
+{
     NSPersistentStore *store = (NSPersistentStore *)[self.persitentStoreCoordinator persistentStores][0];
     XCTAssertEqualObjects(store.type, NSSQLiteStoreType, @"");
 }
 
-- (void)testCorrectStoreOptions {
+- (void)testCorrectStoreOptions
+{
     NSPersistentStore *store = (NSPersistentStore *)[self.persitentStoreCoordinator persistentStores][0];
     XCTAssertEqualObjects(store.options[NSMigratePersistentStoresAutomaticallyOption], @(YES), @"");
     XCTAssertEqualObjects(store.options[NSInferMappingModelAutomaticallyOption], @(YES), @"");
 }
-
 
 
 @end

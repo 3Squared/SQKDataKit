@@ -16,7 +16,8 @@
 
 @implementation NaiveImportOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data {
+- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
+{
     self.startDate = [NSDate date];
     [data enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {
         NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
@@ -24,7 +25,8 @@
         fetchRequest.fetchLimit = 1;
         NSArray *objects = [context executeFetchRequest:fetchRequest error:nil];
         Commit *commit = [objects lastObject];
-        if (!commit) {
+        if (!commit)
+        {
             commit = [Commit sqk_insertInContext:context];
             commit.sha = dictionary[@"sha"];
             commit.authorName = dictionary[@"commit"][@"committer"][@"name"];
@@ -37,14 +39,17 @@
     [self completeOperationBySavingContext:context];
 }
 
-- (NSDate *)dateFromJSONString:(NSString *)jsonString {
+- (NSDate *)dateFromJSONString:(NSString *)jsonString
+{
     NSDate *date = [[self dateFormatter] dateFromString:jsonString];
     return date;
 }
 
-- (NSDateFormatter *)dateFormatter {
+- (NSDateFormatter *)dateFormatter
+{
     static NSDateFormatter *dateFormatter = nil;
-    if (!dateFormatter) {
+    if (!dateFormatter)
+    {
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     }
