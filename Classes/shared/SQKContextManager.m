@@ -54,16 +54,16 @@
 											   object:nil];
 }
 
-- (void)contextSaveNotificationReceived:(NSNotification *)notification {
+- (void)contextSaveNotificationReceived:(NSNotification *)notification
+{
     /**
      *  Ensure mainContext is accessed on the main thread.
      */
     [_mainContext performBlock:^{
         NSManagedObjectContext *managedObjectContext = [notification object];
-        if ([managedObjectContext shouldMergeOnSave] && managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType) {
-            [managedObjectContext performBlock:^{
-                /**
-                 *  If NSManagedObjectContext from the notitification is a private context
+        if ([managedObjectContext shouldMergeOnSave] && managedObjectContext.concurrencyType == NSPrivateQueueConcurrencyType)
+        {
+            /*  If NSManagedObjectContext from the notitification is a private context
                  *	then merge the changes into the main context.
                  */
                 [_mainContext mergeChangesFromContextDidSaveNotification:notification];
@@ -71,15 +71,18 @@
                 /**
                  *  This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
                  *
-                 *  NSManagedObjectContext doesn't event fire NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge, only inserted.
+             * NSManagedObjectContext doesn't event fire
+             * NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge,
+             * only inserted.
                  *
-                 *  SEE: http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
+             * SEE:
+             * http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
                  *  May also have memory implications.
                  */
-                for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey]) {
+            for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey])
+            {
                     [[_mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
                 }
-            }];
         }
     }];
 }
