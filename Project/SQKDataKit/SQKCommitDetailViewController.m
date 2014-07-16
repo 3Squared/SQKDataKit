@@ -25,7 +25,7 @@
     {
         self.commit = commit;
         self.title = commit.sha;
-        self.controller = [[SQKManagedObjectController alloc] initWithWithManagedObject:commit];
+        self.controller = [[SQKManagedObjectController alloc] initWithManagedObject:commit];
         self.controller.delegate = self;
     }
     return self;

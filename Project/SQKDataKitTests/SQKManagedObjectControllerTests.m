@@ -189,8 +189,8 @@
     XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Post"]
                                                      managedObjectContext:nil],
                  @"");
-    XCTAssertNil([[SQKManagedObjectController alloc] initWithWithManagedObject:nil], @"");
-    XCTAssertNil([[SQKManagedObjectController alloc] initWithWithManagedObjects:nil], @"");
+    XCTAssertNil([[SQKManagedObjectController alloc] initWithManagedObject:nil], @"");
+    XCTAssertNil([[SQKManagedObjectController alloc] initWithManagedObjects:nil], @"");
 }
 
 /**
@@ -201,7 +201,7 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithWithManagedObjects:[self.controller managedObjects]];
+        [[SQKManagedObjectController alloc] initWithManagedObjects:[self.controller managedObjects]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
@@ -228,7 +228,7 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
+        [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
@@ -255,7 +255,7 @@
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithWithManagedObject:[[self.controller managedObjects] firstObject]];
+        [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {

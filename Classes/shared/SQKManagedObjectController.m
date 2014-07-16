@@ -52,7 +52,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return self;
 }
 
-- (instancetype)initWithWithManagedObjects:(NSArray *)managedObjects
+- (instancetype)initWithManagedObjects:(NSArray *)managedObjects
 {
     if (!managedObjects || managedObjects.count == 0)
     {
@@ -68,14 +68,14 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return self;
 }
 
-- (instancetype)initWithWithManagedObject:(NSManagedObject *)managedObject
+- (instancetype)initWithManagedObject:(NSManagedObject *)managedObject
 {
     if (!managedObject)
     {
         return nil;
     }
 
-    return [self initWithWithManagedObjects:@[managedObject]];
+    return [self initWithManagedObjects:@[managedObject]];
 }
 
 - (void)dealloc

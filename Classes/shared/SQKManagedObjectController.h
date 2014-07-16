@@ -140,7 +140,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *
  *  @return An initialised SQKManagedObjectController.
  */
-- (instancetype)initWithWithManagedObjects:(NSArray *)managedObjects;
+- (instancetype)initWithManagedObjects:(NSArray *)managedObjects;
 
 /**
  *  Returns a SQKManagedObjectController that manages the given NSManagedObject.
@@ -152,7 +152,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *
  *  @return An initialised SQKManagedObjectController.
  */
-- (instancetype)initWithWithManagedObject:(NSManagedObject *)managedObject;
+- (instancetype)initWithManagedObject:(NSManagedObject *)managedObject;
 
 /**
  *  Execute the fetch request and store the results in self.managedObjects.
