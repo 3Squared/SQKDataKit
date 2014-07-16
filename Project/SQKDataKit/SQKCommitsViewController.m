@@ -109,7 +109,10 @@
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         Commit *commit = [[self activeFetchedResultsController] objectAtIndexPath:indexPath];
-        [commit sqk_deleteObject];
+        [commit.managedObjectContext performBlock:^{
+            [commit sqk_deleteObject];
+            [commit.managedObjectContext save:nil];
+        }];
     }
 }
 
