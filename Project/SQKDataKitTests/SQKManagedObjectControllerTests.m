@@ -31,7 +31,8 @@
     NSManagedObjectModel *managedObjectModel =
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-                                                    managedObjectModel:managedObjectModel];
+                                                    managedObjectModel:managedObjectModel
+                                                              storeURL:nil];
 
     self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";

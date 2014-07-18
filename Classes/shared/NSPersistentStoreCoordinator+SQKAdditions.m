@@ -13,8 +13,12 @@
 
 + (instancetype)sqk_storeCoordinatorWithStoreType:(NSString *)storeType
                                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                                         storeURL:(NSURL *)storeURL
 {
-    NSURL *storeURL = [self storeURL];
+    if (!storeURL)
+    {
+        storeURL = [self storeURL];
+    }
 
     NSPersistentStoreCoordinator *persistentStoreCoordinator =
         [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];

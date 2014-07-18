@@ -38,14 +38,17 @@
 /**
  *  Initialises the a context manager with a store type and managed object model.
  *
- *  @param storeType          A string constant (such as NSSQLiteStoreType or NSInMemoryStoreType)
+ *  @param storeType A string constant (such as NSSQLiteStoreType or NSInMemoryStoreType)
  *that specifies the store type.
  *  @param managedObjectModel A managed object model.
- *
+ *  @param storeURL Optional. Specify a custom location to create the persistent store, or nil.
+ *          Useful if you want to put the store in a shared location using App Groups.
+
  *  @return A context manager.
  */
 - (instancetype)initWithStoreType:(NSString *)storeType
-               managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
+               managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                         storeURL:(NSURL *)storeURL;
 
 /**
  *  The main managed object context to be used for UI based Core Data work (on the main thread). A

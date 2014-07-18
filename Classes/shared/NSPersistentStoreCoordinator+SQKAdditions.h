@@ -11,6 +11,7 @@
 @interface NSPersistentStoreCoordinator (SQKAdditions)
 
 + (instancetype)sqk_storeCoordinatorWithStoreType:(NSString *)storeType
-                               managedObjectModel:(NSManagedObjectModel *)managedObjectModel;
+                               managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                                         storeURL:(NSURL *)storeURL;
 
 @end

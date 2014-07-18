@@ -23,7 +23,8 @@
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     self.persitentStoreCoordinator =
         [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType
-                                                     managedObjectModel:self.managedObjectModel];
+                                                     managedObjectModel:self.managedObjectModel
+                                                               storeURL:nil];
 }
 
 - (void)testCorrectManagedObjectModel

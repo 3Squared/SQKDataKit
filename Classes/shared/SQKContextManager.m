@@ -21,6 +21,7 @@
 
 - (instancetype)initWithStoreType:(NSString *)storeType
                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                         storeURL:(NSURL *)storeURL
 {
     if (!storeType || !managedObjectModel)
     {
@@ -40,7 +41,8 @@
         _managedObjectModel = managedObjectModel;
         _persistentStoreCoordinator =
             [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
-                                                         managedObjectModel:managedObjectModel];
+                                                         managedObjectModel:managedObjectModel
+                                                                   storeURL:storeURL];
         [self observeForSavedNotification];
     }
     return self;

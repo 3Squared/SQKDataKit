@@ -34,7 +34,8 @@
     self.managedObjectModel =
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-                                                    managedObjectModel:self.managedObjectModel];
+                                                    managedObjectModel:self.managedObjectModel
+                                                              storeURL:nil];
 }
 
 - (void)tearDown
@@ -58,7 +59,8 @@
 - (void)testInitialisesWithAStoreTypeAndMangedObjectModel
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-                                                    managedObjectModel:self.managedObjectModel];
+                                                    managedObjectModel:self.managedObjectModel
+                                                              storeURL:nil];
     XCTAssertNotNil(self.contextManager, @"");
     XCTAssertEqualObjects(self.contextManager.storeType, NSInMemoryStoreType, @"");
     XCTAssertEqualObjects(self.contextManager.managedObjectModel, self.managedObjectModel, @"");
@@ -67,21 +69,24 @@
 - (void)testReturnsNilWithNoStoreType
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:nil
-                                                    managedObjectModel:self.managedObjectModel];
+                                                    managedObjectModel:self.managedObjectModel
+                                                              storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
 
 - (void)testReturnsNilWithNoManagedObjectModel
 {
-    self.contextManager =
-        [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType managedObjectModel:nil];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                                    managedObjectModel:nil
+                                                              storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
 
 - (void)testReturnsNilWhenUsingIncorrectStoreTypeString
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:@"unsupported"
-                                                    managedObjectModel:self.managedObjectModel];
+                                                    managedObjectModel:self.managedObjectModel
+                                                              storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
 
