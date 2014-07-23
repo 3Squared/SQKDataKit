@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 
 	s.subspec 'Core' do |ss|
 		ss.source_files = 'Classes/shared/Core/**/*{h,m}'
-		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h' 'Classes/Core/shared/NSManagedObjectContext+SQKAdditions.h']
+		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h','Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h']
 	end
 
 	s.subspec 'NSManagedObject+SQKAdditions' do |ss|
