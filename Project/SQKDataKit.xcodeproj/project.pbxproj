@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22371AE2197FC30400C177E3 /* SQKFetchedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371ACF197FC30400C177E3 /* SQKFetchedTableViewController.m */; };
+		22371AE3197FC30400C177E3 /* NSManagedObject+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371AD2197FC30400C177E3 /* NSManagedObject+SQKAdditions.m */; };
+		22371AE4197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371AD4197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.m */; };
+		22371AE5197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371AD6197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.m */; };
+		22371AE6197FC30400C177E3 /* SQKContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371AD9197FC30400C177E3 /* SQKContextManager.m */; };
+		22371AE7197FC30400C177E3 /* SQKCoreDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371ADB197FC30400C177E3 /* SQKCoreDataOperation.m */; };
+		22371AE8197FC30400C177E3 /* NSArray+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371ADF197FC30400C177E3 /* NSArray+SQKAdditions.m */; };
+		22371AE9197FC30400C177E3 /* SQKManagedObjectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22371AE1197FC30400C177E3 /* SQKManagedObjectController.m */; };
 		22780673196AB3DE00F8DED4 /* SQKCommitDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22780672196AB3DE00F8DED4 /* SQKCommitDetailViewController.m */; };
 		22BB628E1919256B00EEEFCE /* SQKManagedObjectControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 22BB628D1919256B00EEEFCE /* SQKManagedObjectControllerTests.m */; };
 		A30FAE8F1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A30FAE8E1855DFBB008784C6 /* SQKJSONDataImportOperationTests.m */; };
@@ -31,14 +39,6 @@
 		A34BF42B184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34BF42A184F6D0000F2E3B4 /* NSPersistentStoreCoordinatorTests.m */; };
 		A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */; };
 		A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */; };
-		A3D15EB91966E10A000F2268 /* SQKFetchedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EB81966E10A000F2268 /* SQKFetchedTableViewController.m */; };
-		A3D15ECA1966E110000F2268 /* NSArray+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EBB1966E110000F2268 /* NSArray+SQKAdditions.m */; };
-		A3D15ECB1966E110000F2268 /* NSManagedObject+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EBD1966E110000F2268 /* NSManagedObject+SQKAdditions.m */; };
-		A3D15ECC1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EBF1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.m */; };
-		A3D15ECD1966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EC11966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.m */; };
-		A3D15ECE1966E110000F2268 /* SQKContextManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EC41966E110000F2268 /* SQKContextManager.m */; };
-		A3D15ECF1966E110000F2268 /* SQKCoreDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EC61966E110000F2268 /* SQKCoreDataOperation.m */; };
-		A3D15ED01966E110000F2268 /* SQKManagedObjectController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D15EC91966E110000F2268 /* SQKManagedObjectController.m */; };
 		A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */; };
 		A3DC7CA018687E2E00C45DB0 /* data_1500.json in Resources */ = {isa = PBXBuildFile; fileRef = A3DC7C9F18687E2E00C45DB0 /* data_1500.json */; };
 		A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8C1859D80C00C0A389 /* SQKCommitCell.m */; };
@@ -57,6 +57,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22371ACE197FC30400C177E3 /* SQKFetchedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKFetchedTableViewController.h; sourceTree = "<group>"; };
+		22371ACF197FC30400C177E3 /* SQKFetchedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKFetchedTableViewController.m; sourceTree = "<group>"; };
+		22371AD1197FC30400C177E3 /* NSManagedObject+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+SQKAdditions.h"; sourceTree = "<group>"; };
+		22371AD2197FC30400C177E3 /* NSManagedObject+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+SQKAdditions.m"; sourceTree = "<group>"; };
+		22371AD3197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+SQKAdditions.h"; sourceTree = "<group>"; };
+		22371AD4197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+SQKAdditions.m"; sourceTree = "<group>"; };
+		22371AD5197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStoreCoordinator+SQKAdditions.h"; sourceTree = "<group>"; };
+		22371AD6197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+SQKAdditions.m"; sourceTree = "<group>"; };
+		22371AD7197FC30400C177E3 /* SQKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKBundle.h; sourceTree = "<group>"; };
+		22371AD8197FC30400C177E3 /* SQKContextManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKContextManager.h; sourceTree = "<group>"; };
+		22371AD9197FC30400C177E3 /* SQKContextManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKContextManager.m; sourceTree = "<group>"; };
+		22371ADA197FC30400C177E3 /* SQKCoreDataOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKCoreDataOperation.h; sourceTree = "<group>"; };
+		22371ADB197FC30400C177E3 /* SQKCoreDataOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKCoreDataOperation.m; sourceTree = "<group>"; };
+		22371ADC197FC30400C177E3 /* SQKDataKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKDataKit.h; sourceTree = "<group>"; };
+		22371ADE197FC30400C177E3 /* NSArray+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+SQKAdditions.h"; sourceTree = "<group>"; };
+		22371ADF197FC30400C177E3 /* NSArray+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+SQKAdditions.m"; sourceTree = "<group>"; };
+		22371AE0197FC30400C177E3 /* SQKManagedObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKManagedObjectController.h; sourceTree = "<group>"; };
+		22371AE1197FC30400C177E3 /* SQKManagedObjectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKManagedObjectController.m; sourceTree = "<group>"; };
 		22780671196AB3DE00F8DED4 /* SQKCommitDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKCommitDetailViewController.h; sourceTree = "<group>"; };
 		22780672196AB3DE00F8DED4 /* SQKCommitDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKCommitDetailViewController.m; sourceTree = "<group>"; };
 		22BB628D1919256B00EEEFCE /* SQKManagedObjectControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKManagedObjectControllerTests.m; sourceTree = "<group>"; };
@@ -92,24 +110,6 @@
 		A3C66D05185A20CE007AE9B5 /* NaiveImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = NaiveImportOperation.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3C66D07185B2A19007AE9B5 /* GitDataImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitDataImportOperation.h; sourceTree = "<group>"; };
 		A3C66D08185B2A19007AE9B5 /* GitDataImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitDataImportOperation.m; sourceTree = "<group>"; };
-		A3D15EB71966E10A000F2268 /* SQKFetchedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKFetchedTableViewController.h; path = ../../Classes/ios/SQKFetchedTableViewController.h; sourceTree = "<group>"; };
-		A3D15EB81966E10A000F2268 /* SQKFetchedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKFetchedTableViewController.m; path = ../../Classes/ios/SQKFetchedTableViewController.m; sourceTree = "<group>"; };
-		A3D15EBA1966E110000F2268 /* NSArray+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+SQKAdditions.h"; path = "../../Classes/shared/NSArray+SQKAdditions.h"; sourceTree = "<group>"; };
-		A3D15EBB1966E110000F2268 /* NSArray+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+SQKAdditions.m"; path = "../../Classes/shared/NSArray+SQKAdditions.m"; sourceTree = "<group>"; };
-		A3D15EBC1966E110000F2268 /* NSManagedObject+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObject+SQKAdditions.h"; path = "../../Classes/shared/NSManagedObject+SQKAdditions.h"; sourceTree = "<group>"; };
-		A3D15EBD1966E110000F2268 /* NSManagedObject+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+SQKAdditions.m"; path = "../../Classes/shared/NSManagedObject+SQKAdditions.m"; sourceTree = "<group>"; };
-		A3D15EBE1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+SQKAdditions.h"; path = "../../Classes/shared/NSManagedObjectContext+SQKAdditions.h"; sourceTree = "<group>"; };
-		A3D15EBF1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectContext+SQKAdditions.m"; path = "../../Classes/shared/NSManagedObjectContext+SQKAdditions.m"; sourceTree = "<group>"; };
-		A3D15EC01966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSPersistentStoreCoordinator+SQKAdditions.h"; path = "../../Classes/shared/NSPersistentStoreCoordinator+SQKAdditions.h"; sourceTree = "<group>"; };
-		A3D15EC11966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSPersistentStoreCoordinator+SQKAdditions.m"; path = "../../Classes/shared/NSPersistentStoreCoordinator+SQKAdditions.m"; sourceTree = "<group>"; };
-		A3D15EC21966E110000F2268 /* SQKBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKBundle.h; path = ../../Classes/shared/SQKBundle.h; sourceTree = "<group>"; };
-		A3D15EC31966E110000F2268 /* SQKContextManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKContextManager.h; path = ../../Classes/shared/SQKContextManager.h; sourceTree = "<group>"; };
-		A3D15EC41966E110000F2268 /* SQKContextManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKContextManager.m; path = ../../Classes/shared/SQKContextManager.m; sourceTree = "<group>"; };
-		A3D15EC51966E110000F2268 /* SQKCoreDataOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKCoreDataOperation.h; path = ../../Classes/shared/SQKCoreDataOperation.h; sourceTree = "<group>"; };
-		A3D15EC61966E110000F2268 /* SQKCoreDataOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKCoreDataOperation.m; path = ../../Classes/shared/SQKCoreDataOperation.m; sourceTree = "<group>"; };
-		A3D15EC71966E110000F2268 /* SQKDataKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKDataKit.h; path = ../../Classes/shared/SQKDataKit.h; sourceTree = "<group>"; };
-		A3D15EC81966E110000F2268 /* SQKManagedObjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQKManagedObjectController.h; path = ../../Classes/shared/SQKManagedObjectController.h; sourceTree = "<group>"; };
-		A3D15EC91966E110000F2268 /* SQKManagedObjectController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQKManagedObjectController.m; path = ../../Classes/shared/SQKManagedObjectController.m; sourceTree = "<group>"; };
 		A3DC7C991868731100C45DB0 /* SQKJSONLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKJSONLoader.h; sourceTree = "<group>"; };
 		A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKJSONLoader.m; sourceTree = "<group>"; };
 		A3DC7C9F18687E2E00C45DB0 /* data_1500.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_1500.json; sourceTree = "<group>"; };
@@ -146,6 +146,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22371ACD197FC30400C177E3 /* SQKFetchedTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				22371ACE197FC30400C177E3 /* SQKFetchedTableViewController.h */,
+				22371ACF197FC30400C177E3 /* SQKFetchedTableViewController.m */,
+			);
+			name = SQKFetchedTableViewController;
+			path = ../../Classes/ios/SQKFetchedTableViewController;
+			sourceTree = "<group>";
+		};
+		22371AD0197FC30400C177E3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				22371AD1197FC30400C177E3 /* NSManagedObject+SQKAdditions.h */,
+				22371AD2197FC30400C177E3 /* NSManagedObject+SQKAdditions.m */,
+				22371AD3197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.h */,
+				22371AD4197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.m */,
+				22371AD5197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.h */,
+				22371AD6197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.m */,
+				22371AD7197FC30400C177E3 /* SQKBundle.h */,
+				22371AD8197FC30400C177E3 /* SQKContextManager.h */,
+				22371AD9197FC30400C177E3 /* SQKContextManager.m */,
+				22371ADA197FC30400C177E3 /* SQKCoreDataOperation.h */,
+				22371ADB197FC30400C177E3 /* SQKCoreDataOperation.m */,
+				22371ADC197FC30400C177E3 /* SQKDataKit.h */,
+			);
+			name = Core;
+			path = ../../Classes/shared/Core;
+			sourceTree = "<group>";
+		};
+		22371ADD197FC30400C177E3 /* SQKManagedObjectController */ = {
+			isa = PBXGroup;
+			children = (
+				22371ADE197FC30400C177E3 /* NSArray+SQKAdditions.h */,
+				22371ADF197FC30400C177E3 /* NSArray+SQKAdditions.m */,
+				22371AE0197FC30400C177E3 /* SQKManagedObjectController.h */,
+				22371AE1197FC30400C177E3 /* SQKManagedObjectController.m */,
+			);
+			name = SQKManagedObjectController;
+			path = ../../Classes/shared/SQKManagedObjectController;
+			sourceTree = "<group>";
+		};
 		A30F0DD118574D3600CEE72D /* Example App */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,24 +289,9 @@
 		A34BF3A0184F41D300F2E3B4 /* SQKDataKit */ = {
 			isa = PBXGroup;
 			children = (
-				A3D15EB71966E10A000F2268 /* SQKFetchedTableViewController.h */,
-				A3D15EB81966E10A000F2268 /* SQKFetchedTableViewController.m */,
-				A3D15EBA1966E110000F2268 /* NSArray+SQKAdditions.h */,
-				A3D15EBB1966E110000F2268 /* NSArray+SQKAdditions.m */,
-				A3D15EBC1966E110000F2268 /* NSManagedObject+SQKAdditions.h */,
-				A3D15EBD1966E110000F2268 /* NSManagedObject+SQKAdditions.m */,
-				A3D15EBE1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.h */,
-				A3D15EBF1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.m */,
-				A3D15EC01966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.h */,
-				A3D15EC11966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.m */,
-				A3D15EC21966E110000F2268 /* SQKBundle.h */,
-				A3D15EC31966E110000F2268 /* SQKContextManager.h */,
-				A3D15EC41966E110000F2268 /* SQKContextManager.m */,
-				A3D15EC51966E110000F2268 /* SQKCoreDataOperation.h */,
-				A3D15EC61966E110000F2268 /* SQKCoreDataOperation.m */,
-				A3D15EC71966E110000F2268 /* SQKDataKit.h */,
-				A3D15EC81966E110000F2268 /* SQKManagedObjectController.h */,
-				A3D15EC91966E110000F2268 /* SQKManagedObjectController.m */,
+				22371AD0197FC30400C177E3 /* Core */,
+				22371ACD197FC30400C177E3 /* SQKFetchedTableViewController */,
+				22371ADD197FC30400C177E3 /* SQKManagedObjectController */,
 			);
 			path = SQKDataKit;
 			sourceTree = "<group>";
@@ -436,22 +463,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
+				22371AE2197FC30400C177E3 /* SQKFetchedTableViewController.m in Sources */,
+				22371AE9197FC30400C177E3 /* SQKManagedObjectController.m in Sources */,
+				22371AE5197FC30400C177E3 /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */,
+				22371AE8197FC30400C177E3 /* NSArray+SQKAdditions.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
-				A3D15ECD1966E110000F2268 /* NSPersistentStoreCoordinator+SQKAdditions.m in Sources */,
+				22371AE4197FC30400C177E3 /* NSManagedObjectContext+SQKAdditions.m in Sources */,
 				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
 				22780673196AB3DE00F8DED4 /* SQKCommitDetailViewController.m in Sources */,
-				A3D15ECC1966E110000F2268 /* NSManagedObjectContext+SQKAdditions.m in Sources */,
+				22371AE3197FC30400C177E3 /* NSManagedObject+SQKAdditions.m in Sources */,
 				A31AB0E71857769D00B240AB /* Commit.m in Sources */,
 				A328BAC71850986A00267F2E /* SQKDataKitModel.xcdatamodeld in Sources */,
-				A3D15ECB1966E110000F2268 /* NSManagedObject+SQKAdditions.m in Sources */,
+				22371AE7197FC30400C177E3 /* SQKCoreDataOperation.m in Sources */,
 				A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */,
+				22371AE6197FC30400C177E3 /* SQKContextManager.m in Sources */,
 				A31AB0EC185776AE00B240AB /* OptimisedImportOperation.m in Sources */,
-				A3D15ECF1966E110000F2268 /* SQKCoreDataOperation.m in Sources */,
-				A3D15EB91966E10A000F2268 /* SQKFetchedTableViewController.m in Sources */,
-				A3D15ECE1966E110000F2268 /* SQKContextManager.m in Sources */,
 				A34BF3A7184F41D300F2E3B4 /* main.m in Sources */,
-				A3D15ECA1966E110000F2268 /* NSArray+SQKAdditions.m in Sources */,
-				A3D15ED01966E110000F2268 /* SQKManagedObjectController.m in Sources */,
 				A3C66D09185B2A19007AE9B5 /* GitDataImportOperation.m in Sources */,
 				A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */,
 				A3DC7C9B1868731100C45DB0 /* SQKJSONLoader.m in Sources */,
