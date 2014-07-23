@@ -7,14 +7,16 @@
 //
 
 #import "SQKCommitsViewController.h"
-#import "SQKContextManager.h"
-#import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
 #import "SQKAppDelegate.h"
 #import "SQKCommitCell.h"
 #import "SQKCommitDetailViewController.h"
 #import "OptimisedImportOperation.h"
 #import "SQKJSONLoader.h"
+
+#import <SQKDataKit/SQKContextManager.h>
+#import <SQKDataKit/NSManagedObject+SQKAdditions.h>
+
 
 @interface SQKCommitsViewController ()
 @property (nonatomic, strong) NSOperationQueue *queue;

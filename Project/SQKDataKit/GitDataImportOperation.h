@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKCoreDataOperation.h"
+#import <SQKDataKit/SQKCoreDataOperation.h>
 
 @interface GitDataImportOperation : SQKCoreDataOperation
 

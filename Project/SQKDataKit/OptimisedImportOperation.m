@@ -8,7 +8,7 @@
 
 #import "OptimisedImportOperation.h"
 #import "Commit.h"
-#import "NSManagedObject+SQKAdditions.h"
+#import <SQKDataKit/NSManagedObject+SQKAdditions.h>
 
 @interface OptimisedImportOperation ()
 @property (nonatomic, strong, readwrite) NSDate *startDate;

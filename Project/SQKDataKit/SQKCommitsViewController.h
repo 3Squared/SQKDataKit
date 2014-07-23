@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SQKFetchedTableViewController.h"
+#import <SQKDataKit/SQKFetchedTableViewController.h>
 
 @class SQKContextManager;
 @interface SQKCommitsViewController : SQKFetchedTableViewController

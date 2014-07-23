@@ -8,7 +8,8 @@
 
 #import "SQKCommitDetailViewController.h"
 #import "Commit.h"
-#import "SQKManagedObjectController.h"
+
+#import <SQKDataKit/SQKManagedObjectController.h>
 
 @interface SQKCommitDetailViewController () <SQKManagedObjectControllerDelegate>
 @property (nonatomic, strong) Commit *commit;

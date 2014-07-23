@@ -8,12 +8,14 @@
 
 #import "SQKMetricsViewController.h"
 #import "SQKAppDelegate.h"
-#import "SQKDataKit.h"
 #import "OptimisedImportOperation.h"
 #import "NaiveImportOperation.h"
 #import "Commit.h"
-#import "SQKContextManager.h"
 #import "SQKJSONLoader.h"
+
+#import <SQKDataKit/SQKContextManager.h>
+#import <SQKDataKit/NSManagedObject+SQKAdditions.h>
+#import <SQKDataKit/NSManagedObjectContext+SQKAdditions.h>
 
 typedef NS_ENUM(NSInteger, MetricsSection)
 { MetricsSectionNaive,
