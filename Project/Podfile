@@ -1,8 +1,9 @@
 target "SQKDataKit" do
     pod 'SQKDataKit/Core', :path => '../SQKDataKit.podspec'
-    pod 'SQKDataKit/NSManagedObject+SQKAdditions', :path => '../SQKDataKit.podspec'
-    pod 'SQKDataKit/SQKManagedObjectController', :path => '../SQKDataKit.podspec'
-    pod 'SQKDataKit/SQKFetchedTableViewController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/ManagedObjectExtensions', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/ManagedObjectController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/FetchedTableViewController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/CoreDataOperation', :path => '../SQKDataKit.podspec'
 end
 
 target "SQKDataKitTests" do

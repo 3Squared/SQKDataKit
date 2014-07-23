@@ -31,19 +31,26 @@ Pod::Spec.new do |s|
 		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h','Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h']
 	end
 
-	s.subspec 'NSManagedObject+SQKAdditions' do |ss|
+	s.subspec 'ManagedObjectExtensions' do |ss|
 		ss.source_files = 'Classes/shared/NSManagedObject+SQKAdditions/**/*{h,m}'
 		ss.public_header_files = 'Classes/NSManagedObject+SQKAdditions/NSManagedObject+SQKAdditions.h'
 	end
 
-	s.subspec 'SQKManagedObjectController' do |ss|
+	s.subspec 'ManagedObjectController' do |ss|
 		ss.source_files = 'Classes/shared/SQKManagedObjectController/**/*{h,m}'
 		ss.public_header_files = 'Classes/shared/SQKManagedObjectController.h'
 	end
 
-	s.subspec 'SQKFetchedTableViewController' do |ss|
+	s.subspec 'FetchedTableViewController' do |ss|
 		ss.platform    = :ios, '6.0'
 		ss.source_files = 'Classes/ios/SQKFetchedTableViewController/**/*{h,m}'
 		ss.public_header_files = 'Classes/ios/SQKFetchedTableViewController.h'
+	end
+
+	s.subspec 'CoreDataOperation' do |ss|
+		ss.source_files = 'Classes/shared/SQKCoreDataOperation/**/*{h,m}'
+		ss.public_header_files = 'Classes/shared/SQKCoreDataOperation.h'
+    	ss.dependency 'SQKDataKit/Core'
+    	ss.dependency 'SQKDataKit/ManagedObjectExtensions'
 	end
 end
