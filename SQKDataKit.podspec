@@ -24,9 +24,16 @@ Pod::Spec.new do |s|
 	s.ios.deployment_target = '6.0'
 	s.osx.deployment_target = '10.9'
 
+	s.source_files = 'Classes/shared/SQKDataKit.h'
+
 	s.subspec 'Core' do |ss|
 		ss.source_files = 'Classes/shared/Core/**/*{h,m}'
-		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h', 'Classes/shared/Core/SQKDataKit.h', 'Classes/Core/shared/NSManagedObjectContext+SQKAdditions.h']
+		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h' 'Classes/Core/shared/NSManagedObjectContext+SQKAdditions.h']
+	end
+
+	s.subspec 'NSManagedObject+SQKAdditions' do |ss|
+		ss.source_files = 'Classes/shared/NSManagedObject+SQKAdditions/**/*{h,m}'
+		ss.public_header_files = 'Classes/NSManagedObject+SQKAdditions/NSManagedObject+SQKAdditions.h'
 	end
 
 	s.subspec 'SQKManagedObjectController' do |ss|
