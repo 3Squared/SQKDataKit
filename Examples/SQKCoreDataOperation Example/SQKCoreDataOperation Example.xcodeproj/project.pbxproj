@@ -27,6 +27,7 @@
 		A3256C5D19852D630063B939 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3519852D630063B939 /* CoreData.framework */; };
 		A3256C6519852D630063B939 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3256C6319852D630063B939 /* InfoPlist.strings */; };
 		A3256C6719852D630063B939 /* SQKCoreDataOperation_ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C6619852D630063B939 /* SQKCoreDataOperation_ExampleTests.m */; };
+		A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C71198535C20063B939 /* CDOGithubAPIClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		A3256C6219852D630063B939 /* SQKCoreDataOperation ExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SQKCoreDataOperation ExampleTests-Info.plist"; sourceTree = "<group>"; };
 		A3256C6419852D630063B939 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3256C6619852D630063B939 /* SQKCoreDataOperation_ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKCoreDataOperation_ExampleTests.m; sourceTree = "<group>"; };
+		A3256C70198535C20063B939 /* CDOGithubAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOGithubAPIClient.h; sourceTree = "<group>"; };
+		A3256C71198535C20063B939 /* CDOGithubAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOGithubAPIClient.m; sourceTree = "<group>"; };
 		C9B126035BA94F349A0F99DA /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
 		FDCBFE2E76264F5EBD227A30 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -131,6 +134,7 @@
 		A3256C3719852D630063B939 /* SQKCoreDataOperation Example */ = {
 			isa = PBXGroup;
 			children = (
+				A3256C74198539220063B939 /* Web Client */,
 				A3256C4019852D630063B939 /* CDOAppDelegate.h */,
 				A3256C4119852D630063B939 /* CDOAppDelegate.m */,
 				A3256C4319852D630063B939 /* Main_iPhone.storyboard */,
@@ -173,6 +177,15 @@
 				A3256C6319852D630063B939 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A3256C74198539220063B939 /* Web Client */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C70198535C20063B939 /* CDOGithubAPIClient.h */,
+				A3256C71198535C20063B939 /* CDOGithubAPIClient.m */,
+			);
+			name = "Web Client";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */,
+				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
 				A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */,
 				A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */,
 				A3256C3E19852D630063B939 /* main.m in Sources */,
