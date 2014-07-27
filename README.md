@@ -231,9 +231,9 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 }
 ```
 
-## `SQKDataImportOperation`
+## `SQKCoreDataOperation`
 
-Use an SQKDataImportOperation when you need to perform work with Core Data off of the main thread. 
+Use an SQKCoreDataOperation when you need to perform work with Core Data off of the main thread. 
 
 You need to subclass and must override the `performWorkPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use its `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeOperationBySavingContext:` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
 
