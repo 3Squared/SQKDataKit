@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52148E70C4614C26B65911B3 /* libPods-SQKCoreDataOperation ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */; };
 		A3256C3019852D630063B939 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C2F19852D630063B939 /* Foundation.framework */; };
 		A3256C3219852D630063B939 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3119852D630063B939 /* CoreGraphics.framework */; };
 		A3256C3419852D630063B939 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3319852D630063B939 /* UIKit.framework */; };
@@ -31,6 +32,7 @@
 		A3256C811985676D0063B939 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C801985676D0063B939 /* User.m */; };
 		A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */; };
 		A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C89198591870063B939 /* CDOCommitImporter.m */; };
+		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +79,10 @@
 		A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporterTests.m; sourceTree = "<group>"; };
 		A3256C88198591870063B939 /* CDOCommitImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImporter.h; sourceTree = "<group>"; };
 		A3256C89198591870063B939 /* CDOCommitImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporter.m; sourceTree = "<group>"; };
-		D0E129D50CF54860975D7619 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
+		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation ExampleTests.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation ExampleTests.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +94,7 @@
 				A3256C3619852D630063B939 /* CoreData.framework in Frameworks */,
 				A3256C3419852D630063B939 /* UIKit.framework in Frameworks */,
 				A3256C3019852D630063B939 /* Foundation.framework in Frameworks */,
+				EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +106,7 @@
 				A3256C5D19852D630063B939 /* CoreData.framework in Frameworks */,
 				A3256C5C19852D630063B939 /* UIKit.framework in Frameworks */,
 				A3256C5B19852D630063B939 /* Foundation.framework in Frameworks */,
+				52148E70C4614C26B65911B3 /* libPods-SQKCoreDataOperation ExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +120,8 @@
 				A3256C6019852D630063B939 /* SQKCoreDataOperation ExampleTests */,
 				A3256C2E19852D630063B939 /* Frameworks */,
 				A3256C2D19852D630063B939 /* Products */,
-				D0E129D50CF54860975D7619 /* Pods.xcconfig */,
+				DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */,
+				EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +142,8 @@
 				A3256C3319852D630063B939 /* UIKit.framework */,
 				A3256C3519852D630063B939 /* CoreData.framework */,
 				A3256C5919852D630063B939 /* XCTest.framework */,
+				D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */,
+				DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -368,7 +378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-SQKCoreDataOperation Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F70C45A74C8E46908A69406C /* Copy Pods Resources */ = {
@@ -383,7 +393,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-SQKCoreDataOperation ExampleTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -533,7 +543,7 @@
 		};
 		A3256C6B19852D630063B939 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0E129D50CF54860975D7619 /* Pods.xcconfig */;
+			baseConfigurationReference = DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -547,7 +557,7 @@
 		};
 		A3256C6C19852D630063B939 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0E129D50CF54860975D7619 /* Pods.xcconfig */;
+			baseConfigurationReference = DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -561,7 +571,7 @@
 		};
 		A3256C6E19852D630063B939 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0E129D50CF54860975D7619 /* Pods.xcconfig */;
+			baseConfigurationReference = EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKCoreDataOperation Example.app/SQKCoreDataOperation Example";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -584,7 +594,7 @@
 		};
 		A3256C6F19852D630063B939 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0E129D50CF54860975D7619 /* Pods.xcconfig */;
+			baseConfigurationReference = EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKCoreDataOperation Example.app/SQKCoreDataOperation Example";
 				FRAMEWORK_SEARCH_PATHS = (
