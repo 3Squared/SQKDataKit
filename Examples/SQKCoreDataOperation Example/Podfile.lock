@@ -1,0 +1,19 @@
+PODS:
+  - SQKDataKit/Core (0.5.0)
+  - SQKDataKit/CoreDataOperation (0.5.0):
+    - SQKDataKit/Core
+    - SQKDataKit/ManagedObjectExtensions
+  - SQKDataKit/ManagedObjectExtensions (0.5.0)
+
+DEPENDENCIES:
+  - SQKDataKit/Core (from `../../SQKDataKit.podspec`)
+  - SQKDataKit/CoreDataOperation (from `../../SQKDataKit.podspec`)
+
+EXTERNAL SOURCES:
+  SQKDataKit:
+    :path: ../../SQKDataKit.podspec
+
+SPEC CHECKSUMS:
+  SQKDataKit: 5285810c2b14bfe04c1e4ec14df5e3f3731923d3
+
+COCOAPODS: 0.32.1
