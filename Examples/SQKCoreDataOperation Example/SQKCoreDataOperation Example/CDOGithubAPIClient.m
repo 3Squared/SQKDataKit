@@ -15,12 +15,19 @@ static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubA
 
 #pragma mark - Public
 
-- (NSArray *)getCommitsForRepo:(NSString *)repoName error:(NSError **)error {
-	NSURLRequest *request = [self requestForAPIEndpoint:[NSString stringWithFormat:@"repos/3squared/%@/commits", repoName] webMethod:@"GET"];
+- (id)getCommitsForRepo:(NSString *)repoName error:(NSError **)error {
+	NSString *endpoint = [NSString stringWithFormat:@"repos/3squared/%@/commits", repoName];
+	NSURLRequest *request = [self requestForAPIEndpoint:endpoint webMethod:@"GET"];
 	return [self sendSynchronousRequest:request error:error];
 }
 
-#pragma mark - NSURLRequest
+- (id)getUser:(NSString *)username error:(NSError **)error {
+	NSString *endpoint = [NSString stringWithFormat:@"users/%@", username];
+	NSURLRequest *request = [self requestForAPIEndpoint:endpoint webMethod:@"GET"];
+	return [self sendSynchronousRequest:request error:error];
+}
+
+#pragma mark - Private
 
 - (NSURLRequest *)requestForAPIEndpoint:(NSString *)urlString webMethod:(NSString *)webMethod {
     NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", CDOHBaseURL, urlString]];
@@ -31,20 +38,24 @@ static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubA
 }
 
 - (id)sendSynchronousRequest:(NSURLRequest *)request error:(NSError **)error {
+	NSLog(@"%@", request);
+	
     NSHTTPURLResponse *response = nil;
     NSError *localError;
     NSData *reponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&localError];
     
     id JSON = reponseData != nil ? [NSJSONSerialization JSONObjectWithData:reponseData options:0 error:NULL] : nil;
     
-    if ((response != nil && [response statusCode] != 200)) {
-        *error = [NSError errorWithDomain:CDOGithubAPIClientErrorDomain
-                                     code:[response statusCode]
-                                 userInfo:nil];
-    }
-    else {
-        *error = localError;
-    }
+	if (error) {
+		if ((response != nil && [response statusCode] != 200)) {
+			*error = [NSError errorWithDomain:CDOGithubAPIClientErrorDomain
+										 code:[response statusCode]
+									 userInfo:nil];
+		}
+		else {
+			*error = localError;
+		}
+	}
     
     return JSON;
 }

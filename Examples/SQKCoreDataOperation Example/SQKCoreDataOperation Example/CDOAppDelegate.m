@@ -30,9 +30,11 @@
 	NSString *accessToken = plistDict[@"token"];
 	client.accessToken = accessToken;
 	
-	NSError *error = nil;
-	NSArray *commitsJSON = [client getCommitsForRepo:@"sqkdatakit" error:&error];
-	NSLog(@"%@", commitsJSON);
+//	NSArray *commitsJSON = [client getCommitsForRepo:@"sqkdatakit" error:NULL];
+//	NSLog(@"%@", commitsJSON);
+	
+	NSArray *userJSON = [client getUser:@"lukestringer90" error:NULL];
+	NSLog(@"%@", userJSON);
 	
 	
     // Override point for customization after application launch.

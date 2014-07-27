@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSString *accessToken;
 
-- (NSArray *)getCommitsForRepo:(NSString *)repoName error:(NSError **)error;
+- (id)getCommitsForRepo:(NSString *)repoName error:(NSError **)error;
+- (id)getUser:(NSString *)username error:(NSError **)error;
 
 @end
