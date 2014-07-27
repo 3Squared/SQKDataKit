@@ -10,6 +10,8 @@
 
 #import "CDOMasterViewController.h"
 
+#import "CDOGithubAPIClient.h"
+
 @implementation CDOAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -18,6 +20,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	CDOGithubAPIClient *client = [CDOGithubAPIClient new];
+	
+	// Set your Github API access token for the CDOGithubAPIClient
+	// See: https://github.com/settings/applications#personal-access-tokens
+	// I'm loading mine from a .plist (ignored in the git repo)
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
+	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
+	NSString *accessToken = plistDict[@"token"];
+	client.accessToken = accessToken;
+	
+	NSError *error = nil;
+	NSArray *commitsJSON = [client getCommitsForRepo:@"sqkdatakit" error:&error];
+	NSLog(@"%@", commitsJSON);
+	
+	
     // Override point for customization after application launch.
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 	    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;

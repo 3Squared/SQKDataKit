@@ -10,4 +10,8 @@
 
 @interface CDOGithubAPIClient : NSObject
 
+@property (nonatomic, strong) NSString *accessToken;
+
+- (NSArray *)getCommitsForRepo:(NSString *)repoName error:(NSError **)error;
+
 @end
