@@ -25,11 +25,12 @@
 		A3256C5C19852D630063B939 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3319852D630063B939 /* UIKit.framework */; };
 		A3256C5D19852D630063B939 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3519852D630063B939 /* CoreData.framework */; };
 		A3256C6519852D630063B939 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3256C6319852D630063B939 /* InfoPlist.strings */; };
-		A3256C6719852D630063B939 /* SQKCoreDataOperation_ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C6619852D630063B939 /* SQKCoreDataOperation_ExampleTests.m */; };
 		A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C71198535C20063B939 /* CDOGithubAPIClient.m */; };
 		A3256C78198539AF0063B939 /* GithubToken.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3256C77198539AF0063B939 /* GithubToken.plist */; };
 		A3256C7E1985676C0063B939 /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C7D1985676C0063B939 /* Commit.m */; };
 		A3256C811985676D0063B939 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C801985676D0063B939 /* User.m */; };
+		A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */; };
+		A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C89198591870063B939 /* CDOCommitImporter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +67,6 @@
 		A3256C5919852D630063B939 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A3256C6219852D630063B939 /* SQKCoreDataOperation ExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SQKCoreDataOperation ExampleTests-Info.plist"; sourceTree = "<group>"; };
 		A3256C6419852D630063B939 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A3256C6619852D630063B939 /* SQKCoreDataOperation_ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SQKCoreDataOperation_ExampleTests.m; sourceTree = "<group>"; };
 		A3256C70198535C20063B939 /* CDOGithubAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOGithubAPIClient.h; sourceTree = "<group>"; };
 		A3256C71198535C20063B939 /* CDOGithubAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOGithubAPIClient.m; sourceTree = "<group>"; };
 		A3256C77198539AF0063B939 /* GithubToken.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GithubToken.plist; sourceTree = "<group>"; };
@@ -74,6 +74,9 @@
 		A3256C7D1985676C0063B939 /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
 		A3256C7F1985676D0063B939 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		A3256C801985676D0063B939 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporterTests.m; sourceTree = "<group>"; };
+		A3256C88198591870063B939 /* CDOCommitImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImporter.h; sourceTree = "<group>"; };
+		A3256C89198591870063B939 /* CDOCommitImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporter.m; sourceTree = "<group>"; };
 		D0E129D50CF54860975D7619 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +148,8 @@
 				A3256C79198564C20063B939 /* View */,
 				A3256C7A198564C80063B939 /* View Controller */,
 				A3256C3819852D630063B939 /* Supporting Files */,
+				A3256C88198591870063B939 /* CDOCommitImporter.h */,
+				A3256C89198591870063B939 /* CDOCommitImporter.m */,
 			);
 			path = "SQKCoreDataOperation Example";
 			sourceTree = "<group>";
@@ -163,8 +168,8 @@
 		A3256C6019852D630063B939 /* SQKCoreDataOperation ExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				A3256C6619852D630063B939 /* SQKCoreDataOperation_ExampleTests.m */,
 				A3256C6119852D630063B939 /* Supporting Files */,
+				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
 			);
 			path = "SQKCoreDataOperation ExampleTests";
 			sourceTree = "<group>";
@@ -392,6 +397,7 @@
 				A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */,
 				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
 				A3256C7E1985676C0063B939 /* Commit.m in Sources */,
+				A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */,
 				A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */,
 				A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */,
 				A3256C3E19852D630063B939 /* main.m in Sources */,
@@ -403,7 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3256C6719852D630063B939 /* SQKCoreDataOperation_ExampleTests.m in Sources */,
+				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

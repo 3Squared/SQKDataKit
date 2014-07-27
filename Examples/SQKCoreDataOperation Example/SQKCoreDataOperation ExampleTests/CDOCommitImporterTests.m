@@ -1,6 +1,6 @@
 //
-//  SQKCoreDataOperation_ExampleTests.m
-//  SQKCoreDataOperation ExampleTests
+//  CDOCommitImporterTests.m
+//  SQKCoreDataOperation Example
 //
 //  Created by Luke Stringer on 27/07/2014.
 //  Copyright (c) 2014 3Squared Ltd. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface SQKCoreDataOperation_ExampleTests : XCTestCase
+@interface CDOCommitImporterTests : XCTestCase
 
 @end
 
-@implementation SQKCoreDataOperation_ExampleTests
+@implementation CDOCommitImporterTests
 
 - (void)setUp
 {
