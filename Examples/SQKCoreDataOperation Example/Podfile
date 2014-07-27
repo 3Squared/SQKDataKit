@@ -1,10 +1,5 @@
+link_with "SQKCoreDataOperation Example", "SQKCoreDataOperation ExampleTests"
 
-target "SQKCoreDataOperation Example" do
-	pod 'SQKDataKit/Core', :path => '../../SQKDataKit.podspec'
-	pod 'SQKDataKit/CoreDataOperation', :path => '../../SQKDataKit.podspec'
-end
-
-target "SQKCoreDataOperation ExampleTests" do
-
-end
+pod 'SQKDataKit/Core', :path => '../../SQKDataKit.podspec'
+pod 'SQKDataKit/CoreDataOperation', :path => '../../SQKDataKit.podspec'
 
