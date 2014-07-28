@@ -11,18 +11,8 @@
 #import "Commit.h"
 #import "User.h"
 
-@interface CDOCommitImporter ()
-@property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContext;
-@end
 
 @implementation CDOCommitImporter
-
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	if (self = [super init]) {
-		self.managedObjectContext = managedObjectContext;
-	}
-	return self;
-}
 
 - (void)importJSON:(NSArray *)JSON {
 	[Commit sqk_insertOrUpdate:JSON

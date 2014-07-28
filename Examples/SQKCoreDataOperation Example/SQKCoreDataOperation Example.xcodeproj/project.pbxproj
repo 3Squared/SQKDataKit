@@ -34,6 +34,10 @@
 		A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C89198591870063B939 /* CDOCommitImporter.m */; };
 		A3256C8C198597FD0063B939 /* commits.json in Resources */ = {isa = PBXBuildFile; fileRef = A3256C8B198597FD0063B939 /* commits.json */; };
 		A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */; };
+		A3F9AD62198660BB00058B79 /* CDOUserImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD61198660BB00058B79 /* CDOUserImporter.m */; };
+		A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD64198660EA00058B79 /* CDODataImporter.m */; };
+		A3F9AD671986629C00058B79 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F9AD661986629C00058B79 /* users.json */; };
+		A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +89,12 @@
 		A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOJSONFixtureLoader.h; sourceTree = "<group>"; };
 		A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOJSONFixtureLoader.m; sourceTree = "<group>"; };
 		A3256C931985AB260063B939 /* CDORunningTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDORunningTestsHelper.h; sourceTree = "<group>"; };
+		A3F9AD60198660BB00058B79 /* CDOUserImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOUserImporter.h; sourceTree = "<group>"; };
+		A3F9AD61198660BB00058B79 /* CDOUserImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImporter.m; sourceTree = "<group>"; };
+		A3F9AD63198660EA00058B79 /* CDODataImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = CDODataImporter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		A3F9AD64198660EA00058B79 /* CDODataImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CDODataImporter.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		A3F9AD661986629C00058B79 /* users.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
+		A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImporterTests.m; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,14 +169,13 @@
 			children = (
 				A3256C4019852D630063B939 /* CDOAppDelegate.h */,
 				A3256C4119852D630063B939 /* CDOAppDelegate.m */,
+				A3256C931985AB260063B939 /* CDORunningTestsHelper.h */,
+				A3F9AD5F19865FBD00058B79 /* Data Import */,
 				A3256C74198539220063B939 /* Web Client */,
 				A3256C7B198564D40063B939 /* Model */,
 				A3256C79198564C20063B939 /* View */,
 				A3256C7A198564C80063B939 /* View Controller */,
 				A3256C3819852D630063B939 /* Supporting Files */,
-				A3256C88198591870063B939 /* CDOCommitImporter.h */,
-				A3256C89198591870063B939 /* CDOCommitImporter.m */,
-				A3256C931985AB260063B939 /* CDORunningTestsHelper.h */,
 			);
 			path = "SQKCoreDataOperation Example";
 			sourceTree = "<group>";
@@ -185,11 +194,10 @@
 		A3256C6019852D630063B939 /* SQKCoreDataOperation ExampleTests */ = {
 			isa = PBXGroup;
 			children = (
+				A3F9AD5C19865F9700058B79 /* Tests */,
+				A3F9AD5D19865F9E00058B79 /* Helpers */,
+				A3F9AD5E19865FA800058B79 /* Test Data */,
 				A3256C6119852D630063B939 /* Supporting Files */,
-				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
-				A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */,
-				A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */,
-				A3256C8B198597FD0063B939 /* commits.json */,
 			);
 			path = "SQKCoreDataOperation ExampleTests";
 			sourceTree = "<group>";
@@ -244,6 +252,46 @@
 				A3256C7D1985676C0063B939 /* Commit.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		A3F9AD5C19865F9700058B79 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
+				A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		A3F9AD5D19865F9E00058B79 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */,
+				A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		A3F9AD5E19865FA800058B79 /* Test Data */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD661986629C00058B79 /* users.json */,
+				A3256C8B198597FD0063B939 /* commits.json */,
+			);
+			name = "Test Data";
+			sourceTree = "<group>";
+		};
+		A3F9AD5F19865FBD00058B79 /* Data Import */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD63198660EA00058B79 /* CDODataImporter.h */,
+				A3F9AD64198660EA00058B79 /* CDODataImporter.m */,
+				A3256C88198591870063B939 /* CDOCommitImporter.h */,
+				A3256C89198591870063B939 /* CDOCommitImporter.m */,
+				A3F9AD60198660BB00058B79 /* CDOUserImporter.h */,
+				A3F9AD61198660BB00058B79 /* CDOUserImporter.m */,
+			);
+			name = "Data Import";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,6 +387,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3F9AD671986629C00058B79 /* users.json in Resources */,
 				A3256C8C198597FD0063B939 /* commits.json in Resources */,
 				A3256C6519852D630063B939 /* InfoPlist.strings in Resources */,
 			);
@@ -419,10 +468,12 @@
 				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
 				A3256C7E1985676C0063B939 /* Commit.m in Sources */,
 				A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */,
+				A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */,
 				A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */,
 				A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */,
 				A3256C3E19852D630063B939 /* main.m in Sources */,
 				A3256C4219852D630063B939 /* CDOAppDelegate.m in Sources */,
+				A3F9AD62198660BB00058B79 /* CDOUserImporter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +483,7 @@
 			files = (
 				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
 				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
+				A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
