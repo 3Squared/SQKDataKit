@@ -10,12 +10,17 @@
 #import "CDOGithubAPIClient.h"
 #import "CDOCommitImporter.h"
 
+@interface CDOCommitImportOperation ()
+@property (nonatomic, strong) NSError *operationError;
+@end
+
 @implementation CDOCommitImportOperation
 
 - (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
 	NSError *error = nil;
 	NSArray *commits = [[CDOGithubAPIClient sharedInstance] getCommitsForRepo:@"sqkdatakit" error:&error];
 	if (error) {
+        self.operationError = error;
 		NSLog(@"%@", error);
 		[self completeOperationBySavingContext:context];
 		return;
@@ -25,6 +30,10 @@
 	[importer importJSON:commits];
 
 	[self completeOperationBySavingContext:context];
+}
+
+- (NSError *)error {
+    return self.operationError;
 }
 
 @end

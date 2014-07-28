@@ -13,6 +13,7 @@
 #import "User.h"
 
 @interface CDOUserImportOperation ()
+@property (nonatomic, strong) NSError *operationError;
 @end
 
 @implementation CDOUserImportOperation
@@ -35,6 +36,10 @@
 	else {
 		[self completeOperationBySavingContext:context];
 	}
+}
+
+- (NSError *)error {
+    return self.operationError;
 }
 
 @end

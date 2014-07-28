@@ -18,8 +18,6 @@
 		A3256C4519852D630063B939 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3256C4319852D630063B939 /* Main_iPhone.storyboard */; };
 		A3256C4819852D630063B939 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3256C4619852D630063B939 /* Main_iPad.storyboard */; };
 		A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A3256C4919852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld */; };
-		A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C4D19852D630063B939 /* CDOMasterViewController.m */; };
-		A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C5019852D630063B939 /* CDODetailViewController.m */; };
 		A3256C5319852D630063B939 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3256C5219852D630063B939 /* Images.xcassets */; };
 		A3256C5A19852D630063B939 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C5919852D630063B939 /* XCTest.framework */; };
 		A3256C5B19852D630063B939 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C2F19852D630063B939 /* Foundation.framework */; };
@@ -42,6 +40,7 @@
 		A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */; };
 		A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */; };
 		A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */; };
+		A3F9AD771986A1F400058B79 /* CDODataSychroniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD761986A1F400058B79 /* CDODataSychroniser.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -70,10 +69,6 @@
 		A3256C4419852D630063B939 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		A3256C4719852D630063B939 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		A3256C4A19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SQKCoreDataOperation_Example.xcdatamodel; sourceTree = "<group>"; };
-		A3256C4C19852D630063B939 /* CDOMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDOMasterViewController.h; sourceTree = "<group>"; };
-		A3256C4D19852D630063B939 /* CDOMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDOMasterViewController.m; sourceTree = "<group>"; };
-		A3256C4F19852D630063B939 /* CDODetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDODetailViewController.h; sourceTree = "<group>"; };
-		A3256C5019852D630063B939 /* CDODetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDODetailViewController.m; sourceTree = "<group>"; };
 		A3256C5219852D630063B939 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A3256C5819852D630063B939 /* SQKCoreDataOperation ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SQKCoreDataOperation ExampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3256C5919852D630063B939 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -105,6 +100,8 @@
 		A3F9AD70198697E200058B79 /* CDOUserImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOUserImportOperation.h; sourceTree = "<group>"; };
 		A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperation.m; sourceTree = "<group>"; };
 		A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperationTests.m; sourceTree = "<group>"; };
+		A3F9AD751986A1F400058B79 /* CDODataSychroniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDODataSychroniser.h; sourceTree = "<group>"; };
+		A3F9AD761986A1F400058B79 /* CDODataSychroniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDODataSychroniser.m; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,6 +184,8 @@
 				A3256C79198564C20063B939 /* View */,
 				A3256C7A198564C80063B939 /* View Controller */,
 				A3256C3819852D630063B939 /* Supporting Files */,
+				A3F9AD751986A1F400058B79 /* CDODataSychroniser.h */,
+				A3F9AD761986A1F400058B79 /* CDODataSychroniser.m */,
 			);
 			path = "SQKCoreDataOperation Example";
 			sourceTree = "<group>";
@@ -245,10 +244,6 @@
 		A3256C7A198564C80063B939 /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A3256C4C19852D630063B939 /* CDOMasterViewController.h */,
-				A3256C4D19852D630063B939 /* CDOMasterViewController.m */,
-				A3256C4F19852D630063B939 /* CDODetailViewController.h */,
-				A3256C5019852D630063B939 /* CDODetailViewController.m */,
 			);
 			name = "View Controller";
 			sourceTree = "<group>";
@@ -491,10 +486,9 @@
 				A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */,
 				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
 				A3256C7E1985676C0063B939 /* Commit.m in Sources */,
+				A3F9AD771986A1F400058B79 /* CDODataSychroniser.m in Sources */,
 				A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */,
 				A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */,
-				A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */,
-				A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */,
 				A3F9AD6D1986881800058B79 /* CDOCommitImportOperation.m in Sources */,
 				A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */,
 				A3256C3E19852D630063B939 /* main.m in Sources */,
