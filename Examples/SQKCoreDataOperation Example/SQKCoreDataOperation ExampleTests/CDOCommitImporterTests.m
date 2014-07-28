@@ -13,6 +13,7 @@
 #import "CDOJSONFixtureLoader.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
+#import "User.h"
 
 @interface CDOCommitImporterTests : XCTestCase
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -32,12 +33,13 @@
 	self.managedObjectContext = [contextManager newPrivateContext];
 	
 	self.importer = [[CDOCommitImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
-}
-
-- (void)testImport {
-	NSArray *JSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
+    
+    NSArray *JSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
 	
 	[self.importer importJSON:JSON];
+}
+
+- (void)testImportCommits {
 	
 	NSFetchRequest *commitsFetchRequest = [Commit sqk_fetchRequest];
 	
@@ -59,6 +61,18 @@
     Commit *commit4 = (Commit *)[[self.managedObjectContext executeFetchRequest:commitsFetchRequest error:NULL] firstObject];
     XCTAssertEqualObjects(commit4.message, @"Prefixed property names to prevent clashing.", @"");
     
+}
+
+- (void)testImporterUsers {
+    NSFetchRequest *usersFetchRequest = [User sqk_fetchRequest];
+    
+    XCTAssertEqual([self.managedObjectContext countForFetchRequest:usersFetchRequest error:NULL], 2, @"");
+    
+    usersFetchRequest.predicate = [NSPredicate predicateWithFormat:@"username == %@", @"lukestringer90"];
+    XCTAssertEqual([self.managedObjectContext countForFetchRequest:usersFetchRequest error:NULL], 1, @"");
+    
+    usersFetchRequest.predicate = [NSPredicate predicateWithFormat:@"username == %@", @"blork"];
+    XCTAssertEqual([self.managedObjectContext countForFetchRequest:usersFetchRequest error:NULL], 1, @"");
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "CDOCommitImporter.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
+#import "User.h"
 
 @interface CDOCommitImporter ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContext;
@@ -25,12 +26,20 @@
 
 - (void)importJSON:(NSArray *)JSON {
 	[Commit sqk_insertOrUpdate:JSON
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
-               commit.message = dictionary[@"commit"][@"message"];
-           }
-                privateContext:self.managedObjectContext error:NULL];
+	            uniqueModelKey:@"sha"
+	           uniqueRemoteKey:@"sha"
+	       propertySetterBlock: ^(NSDictionary *dictionary, Commit *commit) {
+	    commit.message = dictionary[@"commit"][@"message"];
+	} privateContext:self.managedObjectContext error:NULL];
+
+	/**
+	 *  Import 'stub' User entities with only the username set.
+	 *  The rest of the properties will be set later.
+	 */
+	NSSet *usernames = [NSSet setWithArray:[JSON valueForKeyPath:@"committer.login"]];
+	for (NSString *username in usernames) {
+		[User sqk_insertOrFetchWithKey:@"username" value:username context:self.managedObjectContext error:NULL];
+	}
 }
 
 @end
