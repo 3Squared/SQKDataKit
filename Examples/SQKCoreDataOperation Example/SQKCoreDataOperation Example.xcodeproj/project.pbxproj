@@ -40,6 +40,8 @@
 		A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */; };
 		A3F9AD6D1986881800058B79 /* CDOCommitImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */; };
 		A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */; };
+		A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */; };
+		A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +102,9 @@
 		A3F9AD6B1986881800058B79 /* CDOCommitImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImportOperation.h; sourceTree = "<group>"; };
 		A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImportOperation.m; sourceTree = "<group>"; };
 		A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImportOperationTests.m; sourceTree = "<group>"; };
+		A3F9AD70198697E200058B79 /* CDOUserImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOUserImportOperation.h; sourceTree = "<group>"; };
+		A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperation.m; sourceTree = "<group>"; };
+		A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperationTests.m; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -266,6 +271,7 @@
 				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
 				A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */,
 				A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */,
+				A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -306,6 +312,8 @@
 			children = (
 				A3F9AD6B1986881800058B79 /* CDOCommitImportOperation.h */,
 				A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */,
+				A3F9AD70198697E200058B79 /* CDOUserImportOperation.h */,
+				A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */,
 			);
 			name = Operations;
 			sourceTree = "<group>";
@@ -488,6 +496,7 @@
 				A3256C5119852D630063B939 /* CDODetailViewController.m in Sources */,
 				A3256C4E19852D630063B939 /* CDOMasterViewController.m in Sources */,
 				A3F9AD6D1986881800058B79 /* CDOCommitImportOperation.m in Sources */,
+				A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */,
 				A3256C3E19852D630063B939 /* main.m in Sources */,
 				A3256C4219852D630063B939 /* CDOAppDelegate.m in Sources */,
 				A3F9AD62198660BB00058B79 /* CDOUserImporter.m in Sources */,
@@ -501,6 +510,7 @@
 				A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */,
 				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
 				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
+				A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */,
 				A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
