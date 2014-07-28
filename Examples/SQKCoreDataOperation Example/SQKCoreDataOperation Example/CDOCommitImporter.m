@@ -7,6 +7,8 @@
 //
 
 #import "CDOCommitImporter.h"
+#import "NSManagedObject+SQKAdditions.h"
+#import "Commit.h"
 
 @interface CDOCommitImporter ()
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContext;
@@ -22,7 +24,13 @@
 }
 
 - (void)importJSON:(NSArray *)JSON {
-	
+	[Commit sqk_insertOrUpdate:JSON
+                uniqueModelKey:@"sha"
+               uniqueRemoteKey:@"sha"
+           propertySetterBlock:^(NSDictionary *dictionary, Commit *commit) {
+               commit.message = dictionary[@"commit"][@"message"];
+           }
+                privateContext:self.managedObjectContext error:NULL];
 }
 
 @end
