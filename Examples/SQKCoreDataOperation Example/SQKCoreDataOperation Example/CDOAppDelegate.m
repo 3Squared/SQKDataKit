@@ -11,6 +11,8 @@
 #import "CDOMasterViewController.h"
 
 #import "CDOGithubAPIClient.h"
+#import	"SQKContextManager.h"
+#import "CDORunningTestsHelper.h"
 
 @implementation CDOAppDelegate
 
@@ -18,8 +20,11 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	if (isRunningTests()) return YES;
+	
 	CDOGithubAPIClient *client = [CDOGithubAPIClient new];
 	
 	// Set your Github API access token for the CDOGithubAPIClient

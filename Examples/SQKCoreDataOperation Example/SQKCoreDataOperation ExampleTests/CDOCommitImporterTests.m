@@ -8,8 +8,15 @@
 
 #import <XCTest/XCTest.h>
 
-@interface CDOCommitImporterTests : XCTestCase
+#import "CDOCommitImporter.h"
+#import	"SQKContextManager.h"
+#import "CDOJSONFixtureLoader.h"
+#import "NSManagedObject+SQKAdditions.h"
+#import "Commit.h"
 
+@interface CDOCommitImporterTests : XCTestCase
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) CDOCommitImporter *importer;
 @end
 
 @implementation CDOCommitImporterTests
@@ -17,18 +24,24 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+	
+	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+	SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+																  managedObjectModel:model
+																			storeURL:nil];
+	self.managedObjectContext = [contextManager mainContext];
+	
+	self.importer = [[CDOCommitImporter alloc] initWithManagedObjectContext:self.managedObjectContext];
 }
 
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+- (void)testImport {
+	NSArray *JSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
+	
+	[self.importer importJSON:JSON];
+	
+	NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
+	
+	XCTAssertEqual([self.managedObjectContext countForFetchRequest:fetchRequest error:NULL], 4, @"");
 }
 
 @end

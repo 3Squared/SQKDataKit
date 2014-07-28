@@ -32,6 +32,8 @@
 		A3256C811985676D0063B939 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C801985676D0063B939 /* User.m */; };
 		A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */; };
 		A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C89198591870063B939 /* CDOCommitImporter.m */; };
+		A3256C8C198597FD0063B939 /* commits.json in Resources */ = {isa = PBXBuildFile; fileRef = A3256C8B198597FD0063B939 /* commits.json */; };
+		A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +81,10 @@
 		A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporterTests.m; sourceTree = "<group>"; };
 		A3256C88198591870063B939 /* CDOCommitImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImporter.h; sourceTree = "<group>"; };
 		A3256C89198591870063B939 /* CDOCommitImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporter.m; sourceTree = "<group>"; };
+		A3256C8B198597FD0063B939 /* commits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = commits.json; sourceTree = "<group>"; };
+		A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOJSONFixtureLoader.h; sourceTree = "<group>"; };
+		A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOJSONFixtureLoader.m; sourceTree = "<group>"; };
+		A3256C931985AB260063B939 /* CDORunningTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDORunningTestsHelper.h; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -160,6 +166,7 @@
 				A3256C3819852D630063B939 /* Supporting Files */,
 				A3256C88198591870063B939 /* CDOCommitImporter.h */,
 				A3256C89198591870063B939 /* CDOCommitImporter.m */,
+				A3256C931985AB260063B939 /* CDORunningTestsHelper.h */,
 			);
 			path = "SQKCoreDataOperation Example";
 			sourceTree = "<group>";
@@ -180,6 +187,9 @@
 			children = (
 				A3256C6119852D630063B939 /* Supporting Files */,
 				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
+				A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */,
+				A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */,
+				A3256C8B198597FD0063B939 /* commits.json */,
 			);
 			path = "SQKCoreDataOperation ExampleTests";
 			sourceTree = "<group>";
@@ -329,6 +339,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3256C8C198597FD0063B939 /* commits.json in Resources */,
 				A3256C6519852D630063B939 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,6 +431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
+				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

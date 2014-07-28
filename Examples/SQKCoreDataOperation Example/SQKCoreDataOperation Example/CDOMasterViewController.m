@@ -7,8 +7,8 @@
 //
 
 #import "CDOMasterViewController.h"
-
 #import "CDODetailViewController.h"
+#import "CDORunningTestsHelper.h"
 
 @interface CDOMasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -71,6 +71,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+	if (isRunningTests()) return 0;
 	id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
 	return [sectionInfo numberOfObjects];
 }
@@ -131,6 +133,8 @@
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
+    if (isRunningTests()) return nil;
+    
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }

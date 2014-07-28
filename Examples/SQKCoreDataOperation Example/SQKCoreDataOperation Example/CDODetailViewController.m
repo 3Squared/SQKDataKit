@@ -7,6 +7,7 @@
 //
 
 #import "CDODetailViewController.h"
+#import "CDORunningTestsHelper.h"
 
 @interface CDODetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -16,6 +17,11 @@
 @implementation CDODetailViewController
 
 #pragma mark - Managing the detail item
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	if (isRunningTests()) return nil;
+	return [super initWithCoder:aDecoder];
+}
 
 - (void)setDetailItem:(id)newDetailItem
 {
