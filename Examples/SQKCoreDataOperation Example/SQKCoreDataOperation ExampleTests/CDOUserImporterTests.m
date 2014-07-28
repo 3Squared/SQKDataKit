@@ -43,10 +43,18 @@
     NSFetchRequest *usersFetchRequest = [User sqk_fetchRequest];
     
     usersFetchRequest.predicate = [NSPredicate predicateWithFormat:@"username == %@", @"lukestringer90"];
-    XCTAssertEqual([self.managedObjectContext countForFetchRequest:usersFetchRequest error:NULL], 1, @"");
+    User *user1 = (User *)[[self.managedObjectContext executeFetchRequest:usersFetchRequest error:NULL] firstObject];
+    XCTAssertEqualObjects(user1.followers, @13, @"");
+    XCTAssertEqualObjects(user1.following, @12, @"");
+    XCTAssertEqualObjects(user1.avatarURL, @"https://avatars.githubusercontent.com/u/987146?", @"");
+    XCTAssertEqualObjects(user1.email, @"lukestringer90@gmail.com", @"");
     
     usersFetchRequest.predicate = [NSPredicate predicateWithFormat:@"username == %@", @"blork"];
-    XCTAssertEqual([self.managedObjectContext countForFetchRequest:usersFetchRequest error:NULL], 1, @"");
+    User *user2 = (User *)[[self.managedObjectContext executeFetchRequest:usersFetchRequest error:NULL] firstObject];
+    XCTAssertEqualObjects(user2.followers, @22, @"");
+    XCTAssertEqualObjects(user2.following, @6, @"");
+    XCTAssertEqualObjects(user2.avatarURL, @"https://avatars.githubusercontent.com/u/116228?", @"");
+    XCTAssertEqualObjects(user2.email, @"sam@blork.co.uk", @"");
 }
 
 @end

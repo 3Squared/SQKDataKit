@@ -16,8 +16,11 @@
     [User sqk_insertOrUpdate:JSON
 	            uniqueModelKey:@"username"
 	           uniqueRemoteKey:@"login"
-	       propertySetterBlock: ^(NSDictionary *dictionary, Commit *commit) {
-               // TODO
+	       propertySetterBlock: ^(NSDictionary *dictionary, User *user) {
+               user.followers = dictionary[@"followers"];
+               user.avatarURL = dictionary[@"avatar_url"];
+               user.following = dictionary[@"following"];
+               user.email = dictionary[@"email"];
            } privateContext:self.managedObjectContext error:NULL];
 }
 
