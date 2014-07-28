@@ -13,6 +13,17 @@ static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubA
 
 @implementation CDOGithubAPIClient
 
+#pragma mark - Singleton setup
++ (CDOGithubAPIClient *)sharedInstance {
+    static CDOGithubAPIClient *sharedSingleton;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedSingleton = [[CDOGithubAPIClient alloc] init];
+    });
+    
+    return sharedSingleton;
+}
+
 #pragma mark - Public
 
 - (id)getCommitsForRepo:(NSString *)repoName error:(NSError **)error {
