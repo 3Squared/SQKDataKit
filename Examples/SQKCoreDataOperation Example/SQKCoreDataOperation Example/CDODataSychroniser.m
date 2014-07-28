@@ -84,9 +84,11 @@
 }
 
 - (void)setSynchroniseFinish {
-	NSLog(@"Finished Synchronise");
-	self.isSynchronising = NO;
-	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	[[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+	    NSLog(@"Finished Synchronise");
+	    self.isSynchronising = NO;
+	    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	}];
 }
 
 - (BOOL)operationFinishedWithoutError:(SQKCoreDataOperation *)dataOperation {
