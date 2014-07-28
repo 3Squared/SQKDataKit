@@ -31,7 +31,7 @@
 	[CDOGithubAPIClient sharedInstance].accessToken = accessToken;
 
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
 

@@ -17,9 +17,13 @@
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, assign, readwrite) BOOL isSynchronising;
 @property (nonatomic, assign, readwrite) NSInteger pendingSyncs;
+@property (nonatomic, strong) NSArray *synchroniseBlocks;
+@property (nonatomic, assign) NSUInteger currentSynchroniseBlockIndex;
 @end
 
 @implementation CDODataSychroniser
+
+#pragma mark - Public
 
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager {
 	if (self = [super init]) {
@@ -42,7 +46,30 @@
 - (void)startSynchronise {
 	NSLog(@"Starting Synchronise");
 	self.isSynchronising = YES;
-	[self synchroniseCommits];
+
+	// The synchronise work to do
+	self.synchroniseBlocks = @[
+	        ^{ [self synchroniseCommits]; },
+	        ^{ [self synchroniseUsers]; },
+	    ];
+	self.currentSynchroniseBlockIndex = 0;
+
+	[self exectuteNextSynchroniseBlock];
+}
+
+/**
+ *  Executes the next block in self.synchroniseBlocks. If not more blocks then data sychronisation is finished.
+ */
+- (void)exectuteNextSynchroniseBlock {
+	if (self.currentSynchroniseBlockIndex < self.synchroniseBlocks.count) {
+		void (^syncBlock)(void) = self.synchroniseBlocks[self.currentSynchroniseBlockIndex];
+		syncBlock();
+
+		++self.currentSynchroniseBlockIndex;
+	}
+	else {
+		[self setSynchroniseFinish];
+	}
 }
 
 - (void)handleSynchroniseFinish {
@@ -81,7 +108,7 @@
 	[operation setCompletionBlock: ^{
 	    CDOCommitImportOperation *strongOperation = weakOperation;
 	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self synchroniseUsers];
+	        [self exectuteNextSynchroniseBlock];
 		}
 	    else {
 	        NSLog(@"Commit Import Error");
@@ -97,7 +124,7 @@
 	[operation setCompletionBlock: ^{
 	    CDOUserImportOperation *strongOperation = weakOperation;
 	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self setSynchroniseFinish];
+	        [self exectuteNextSynchroniseBlock];
 		}
 	    else {
 	        NSLog(@"Users Import Error");
