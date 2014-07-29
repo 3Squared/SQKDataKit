@@ -20,7 +20,7 @@
 	NSError *error = nil;
 	NSArray *commits = [[CDOGithubAPIClient sharedInstance] getCommitsForRepo:@"sqkdatakit" error:&error];
 	if (error) {
-        self.operationError = error;
+		self.operationError = error;
 		NSLog(@"%@", error);
 		[self completeOperationBySavingContext:context];
 		return;
@@ -33,7 +33,7 @@
 }
 
 - (NSError *)error {
-    return self.operationError;
+	return self.operationError;
 }
 
 @end

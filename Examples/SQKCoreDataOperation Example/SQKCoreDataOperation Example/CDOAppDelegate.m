@@ -8,12 +8,12 @@
 
 #import "CDOAppDelegate.h"
 #import "CDOGithubAPIClient.h"
-#import "CDODataSychroniser.h"
+#import "CDODataSynchroniser.h"
 #import "SQKContextManager.h"
 #import "CDORunningTestsHelper.h"
 
 @interface CDOAppDelegate ()
-@property (nonatomic, strong) CDODataSychroniser *dataSynchroniser;
+@property (nonatomic, strong) CDODataSynchroniser *dataSynchroniser;
 @property (nonatomic, strong) SQKContextManager *contextManager;
 @end
 
@@ -35,7 +35,7 @@
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
 
-	self.dataSynchroniser = [[CDODataSychroniser alloc] initWithContextManager:self.contextManager];
+	self.dataSynchroniser = [[CDODataSynchroniser alloc] initWithContextManager:self.contextManager];
 	[self.dataSynchroniser synchronise];
 
 	return YES;

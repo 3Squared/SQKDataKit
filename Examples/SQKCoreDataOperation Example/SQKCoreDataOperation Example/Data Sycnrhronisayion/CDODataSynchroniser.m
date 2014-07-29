@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 3Squared Ltd. All rights reserved.
 //
 
-#import "CDODataSychroniser.h"
+#import "CDODataSynchroniser.h"
 #import "SQKContextManager.h"
 #import "SQKCoreDataOperation.h"
 #import "CDOCommitImportOperation.h"
 #import "CDOUserImportOperation.h"
 
-@interface CDODataSychroniser ()
+@interface CDODataSynchroniser ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, assign, readwrite) BOOL isSynchronising;
@@ -21,7 +21,7 @@
 @property (nonatomic, assign) NSUInteger currentSynchroniseBlockIndex;
 @end
 
-@implementation CDODataSychroniser
+@implementation CDODataSynchroniser
 
 #pragma mark - Public
 
@@ -54,29 +54,18 @@
 	    ];
 	self.currentSynchroniseBlockIndex = 0;
 
-	[self exectuteNextSynchroniseBlock];
+	[self executeNextSynchroniseBlock];
 }
 
 /**
  *  Executes the next block in self.synchroniseBlocks. If not more blocks then data sychronisation is finished.
  */
-- (void)exectuteNextSynchroniseBlock {
+- (void)executeNextSynchroniseBlock {
 	if (self.currentSynchroniseBlockIndex < self.synchroniseBlocks.count) {
 		void (^syncBlock)(void) = self.synchroniseBlocks[self.currentSynchroniseBlockIndex];
 		syncBlock();
 
 		++self.currentSynchroniseBlockIndex;
-	}
-	else {
-		[self setSynchroniseFinish];
-	}
-}
-
-- (void)handleSynchroniseFinish {
-	--self.pendingSyncs;
-	if (self.pendingSyncs > 0) {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-		[self setSynchroniseFinish];
 	}
 	else {
 		[self setSynchroniseFinish];
@@ -110,7 +99,7 @@
 	[operation setCompletionBlock: ^{
 	    CDOCommitImportOperation *strongOperation = weakOperation;
 	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self exectuteNextSynchroniseBlock];
+	        [self executeNextSynchroniseBlock];
 		}
 	    else {
 	        NSLog(@"Commit Import Error");
@@ -126,7 +115,7 @@
 	[operation setCompletionBlock: ^{
 	    CDOUserImportOperation *strongOperation = weakOperation;
 	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self exectuteNextSynchroniseBlock];
+	        [self executeNextSynchroniseBlock];
 		}
 	    else {
 	        NSLog(@"User Import Error");

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class SQKContextManager;
-@interface CDODataSychroniser : NSObject
+@interface CDODataSynchroniser : NSObject
 
 @property (nonatomic, strong, readonly) SQKContextManager *contextManager;
 @property (nonatomic, assign, readonly) BOOL isSynchronising;
