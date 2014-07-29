@@ -129,7 +129,7 @@
 	        [self exectuteNextSynchroniseBlock];
 		}
 	    else {
-	        NSLog(@"Users Import Error");
+	        NSLog(@"User Import Error");
 		}
 	}];
 	[self.operationQueue addOperation:operation];
