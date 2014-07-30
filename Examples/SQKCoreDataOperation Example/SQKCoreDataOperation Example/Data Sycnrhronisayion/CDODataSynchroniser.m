@@ -17,8 +17,6 @@
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, assign, readwrite) BOOL isSynchronising;
 @property (nonatomic, assign, readwrite) NSInteger pendingSyncs;
-@property (nonatomic, strong) NSArray *synchroniseBlocks;
-@property (nonatomic, assign) NSUInteger currentSynchroniseBlockIndex;
 @end
 
 @implementation CDODataSynchroniser
@@ -46,82 +44,38 @@
 - (void)startSynchronise {
 	NSLog(@"Starting Synchronise");
 	self.isSynchronising = YES;
+	
+	CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager];
+	CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager];
 
-	// The synchronise work to do
-	self.synchroniseBlocks = @[
-	        ^{ [self synchroniseCommits]; },
-	        ^{ [self synchroniseUsers]; },
-	    ];
-	self.currentSynchroniseBlockIndex = 0;
-
-	[self executeNextSynchroniseBlock];
+	[userOperation addDependency:commitOperation];
+	
+	[self.operationQueue addOperation:commitOperation];
+	[self.operationQueue addOperation:userOperation];
+	
+	[self.operationQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
-/**
- *  Executes the next block in self.synchroniseBlocks. If not more blocks then data sychronisation is finished.
- */
-- (void)executeNextSynchroniseBlock {
-	if (self.currentSynchroniseBlockIndex < self.synchroniseBlocks.count) {
-		void (^syncBlock)(void) = self.synchroniseBlocks[self.currentSynchroniseBlockIndex];
-		syncBlock();
-
-		++self.currentSynchroniseBlockIndex;
-	}
-	else {
-		[self setSynchroniseFinish];
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (object == self.operationQueue && self.operationQueue.operationCount == 0) {
+		[self finishSynchronise];
 	}
 }
 
-- (void)setSynchroniseFinish {
+- (void)finishSynchronise {
 	[[NSOperationQueue mainQueue] addOperationWithBlock: ^{
-	    NSLog(@"Finished Synchronise");
-	    self.isSynchronising = NO;
-	    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+		--self.pendingSyncs;
+		if (self.pendingSyncs > 0) {
+			[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+			[self startSynchronise];
+		}
+		else {
+			NSLog(@"Finished Synchronise");
+			self.isSynchronising = NO;
+			[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+		}
+		
 	}];
-}
-
-- (BOOL)operationFinishedWithoutError:(SQKCoreDataOperation *)dataOperation {
-	NSError *error = [dataOperation error];
-	if (error) {
-		[self setSynchroniseFinish];
-		self.pendingSyncs = 0;
-		return NO;
-	}
-	return YES;
-}
-
-#pragma mark - Synchronising methods
-
-- (void)synchroniseCommits {
-	CDOCommitImportOperation *operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager];
-	__weak typeof(CDOCommitImportOperation *) weakOperation = operation;
-
-	[operation setCompletionBlock: ^{
-	    CDOCommitImportOperation *strongOperation = weakOperation;
-	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self executeNextSynchroniseBlock];
-		}
-	    else {
-	        NSLog(@"Commit Import Error");
-		}
-	}];
-	[self.operationQueue addOperation:operation];
-}
-
-- (void)synchroniseUsers {
-	CDOUserImportOperation *operation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager];
-	__weak typeof(CDOUserImportOperation *) weakOperation = operation;
-
-	[operation setCompletionBlock: ^{
-	    CDOUserImportOperation *strongOperation = weakOperation;
-	    if ([self operationFinishedWithoutError:strongOperation]) {
-	        [self executeNextSynchroniseBlock];
-		}
-	    else {
-	        NSLog(@"User Import Error");
-		}
-	}];
-	[self.operationQueue addOperation:operation];
 }
 
 @end

@@ -19,6 +19,8 @@
 @implementation CDOUserImportOperation
 
 - (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+	NSLog(@"Executing CDOCommitImportOperation");
+	
 	NSMutableArray *usersJSON = [NSMutableArray array];
 
 	NSFetchRequest *fetchRequest = [User sqk_fetchRequest];
