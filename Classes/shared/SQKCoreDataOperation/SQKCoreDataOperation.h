@@ -6,7 +6,8 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import CoreData;
 
 @class SQKContextManager;
 

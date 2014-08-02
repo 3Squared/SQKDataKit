@@ -7,7 +7,6 @@
 //
 
 #import "SQKFetchedTableViewController.h"
-#import "SQKDataKit.h"
 
 #define mustOverride()                                                                                            \
     @throw [NSException                                                                                           \

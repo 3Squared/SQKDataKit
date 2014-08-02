@@ -1,3 +1,11 @@
+target "SQKDataKit" do
+    pod 'SQKDataKit/ContextManager', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/ManagedObjectExtensions', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/ManagedObjectController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/FetchedTableViewController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/CoreDataOperation', :path => '../SQKDataKit.podspec'
+end
+
 target "SQKDataKitTests" do
 	pod 'OCMock', '~> 2.2.1'
     pod 'AGAsyncTestHelper', '~> 1.0'

@@ -8,8 +8,9 @@
 
 #import "SQKAppDelegate.h"
 #import "SQKCommitsViewController.h"
-#import "SQKContextManager.h"
 #import "SQKMetricsViewController.h"
+
+#import <SQKDataKit/SQKContextManager.h>
 
 @interface SQKAppDelegate ()
 @property (nonatomic, readwrite, strong) SQKContextManager *contextManager;
