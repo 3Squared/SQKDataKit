@@ -3,9 +3,9 @@ PODS:
     - AGAsyncTestHelper/Core
   - AGAsyncTestHelper/Core (1.0)
   - OCMock (2.2.4)
-  - SQKDataKit/Core (0.5.0)
+  - SQKDataKit/ContextManager (0.5.0)
   - SQKDataKit/CoreDataOperation (0.5.0):
-    - SQKDataKit/Core
+    - SQKDataKit/ContextManager
     - SQKDataKit/ManagedObjectExtensions
   - SQKDataKit/FetchedTableViewController (0.5.0)
   - SQKDataKit/ManagedObjectController (0.5.0)
@@ -14,7 +14,7 @@ PODS:
 DEPENDENCIES:
   - AGAsyncTestHelper (~> 1.0)
   - OCMock (~> 2.2.1)
-  - SQKDataKit/Core (from `../SQKDataKit.podspec`)
+  - SQKDataKit/ContextManager (from `../SQKDataKit.podspec`)
   - SQKDataKit/CoreDataOperation (from `../SQKDataKit.podspec`)
   - SQKDataKit/FetchedTableViewController (from `../SQKDataKit.podspec`)
   - SQKDataKit/ManagedObjectController (from `../SQKDataKit.podspec`)
@@ -27,6 +27,6 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AGAsyncTestHelper: fc9d44460933d8167ae431f466ab3a09a5121582
   OCMock: 6db79185520e24f9f299548f2b8b07e41d881bd5
-  SQKDataKit: 5285810c2b14bfe04c1e4ec14df5e3f3731923d3
+  SQKDataKit: 229bf6d7f0eefd9542b1b50aefa02837466f5f2b
 
 COCOAPODS: 0.33.1

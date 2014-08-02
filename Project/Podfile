@@ -1,5 +1,5 @@
 target "SQKDataKit" do
-    pod 'SQKDataKit/Core', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/ContextManager', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/ManagedObjectExtensions', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/ManagedObjectController', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/FetchedTableViewController', :path => '../SQKDataKit.podspec'
