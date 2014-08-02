@@ -45,6 +45,7 @@ Pod::Spec.new do |s|
 		ss.platform    = :ios, '6.0'
 		ss.source_files = 'Classes/ios/SQKFetchedTableViewController/**/*{h,m}'
 		ss.public_header_files = 'Classes/ios/SQKFetchedTableViewController.h'
+		ss.frameworks  = 'CoreData', 'UIKit'
 	end
 
 	s.subspec 'CoreDataOperation' do |ss|
