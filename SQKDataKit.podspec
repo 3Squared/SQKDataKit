@@ -26,9 +26,9 @@ Pod::Spec.new do |s|
 
 	s.source_files = 'Classes/shared/SQKDataKit.h'
 
-	s.subspec 'Core' do |ss|
+	s.subspec 'ContextManager' do |ss|
 		ss.source_files = 'Classes/shared/Core/**/*{h,m}'
-		ss.public_header_files = ['Classes/shared/Core/NSManagedObject+SQKAdditions.h', 'Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/SQKCoreDataOperation.h','Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h']
+		ss.public_header_files = ['Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h']
 	end
 
 	s.subspec 'ManagedObjectExtensions' do |ss|
@@ -51,7 +51,7 @@ Pod::Spec.new do |s|
 	s.subspec 'CoreDataOperation' do |ss|
 		ss.source_files = 'Classes/shared/SQKCoreDataOperation/**/*{h,m}'
 		ss.public_header_files = 'Classes/shared/SQKCoreDataOperation.h'
-    	ss.dependency 'SQKDataKit/Core'
+    	ss.dependency 'SQKDataKit/ContextManager'
     	ss.dependency 'SQKDataKit/ManagedObjectExtensions'
 	end
 end
