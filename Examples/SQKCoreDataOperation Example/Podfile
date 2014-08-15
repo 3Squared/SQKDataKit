@@ -1,0 +1,12 @@
+target "SQKCoreDataOperation Example" do
+	pod 'SQKDataKit/Core', :path => '../../SQKDataKit.podspec'
+	pod 'SQKDataKit/CoreDataOperation', :path => '../../SQKDataKit.podspec'
+end
+
+target "SQKCoreDataOperation ExampleTests" do
+	pod 'SQKDataKit/Core', :path => '../../SQKDataKit.podspec'
+	pod 'SQKDataKit/CoreDataOperation', :path => '../../SQKDataKit.podspec'
+    pod 'AGAsyncTestHelper', '~> 1.0'
+end
+
+
