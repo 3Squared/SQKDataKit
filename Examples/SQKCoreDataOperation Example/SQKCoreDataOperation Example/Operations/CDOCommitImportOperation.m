@@ -17,8 +17,8 @@
 @implementation CDOCommitImportOperation
 
 - (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
-	NSLog(@"Executing CDOCommitImportOperation");
-	
+	NSLog(@"Executing %@", NSStringFromClass([self class]));
+
 	NSError *error = nil;
 	NSArray *commits = [[CDOGithubAPIClient sharedInstance] getCommitsForRepo:@"sqkdatakit" error:&error];
 	if (error) {

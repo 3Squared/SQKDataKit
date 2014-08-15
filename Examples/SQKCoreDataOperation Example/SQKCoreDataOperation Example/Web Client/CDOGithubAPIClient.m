@@ -15,13 +15,13 @@ static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubA
 
 #pragma mark - Singleton setup
 + (CDOGithubAPIClient *)sharedInstance {
-    static CDOGithubAPIClient *sharedSingleton;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedSingleton = [[CDOGithubAPIClient alloc] init];
-    });
-    
-    return sharedSingleton;
+	static CDOGithubAPIClient *sharedSingleton;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+	    sharedSingleton = [[CDOGithubAPIClient alloc] init];
+	});
+
+	return sharedSingleton;
 }
 
 #pragma mark - Public
@@ -41,34 +41,34 @@ static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubA
 #pragma mark - Private
 
 - (NSURLRequest *)requestForAPIEndpoint:(NSString *)urlString webMethod:(NSString *)webMethod {
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", CDOHBaseURL, urlString]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
-    [request setValue:[NSString stringWithFormat:@"token %@", self.accessToken] forHTTPHeaderField:@"Authorization"];
-    [request setHTTPMethod:webMethod];
-    return request;
+	NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", CDOHBaseURL, urlString]];
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:URL];
+	[request setValue:[NSString stringWithFormat:@"token %@", self.accessToken] forHTTPHeaderField:@"Authorization"];
+	[request setHTTPMethod:webMethod];
+	return request;
 }
 
 - (id)sendSynchronousRequest:(NSURLRequest *)request error:(NSError **)error {
-	NSLog(@"%@", request);
-	
-    NSHTTPURLResponse *response = nil;
-    NSError *localError;
-    NSData *reponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&localError];
-    
-    id JSON = reponseData != nil ? [NSJSONSerialization JSONObjectWithData:reponseData options:0 error:NULL] : nil;
-    
+	NSLog(@"Github API call: %@", [[request URL] absoluteString]);
+
+	NSHTTPURLResponse *response = nil;
+	NSError *localError;
+	NSData *reponseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&localError];
+
+	id JSON = reponseData != nil ? [NSJSONSerialization JSONObjectWithData:reponseData options:0 error:NULL] : nil;
+
 	if (error) {
 		if ((response != nil && [response statusCode] != 200)) {
 			*error = [NSError errorWithDomain:CDOGithubAPIClientErrorDomain
-										 code:[response statusCode]
-									 userInfo:nil];
+			                             code:[response statusCode]
+			                         userInfo:nil];
 		}
 		else {
 			*error = localError;
 		}
 	}
-    
-    return JSON;
+
+	return JSON;
 }
 
 @end

@@ -19,8 +19,8 @@
 @implementation CDOUserImportOperation
 
 - (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
-	NSLog(@"Executing CDOCommitImportOperation");
-	
+	NSLog(@"Executing %@", NSStringFromClass([self class]));
+
 	NSMutableArray *usersJSON = [NSMutableArray array];
 
 	NSFetchRequest *fetchRequest = [User sqk_fetchRequest];
@@ -41,7 +41,7 @@
 }
 
 - (NSError *)error {
-    return self.operationError;
+	return self.operationError;
 }
 
 @end
