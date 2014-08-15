@@ -318,8 +318,7 @@
 				A3F9AD751986A1F400058B79 /* CDODataSynchroniser.h */,
 				A3F9AD761986A1F400058B79 /* CDODataSynchroniser.m */,
 			);
-			name = "Data Sycnrhronisation";
-			path = "Data Sycnrhronisayion";
+			path = "Data Sycnrhronisation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
