@@ -314,15 +314,13 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [self filterContentForSearchText:searchText
-                               scope:[self.searchController.searchBar selectedScopeButtonIndex]];
+    [self filterContent];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar
     selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
 {
-    [self filterContentForSearchText:searchBar.text
-                               scope:[self.searchController.searchBar selectedScopeButtonIndex]];
+    [self filterContent];
 }
 
 #pragma mark -
@@ -336,26 +334,20 @@
     self.searchFetchedResultsController = nil;
 }
 
-- (void)filterContentForSearchText:(NSString *)searchText scope:(NSInteger)scope
+- (void)filterContent
 {
     // update the filter, in this case just blow away the FRC and let lazy evaluation create another
     // with the relevant search info
     self.searchFetchedResultsController.delegate = nil;
     self.searchFetchedResultsController = nil;
+    [((UITableViewController *)self.searchController.searchResultsController).tableView reloadData];
 }
 
 #pragma mark - UISearchResultsUpdating
 
--(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    
-    NSString *searchString = [self.searchController.searchBar text];
-        
-    NSInteger selectedScopeButtonIndex = [self.searchController.searchBar selectedScopeButtonIndex];
-
-    [self filterContentForSearchText:searchString
-                               scope:selectedScopeButtonIndex];
-    
-    [((UITableViewController *)self.searchController.searchResultsController).tableView reloadData];
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    [self filterContent];
 }
 
 
