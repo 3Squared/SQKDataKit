@@ -23,7 +23,6 @@
 @interface SQKFetchedTableViewController () <UISearchBarDelegate, UISearchResultsUpdating, NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSFetchedResultsController *searchFetchedResultsController;
-@property (strong, nonatomic) UITableViewController *searchResultsController;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, assign, readwrite) BOOL searchIsActive;
 @end
