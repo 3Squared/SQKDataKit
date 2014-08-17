@@ -13,8 +13,7 @@
 This class provides a simpler way to replicate the often-used pattern of a searchable Core
 Data-backed table view. Must be used as a subclass.
  */
-@interface SQKFetchedTableViewController
-    : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
+@interface SQKFetchedTableViewController : UITableViewController
 
 /**
  *  Initialises a Core Data-backed UITableViewController with a configured with a
@@ -42,10 +41,10 @@ Data-backed table view. Must be used as a subclass.
 @property (nonatomic, assign, readonly) BOOL searchIsActive;
 
 /**
- The UISearchDisplayController used to manage the search interface.
+ The UISearchController used to manage the search interface.
  @discussion You can customise it in your subclass to enable scope buttons, etc.
  */
-@property (strong, nonatomic, readonly) UISearchDisplayController *searchController;
+@property (strong, nonatomic, readonly) UISearchController *searchController;
 
 @property (strong, nonatomic) UIView *emptyView;
 

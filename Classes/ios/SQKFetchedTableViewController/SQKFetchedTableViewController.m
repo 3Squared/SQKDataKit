@@ -20,9 +20,10 @@
                               stringWithFormat:@"%s must be set in your subclass init method", __PRETTY_FUNCTION__] \
                  userInfo:nil]
 
-@interface SQKFetchedTableViewController ()
+@interface SQKFetchedTableViewController () <UISearchBarDelegate, UISearchResultsUpdating, NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSFetchedResultsController *searchFetchedResultsController;
+@property (strong, nonatomic) UITableViewController *searchResultsController;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, assign, readwrite) BOOL searchIsActive;
 @end
@@ -43,15 +44,23 @@
 {
     [super viewDidLoad];
 
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    _searchController =
-        [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    self.searchController.searchResultsDelegate = self;
-    self.searchController.searchResultsDataSource = self;
-    self.searchController.delegate = self;
-    self.searchController.searchBar.frame = CGRectMake(0, 0, 0, 44);
-    self.searchController.searchBar.delegate = self;
-    self.tableView.tableHeaderView = searchBar;
+    _searchResultsController = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.searchResultsController.tableView.dataSource = self;
+    self.searchResultsController.tableView.delegate = self;
+
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:self.searchResultsController];
+    
+    self.searchController.searchResultsUpdater = self;
+    
+    self.searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x,
+                                                       self.searchController.searchBar.frame.origin.y,
+                                                       self.searchController.searchBar.frame.size.width,
+                                                       44.0);
+    
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    
+    self.definesPresentationContext = YES;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -61,29 +70,6 @@
     [self showEmptyView:([[[self activeFetchedResultsController] fetchedObjects] count] == 0)];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    _fetchedResultsController.delegate = nil;
-    _searchFetchedResultsController.delegate = nil;
-    _searchController.delegate = nil;
-    _searchController.searchResultsDelegate = nil;
-    _searchController.searchResultsDataSource = nil;
-    _searchController.searchBar.delegate = nil;
-    _searchController = nil;
-    [super didReceiveMemoryWarning];
-}
-
-- (void)dealloc
-{
-    _fetchedResultsController.delegate = nil;
-    _searchFetchedResultsController.delegate = nil;
-    _searchController.delegate = nil;
-    _searchController.searchResultsDelegate = nil;
-    _searchController.searchResultsDataSource = nil;
-    _searchController.searchBar.delegate = nil;
-    _searchController = nil;
-}
-
 #pragma mark -
 #pragma mark Fetched results controller data source
 
@@ -91,7 +77,7 @@
 {
     return [self activeFetchedResultsController] == self.fetchedResultsController ?
                self.tableView :
-               self.searchController.searchResultsTableView;
+               self.searchResultsController.tableView;
 }
 
 - (NSFetchedResultsController *)activeFetchedResultsController
@@ -151,7 +137,7 @@
     [self.managedObjectContext performBlockAndWait:^{
         UITableView *tableView = controller == self.fetchedResultsController ?
                                      self.tableView :
-                                     self.searchController.searchResultsTableView;
+                                     self.searchResultsController.tableView;
         [tableView beginUpdates];
     }];
 }
@@ -161,7 +147,7 @@
     [self.managedObjectContext performBlockAndWait:^{
         UITableView *tableView = controller == self.fetchedResultsController ?
                                      self.tableView :
-                                     self.searchController.searchResultsTableView;
+                                     self.searchResultsController.tableView;
         [tableView endUpdates];
     }];
 }
@@ -175,7 +161,7 @@
 
         UITableView *tableView = controller == self.fetchedResultsController ?
                                      self.tableView :
-                                     self.searchController.searchResultsTableView;
+                                     self.searchResultsController.tableView;
 
         switch (type)
         {
@@ -202,7 +188,7 @@
 
         UITableView *tableView = controller == self.fetchedResultsController ?
                                      self.tableView :
-                                     self.searchController.searchResultsTableView;
+                                     self.searchResultsController.tableView;
 
         [self showEmptyView:([[controller fetchedObjects] count] == 0)];
 
@@ -359,37 +345,22 @@
     self.searchFetchedResultsController = nil;
 }
 
-#pragma mark -
-#pragma mark Search Bar
-- (void)searchController:(UISearchDisplayController *)controller
-    willUnloadSearchResultsTableView:(UITableView *)tableView;
-{
-    // search is done so get rid of the search FRC and reclaim memory
-    self.searchFetchedResultsController.delegate = nil;
-    self.searchFetchedResultsController = nil;
-}
+#pragma mark - UISearchResultsUpdating
 
-- (BOOL)searchController:(UISearchDisplayController *)controller
-    shouldReloadTableForSearchString:(NSString *)searchString
-{
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    
+    NSString *searchString = [self.searchController.searchBar text];
+        
+    NSInteger selectedScopeButtonIndex = [self.searchController.searchBar selectedScopeButtonIndex];
+
     [self filterContentForSearchText:searchString
-                               scope:[self.searchController.searchBar selectedScopeButtonIndex]];
-
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
+                               scope:selectedScopeButtonIndex];
+    
+    [((UITableViewController *)self.searchController.searchResultsController).tableView reloadData];
 }
 
 
-- (BOOL)searchController:(UISearchDisplayController *)controller
-    shouldReloadTableForSearchScope:(NSInteger)searchOption
-{
-    [self filterContentForSearchText:[self.searchController.searchBar text]
-                               scope:[self.searchController.searchBar selectedScopeButtonIndex]];
-
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
-}
-
+#pragma mark - Empty View
 
 - (void)showEmptyView:(BOOL)show
 {

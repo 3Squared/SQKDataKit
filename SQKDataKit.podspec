@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 	s.framework  = 'CoreData'
 	s.requires_arc = true
 
-	s.ios.deployment_target = '6.0'
+	s.ios.deployment_target = '8.0'
 	s.osx.deployment_target = '10.9'
 
 	s.source_files = 'Classes/shared/SQKDataKit.h'
@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
 	end
 
 	s.subspec 'FetchedTableViewController' do |ss|
-		ss.platform    = :ios, '6.0'
+		ss.platform    = :ios, '8.0'
 		ss.source_files = 'Classes/ios/SQKFetchedTableViewController/**/*{h,m}'
 		ss.public_header_files = 'Classes/ios/SQKFetchedTableViewController.h'
 		ss.frameworks  = 'CoreData', 'UIKit'
