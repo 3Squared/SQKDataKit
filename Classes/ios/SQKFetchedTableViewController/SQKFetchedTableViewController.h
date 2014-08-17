@@ -50,7 +50,7 @@ Data-backed table view. Must be used as a subclass.
  The UITableViewController in which search results are displayed.
  @discussion You can customise it in your subclass to enable header views, etc.
 */
-@property (strong, nonatomic) UITableViewController *searchResultsController;
+@property (strong, nonatomic, readonly) UITableViewController *searchResultsController;
 
 @property (strong, nonatomic) UIView *emptyView;
 
