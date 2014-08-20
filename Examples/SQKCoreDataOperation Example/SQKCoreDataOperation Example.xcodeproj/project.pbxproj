@@ -1,0 +1,754 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		52148E70C4614C26B65911B3 /* libPods-SQKCoreDataOperation ExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */; };
+		A3256C3019852D630063B939 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C2F19852D630063B939 /* Foundation.framework */; };
+		A3256C3219852D630063B939 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3119852D630063B939 /* CoreGraphics.framework */; };
+		A3256C3419852D630063B939 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3319852D630063B939 /* UIKit.framework */; };
+		A3256C3619852D630063B939 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3519852D630063B939 /* CoreData.framework */; };
+		A3256C3C19852D630063B939 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3256C3A19852D630063B939 /* InfoPlist.strings */; };
+		A3256C3E19852D630063B939 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C3D19852D630063B939 /* main.m */; };
+		A3256C4219852D630063B939 /* CDOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C4119852D630063B939 /* CDOAppDelegate.m */; };
+		A3256C4519852D630063B939 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3256C4319852D630063B939 /* Main_iPhone.storyboard */; };
+		A3256C4819852D630063B939 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3256C4619852D630063B939 /* Main_iPad.storyboard */; };
+		A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A3256C4919852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld */; };
+		A3256C5319852D630063B939 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3256C5219852D630063B939 /* Images.xcassets */; };
+		A3256C5A19852D630063B939 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C5919852D630063B939 /* XCTest.framework */; };
+		A3256C5B19852D630063B939 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C2F19852D630063B939 /* Foundation.framework */; };
+		A3256C5C19852D630063B939 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3319852D630063B939 /* UIKit.framework */; };
+		A3256C5D19852D630063B939 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3256C3519852D630063B939 /* CoreData.framework */; };
+		A3256C6519852D630063B939 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3256C6319852D630063B939 /* InfoPlist.strings */; };
+		A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C71198535C20063B939 /* CDOGithubAPIClient.m */; };
+		A3256C78198539AF0063B939 /* GithubToken.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3256C77198539AF0063B939 /* GithubToken.plist */; };
+		A3256C7E1985676C0063B939 /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C7D1985676C0063B939 /* Commit.m */; };
+		A3256C811985676D0063B939 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C801985676D0063B939 /* User.m */; };
+		A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */; };
+		A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C89198591870063B939 /* CDOCommitImporter.m */; };
+		A3256C8C198597FD0063B939 /* commits.json in Resources */ = {isa = PBXBuildFile; fileRef = A3256C8B198597FD0063B939 /* commits.json */; };
+		A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */; };
+		A3F9AD62198660BB00058B79 /* CDOUserImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD61198660BB00058B79 /* CDOUserImporter.m */; };
+		A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD64198660EA00058B79 /* CDODataImporter.m */; };
+		A3F9AD671986629C00058B79 /* users.json in Resources */ = {isa = PBXBuildFile; fileRef = A3F9AD661986629C00058B79 /* users.json */; };
+		A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */; };
+		A3F9AD6D1986881800058B79 /* CDOCommitImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */; };
+		A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */; };
+		A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */; };
+		A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */; };
+		A3F9AD771986A1F400058B79 /* CDODataSynchroniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD761986A1F400058B79 /* CDODataSynchroniser.m */; };
+		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A3256C5E19852D630063B939 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A3256C2419852D630063B939 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A3256C2B19852D630063B939;
+			remoteInfo = "SQKCoreDataOperation Example";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A3256C2C19852D630063B939 /* SQKCoreDataOperation Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SQKCoreDataOperation Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3256C2F19852D630063B939 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A3256C3119852D630063B939 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A3256C3319852D630063B939 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		A3256C3519852D630063B939 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A3256C3919852D630063B939 /* SQKCoreDataOperation Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SQKCoreDataOperation Example-Info.plist"; sourceTree = "<group>"; };
+		A3256C3B19852D630063B939 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A3256C3D19852D630063B939 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A3256C3F19852D630063B939 /* SQKCoreDataOperation Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SQKCoreDataOperation Example-Prefix.pch"; sourceTree = "<group>"; };
+		A3256C4019852D630063B939 /* CDOAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDOAppDelegate.h; sourceTree = "<group>"; };
+		A3256C4119852D630063B939 /* CDOAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDOAppDelegate.m; sourceTree = "<group>"; };
+		A3256C4419852D630063B939 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		A3256C4719852D630063B939 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		A3256C4A19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SQKCoreDataOperation_Example.xcdatamodel; sourceTree = "<group>"; };
+		A3256C5219852D630063B939 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A3256C5819852D630063B939 /* SQKCoreDataOperation ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SQKCoreDataOperation ExampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3256C5919852D630063B939 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		A3256C6219852D630063B939 /* SQKCoreDataOperation ExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SQKCoreDataOperation ExampleTests-Info.plist"; sourceTree = "<group>"; };
+		A3256C6419852D630063B939 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A3256C70198535C20063B939 /* CDOGithubAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOGithubAPIClient.h; sourceTree = "<group>"; };
+		A3256C71198535C20063B939 /* CDOGithubAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOGithubAPIClient.m; sourceTree = "<group>"; };
+		A3256C77198539AF0063B939 /* GithubToken.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GithubToken.plist; sourceTree = "<group>"; };
+		A3256C7C1985676C0063B939 /* Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commit.h; sourceTree = "<group>"; };
+		A3256C7D1985676C0063B939 /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
+		A3256C7F1985676D0063B939 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		A3256C801985676D0063B939 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporterTests.m; sourceTree = "<group>"; };
+		A3256C88198591870063B939 /* CDOCommitImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImporter.h; sourceTree = "<group>"; };
+		A3256C89198591870063B939 /* CDOCommitImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImporter.m; sourceTree = "<group>"; };
+		A3256C8B198597FD0063B939 /* commits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = commits.json; sourceTree = "<group>"; };
+		A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOJSONFixtureLoader.h; sourceTree = "<group>"; };
+		A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOJSONFixtureLoader.m; sourceTree = "<group>"; };
+		A3256C931985AB260063B939 /* CDORunningTestsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDORunningTestsHelper.h; sourceTree = "<group>"; };
+		A3F9AD60198660BB00058B79 /* CDOUserImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOUserImporter.h; sourceTree = "<group>"; };
+		A3F9AD61198660BB00058B79 /* CDOUserImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImporter.m; sourceTree = "<group>"; };
+		A3F9AD63198660EA00058B79 /* CDODataImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = CDODataImporter.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		A3F9AD64198660EA00058B79 /* CDODataImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = CDODataImporter.m; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; wrapsLines = 1; };
+		A3F9AD661986629C00058B79 /* users.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = users.json; sourceTree = "<group>"; };
+		A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImporterTests.m; sourceTree = "<group>"; };
+		A3F9AD6B1986881800058B79 /* CDOCommitImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOCommitImportOperation.h; sourceTree = "<group>"; };
+		A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImportOperation.m; sourceTree = "<group>"; };
+		A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOCommitImportOperationTests.m; sourceTree = "<group>"; };
+		A3F9AD70198697E200058B79 /* CDOUserImportOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOUserImportOperation.h; sourceTree = "<group>"; };
+		A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperation.m; sourceTree = "<group>"; };
+		A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperationTests.m; sourceTree = "<group>"; };
+		A3F9AD751986A1F400058B79 /* CDODataSynchroniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDODataSynchroniser.h; sourceTree = "<group>"; };
+		A3F9AD761986A1F400058B79 /* CDODataSynchroniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDODataSynchroniser.m; sourceTree = "<group>"; };
+		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation Example.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation Example.xcconfig"; sourceTree = "<group>"; };
+		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SQKCoreDataOperation ExampleTests.xcconfig"; path = "Pods/Pods-SQKCoreDataOperation ExampleTests.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A3256C2919852D630063B939 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3256C3219852D630063B939 /* CoreGraphics.framework in Frameworks */,
+				A3256C3619852D630063B939 /* CoreData.framework in Frameworks */,
+				A3256C3419852D630063B939 /* UIKit.framework in Frameworks */,
+				A3256C3019852D630063B939 /* Foundation.framework in Frameworks */,
+				EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3256C5519852D630063B939 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3256C5A19852D630063B939 /* XCTest.framework in Frameworks */,
+				A3256C5D19852D630063B939 /* CoreData.framework in Frameworks */,
+				A3256C5C19852D630063B939 /* UIKit.framework in Frameworks */,
+				A3256C5B19852D630063B939 /* Foundation.framework in Frameworks */,
+				52148E70C4614C26B65911B3 /* libPods-SQKCoreDataOperation ExampleTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A3256C2319852D630063B939 = {
+			isa = PBXGroup;
+			children = (
+				A3256C3719852D630063B939 /* SQKCoreDataOperation Example */,
+				A3256C6019852D630063B939 /* SQKCoreDataOperation ExampleTests */,
+				A3256C2E19852D630063B939 /* Frameworks */,
+				A3256C2D19852D630063B939 /* Products */,
+				DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */,
+				EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		A3256C2D19852D630063B939 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C2C19852D630063B939 /* SQKCoreDataOperation Example.app */,
+				A3256C5819852D630063B939 /* SQKCoreDataOperation ExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A3256C2E19852D630063B939 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C2F19852D630063B939 /* Foundation.framework */,
+				A3256C3119852D630063B939 /* CoreGraphics.framework */,
+				A3256C3319852D630063B939 /* UIKit.framework */,
+				A3256C3519852D630063B939 /* CoreData.framework */,
+				A3256C5919852D630063B939 /* XCTest.framework */,
+				D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */,
+				DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A3256C3719852D630063B939 /* SQKCoreDataOperation Example */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C4019852D630063B939 /* CDOAppDelegate.h */,
+				A3256C4119852D630063B939 /* CDOAppDelegate.m */,
+				A3256C931985AB260063B939 /* CDORunningTestsHelper.h */,
+				A3F9AD78198796C900058B79 /* Data Sycnrhronisation */,
+				A3F9AD6A198687F200058B79 /* Operations */,
+				A3F9AD5F19865FBD00058B79 /* Data Import */,
+				A3256C74198539220063B939 /* Web Client */,
+				A3256C7B198564D40063B939 /* Model */,
+				A3256C79198564C20063B939 /* View */,
+				A3256C7A198564C80063B939 /* View Controller */,
+				A3256C3819852D630063B939 /* Supporting Files */,
+			);
+			path = "SQKCoreDataOperation Example";
+			sourceTree = "<group>";
+		};
+		A3256C3819852D630063B939 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C3919852D630063B939 /* SQKCoreDataOperation Example-Info.plist */,
+				A3256C3A19852D630063B939 /* InfoPlist.strings */,
+				A3256C3D19852D630063B939 /* main.m */,
+				A3256C3F19852D630063B939 /* SQKCoreDataOperation Example-Prefix.pch */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A3256C6019852D630063B939 /* SQKCoreDataOperation ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD5C19865F9700058B79 /* Tests */,
+				A3F9AD5D19865F9E00058B79 /* Helpers */,
+				A3F9AD5E19865FA800058B79 /* Test Data */,
+				A3256C6119852D630063B939 /* Supporting Files */,
+			);
+			path = "SQKCoreDataOperation ExampleTests";
+			sourceTree = "<group>";
+		};
+		A3256C6119852D630063B939 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C6219852D630063B939 /* SQKCoreDataOperation ExampleTests-Info.plist */,
+				A3256C6319852D630063B939 /* InfoPlist.strings */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A3256C74198539220063B939 /* Web Client */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C70198535C20063B939 /* CDOGithubAPIClient.h */,
+				A3256C71198535C20063B939 /* CDOGithubAPIClient.m */,
+				A3256C77198539AF0063B939 /* GithubToken.plist */,
+			);
+			path = "Web Client";
+			sourceTree = "<group>";
+		};
+		A3256C79198564C20063B939 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C4319852D630063B939 /* Main_iPhone.storyboard */,
+				A3256C4619852D630063B939 /* Main_iPad.storyboard */,
+				A3256C5219852D630063B939 /* Images.xcassets */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A3256C7A198564C80063B939 /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "View Controller";
+			sourceTree = "<group>";
+		};
+		A3256C7B198564D40063B939 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C4919852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld */,
+				A3256C7F1985676D0063B939 /* User.h */,
+				A3256C801985676D0063B939 /* User.m */,
+				A3256C7C1985676C0063B939 /* Commit.h */,
+				A3256C7D1985676C0063B939 /* Commit.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A3F9AD5C19865F9700058B79 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C8619858EEF0063B939 /* CDOCommitImporterTests.m */,
+				A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */,
+				A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */,
+				A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		A3F9AD5D19865F9E00058B79 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A3256C90198599000063B939 /* CDOJSONFixtureLoader.h */,
+				A3256C91198599000063B939 /* CDOJSONFixtureLoader.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A3F9AD5E19865FA800058B79 /* Test Data */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD661986629C00058B79 /* users.json */,
+				A3256C8B198597FD0063B939 /* commits.json */,
+			);
+			path = "Test Data";
+			sourceTree = "<group>";
+		};
+		A3F9AD5F19865FBD00058B79 /* Data Import */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD63198660EA00058B79 /* CDODataImporter.h */,
+				A3F9AD64198660EA00058B79 /* CDODataImporter.m */,
+				A3256C88198591870063B939 /* CDOCommitImporter.h */,
+				A3256C89198591870063B939 /* CDOCommitImporter.m */,
+				A3F9AD60198660BB00058B79 /* CDOUserImporter.h */,
+				A3F9AD61198660BB00058B79 /* CDOUserImporter.m */,
+			);
+			path = "Data Import";
+			sourceTree = "<group>";
+		};
+		A3F9AD6A198687F200058B79 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD6B1986881800058B79 /* CDOCommitImportOperation.h */,
+				A3F9AD6C1986881800058B79 /* CDOCommitImportOperation.m */,
+				A3F9AD70198697E200058B79 /* CDOUserImportOperation.h */,
+				A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		A3F9AD78198796C900058B79 /* Data Sycnrhronisation */ = {
+			isa = PBXGroup;
+			children = (
+				A3F9AD751986A1F400058B79 /* CDODataSynchroniser.h */,
+				A3F9AD761986A1F400058B79 /* CDODataSynchroniser.m */,
+			);
+			path = "Data Sycnrhronisation";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A3256C2B19852D630063B939 /* SQKCoreDataOperation Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3256C6A19852D630063B939 /* Build configuration list for PBXNativeTarget "SQKCoreDataOperation Example" */;
+			buildPhases = (
+				1D0F0820A5FD4C6AAB7280A0 /* Check Pods Manifest.lock */,
+				A3256C2819852D630063B939 /* Sources */,
+				A3256C2919852D630063B939 /* Frameworks */,
+				A3256C2A19852D630063B939 /* Resources */,
+				9FA14E29F8B441AEA2224ECD /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SQKCoreDataOperation Example";
+			productName = "SQKCoreDataOperation Example";
+			productReference = A3256C2C19852D630063B939 /* SQKCoreDataOperation Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A3256C5719852D630063B939 /* SQKCoreDataOperation ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3256C6D19852D630063B939 /* Build configuration list for PBXNativeTarget "SQKCoreDataOperation ExampleTests" */;
+			buildPhases = (
+				693C1FBB6A6440A1A5272D4D /* Check Pods Manifest.lock */,
+				A3256C5419852D630063B939 /* Sources */,
+				A3256C5519852D630063B939 /* Frameworks */,
+				A3256C5619852D630063B939 /* Resources */,
+				F70C45A74C8E46908A69406C /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A3256C5F19852D630063B939 /* PBXTargetDependency */,
+			);
+			name = "SQKCoreDataOperation ExampleTests";
+			productName = "SQKCoreDataOperation ExampleTests";
+			productReference = A3256C5819852D630063B939 /* SQKCoreDataOperation ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A3256C2419852D630063B939 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = CDO;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "3Squared Ltd";
+				TargetAttributes = {
+					A3256C5719852D630063B939 = {
+						TestTargetID = A3256C2B19852D630063B939;
+					};
+				};
+			};
+			buildConfigurationList = A3256C2719852D630063B939 /* Build configuration list for PBXProject "SQKCoreDataOperation Example" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A3256C2319852D630063B939;
+			productRefGroup = A3256C2D19852D630063B939 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A3256C2B19852D630063B939 /* SQKCoreDataOperation Example */,
+				A3256C5719852D630063B939 /* SQKCoreDataOperation ExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A3256C2A19852D630063B939 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3256C4819852D630063B939 /* Main_iPad.storyboard in Resources */,
+				A3256C5319852D630063B939 /* Images.xcassets in Resources */,
+				A3256C78198539AF0063B939 /* GithubToken.plist in Resources */,
+				A3256C4519852D630063B939 /* Main_iPhone.storyboard in Resources */,
+				A3256C3C19852D630063B939 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3256C5619852D630063B939 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3F9AD671986629C00058B79 /* users.json in Resources */,
+				A3256C8C198597FD0063B939 /* commits.json in Resources */,
+				A3256C6519852D630063B939 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1D0F0820A5FD4C6AAB7280A0 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		693C1FBB6A6440A1A5272D4D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9FA14E29F8B441AEA2224ECD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-SQKCoreDataOperation Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F70C45A74C8E46908A69406C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-SQKCoreDataOperation ExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A3256C2819852D630063B939 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3256C811985676D0063B939 /* User.m in Sources */,
+				A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */,
+				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
+				A3256C7E1985676C0063B939 /* Commit.m in Sources */,
+				A3F9AD771986A1F400058B79 /* CDODataSynchroniser.m in Sources */,
+				A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */,
+				A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */,
+				A3F9AD6D1986881800058B79 /* CDOCommitImportOperation.m in Sources */,
+				A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */,
+				A3256C3E19852D630063B939 /* main.m in Sources */,
+				A3256C4219852D630063B939 /* CDOAppDelegate.m in Sources */,
+				A3F9AD62198660BB00058B79 /* CDOUserImporter.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3256C5419852D630063B939 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */,
+				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
+				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
+				A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */,
+				A3F9AD69198662E200058B79 /* CDOUserImporterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A3256C5F19852D630063B939 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A3256C2B19852D630063B939 /* SQKCoreDataOperation Example */;
+			targetProxy = A3256C5E19852D630063B939 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A3256C3A19852D630063B939 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A3256C3B19852D630063B939 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		A3256C4319852D630063B939 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A3256C4419852D630063B939 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		A3256C4619852D630063B939 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A3256C4719852D630063B939 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		A3256C6319852D630063B939 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A3256C6419852D630063B939 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A3256C6819852D630063B939 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A3256C6919852D630063B939 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A3256C6B19852D630063B939 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Prefix.pch";
+				INFOPLIST_FILE = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		A3256C6C19852D630063B939 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCE0D618DB72426F97EDEE76 /* Pods-SQKCoreDataOperation Example.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Prefix.pch";
+				INFOPLIST_FILE = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		A3256C6E19852D630063B939 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKCoreDataOperation Example.app/SQKCoreDataOperation Example";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "SQKCoreDataOperation ExampleTests/Supporting Files/SQKCoreDataOperation ExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		A3256C6F19852D630063B939 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE999D2F81B04F89B27EA599 /* Pods-SQKCoreDataOperation ExampleTests.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SQKCoreDataOperation Example.app/SQKCoreDataOperation Example";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SQKCoreDataOperation Example/Supporting Files/SQKCoreDataOperation Example-Prefix.pch";
+				INFOPLIST_FILE = "SQKCoreDataOperation ExampleTests/Supporting Files/SQKCoreDataOperation ExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A3256C2719852D630063B939 /* Build configuration list for PBXProject "SQKCoreDataOperation Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3256C6819852D630063B939 /* Debug */,
+				A3256C6919852D630063B939 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3256C6A19852D630063B939 /* Build configuration list for PBXNativeTarget "SQKCoreDataOperation Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3256C6B19852D630063B939 /* Debug */,
+				A3256C6C19852D630063B939 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3256C6D19852D630063B939 /* Build configuration list for PBXNativeTarget "SQKCoreDataOperation ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3256C6E19852D630063B939 /* Debug */,
+				A3256C6F19852D630063B939 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A3256C4919852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A3256C4A19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodel */,
+			);
+			currentVersion = A3256C4A19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodel */;
+			path = SQKCoreDataOperation_Example.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = A3256C2419852D630063B939 /* Project object */;
+}

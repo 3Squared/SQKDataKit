@@ -1,0 +1,287 @@
+[
+  {
+    "sha": "73b03a885f209c66ec61c255f8ea2707a9674dd9",
+    "commit": {
+      "author": {
+        "name": "Luke Stringer",
+        "email": "lukestringer630@gmail.com",
+        "date": "2014-07-27T12:32:01Z"
+      },
+      "committer": {
+        "name": "Luke Stringer",
+        "email": "lukestringer630@gmail.com",
+        "date": "2014-07-27T12:32:01Z"
+      },
+      "message": "Changed references to `SQKDataImportOperation` to `SQKCoreDataOperation`",
+      "tree": {
+        "sha": "6c223f41c4641e6d7cc04f035d261c50ddf54619",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/git/trees/6c223f41c4641e6d7cc04f035d261c50ddf54619"
+      },
+      "url": "https://api.github.com/repos/3squared/SQKDataKit/git/commits/73b03a885f209c66ec61c255f8ea2707a9674dd9",
+      "comment_count": 0
+    },
+    "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/73b03a885f209c66ec61c255f8ea2707a9674dd9",
+    "html_url": "https://github.com/3squared/SQKDataKit/commit/73b03a885f209c66ec61c255f8ea2707a9674dd9",
+    "comments_url": "https://api.github.com/repos/3squared/SQKDataKit/commits/73b03a885f209c66ec61c255f8ea2707a9674dd9/comments",
+    "author": {
+      "login": "lukestringer90",
+      "id": 987146,
+      "avatar_url": "https://avatars.githubusercontent.com/u/987146?",
+      "gravatar_id": "66df5cd089a2d9cbfaa7d42442156281",
+      "url": "https://api.github.com/users/lukestringer90",
+      "html_url": "https://github.com/lukestringer90",
+      "followers_url": "https://api.github.com/users/lukestringer90/followers",
+      "following_url": "https://api.github.com/users/lukestringer90/following{/other_user}",
+      "gists_url": "https://api.github.com/users/lukestringer90/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/lukestringer90/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/lukestringer90/subscriptions",
+      "organizations_url": "https://api.github.com/users/lukestringer90/orgs",
+      "repos_url": "https://api.github.com/users/lukestringer90/repos",
+      "events_url": "https://api.github.com/users/lukestringer90/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/lukestringer90/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "lukestringer90",
+      "id": 987146,
+      "avatar_url": "https://avatars.githubusercontent.com/u/987146?",
+      "gravatar_id": "66df5cd089a2d9cbfaa7d42442156281",
+      "url": "https://api.github.com/users/lukestringer90",
+      "html_url": "https://github.com/lukestringer90",
+      "followers_url": "https://api.github.com/users/lukestringer90/followers",
+      "following_url": "https://api.github.com/users/lukestringer90/following{/other_user}",
+      "gists_url": "https://api.github.com/users/lukestringer90/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/lukestringer90/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/lukestringer90/subscriptions",
+      "organizations_url": "https://api.github.com/users/lukestringer90/orgs",
+      "repos_url": "https://api.github.com/users/lukestringer90/repos",
+      "events_url": "https://api.github.com/users/lukestringer90/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/lukestringer90/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+        "html_url": "https://github.com/3squared/SQKDataKit/commit/3e719a0c5b24f6266af127d2bab5780bea0d2bd7"
+      }
+    ]
+  },
+  {
+    "sha": "3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+    "commit": {
+      "author": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T18:23:46Z"
+      },
+      "committer": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T18:23:46Z"
+      },
+      "message": "Merge pull request #8 from 3squared/operation-property-names\n\nOperation property names",
+      "tree": {
+        "sha": "d90990c9914700a82c37b7d52907add1dbcfe3bd",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/git/trees/d90990c9914700a82c37b7d52907add1dbcfe3bd"
+      },
+      "url": "https://api.github.com/repos/3squared/SQKDataKit/git/commits/3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+      "comment_count": 0
+    },
+    "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+    "html_url": "https://github.com/3squared/SQKDataKit/commit/3e719a0c5b24f6266af127d2bab5780bea0d2bd7",
+    "comments_url": "https://api.github.com/repos/3squared/SQKDataKit/commits/3e719a0c5b24f6266af127d2bab5780bea0d2bd7/comments",
+    "author": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "677fd325725bcf75a6110e2af55e0ec4e7b94730",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/677fd325725bcf75a6110e2af55e0ec4e7b94730",
+        "html_url": "https://github.com/3squared/SQKDataKit/commit/677fd325725bcf75a6110e2af55e0ec4e7b94730"
+      },
+      {
+        "sha": "fd17de5659d386d0cce4f9465c24ca938374a918",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/fd17de5659d386d0cce4f9465c24ca938374a918",
+        "html_url": "https://github.com/3squared/SQKDataKit/commit/fd17de5659d386d0cce4f9465c24ca938374a918"
+      }
+    ]
+  },
+  {
+    "sha": "fd17de5659d386d0cce4f9465c24ca938374a918",
+    "commit": {
+      "author": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T15:20:25Z"
+      },
+      "committer": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T15:20:25Z"
+      },
+      "message": "Return correct property value.",
+      "tree": {
+        "sha": "d90990c9914700a82c37b7d52907add1dbcfe3bd",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/git/trees/d90990c9914700a82c37b7d52907add1dbcfe3bd"
+      },
+      "url": "https://api.github.com/repos/3squared/SQKDataKit/git/commits/fd17de5659d386d0cce4f9465c24ca938374a918",
+      "comment_count": 0
+    },
+    "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/fd17de5659d386d0cce4f9465c24ca938374a918",
+    "html_url": "https://github.com/3squared/SQKDataKit/commit/fd17de5659d386d0cce4f9465c24ca938374a918",
+    "comments_url": "https://api.github.com/repos/3squared/SQKDataKit/commits/fd17de5659d386d0cce4f9465c24ca938374a918/comments",
+    "author": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "8538805da59b243f447fbcd6cf649db90f622c59",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/8538805da59b243f447fbcd6cf649db90f622c59",
+        "html_url": "https://github.com/3squared/SQKDataKit/commit/8538805da59b243f447fbcd6cf649db90f622c59"
+      }
+    ]
+  },
+  {
+    "sha": "8538805da59b243f447fbcd6cf649db90f622c59",
+    "commit": {
+      "author": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T10:52:13Z"
+      },
+      "committer": {
+        "name": "Sam Oakley",
+        "email": "sam@blork.co.uk",
+        "date": "2014-07-12T10:52:13Z"
+      },
+      "message": "Prefixed property names to prevent clashing.",
+      "tree": {
+        "sha": "ef3ddbf36e912ed6df6e05319503ed68a29e31f4",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/git/trees/ef3ddbf36e912ed6df6e05319503ed68a29e31f4"
+      },
+      "url": "https://api.github.com/repos/3squared/SQKDataKit/git/commits/8538805da59b243f447fbcd6cf649db90f622c59",
+      "comment_count": 0
+    },
+    "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/8538805da59b243f447fbcd6cf649db90f622c59",
+    "html_url": "https://github.com/3squared/SQKDataKit/commit/8538805da59b243f447fbcd6cf649db90f622c59",
+    "comments_url": "https://api.github.com/repos/3squared/SQKDataKit/commits/8538805da59b243f447fbcd6cf649db90f622c59/comments",
+    "author": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "blork",
+      "id": 116228,
+      "avatar_url": "https://avatars.githubusercontent.com/u/116228?",
+      "gravatar_id": "a71415d63c41e94c7cbc10797afeeedd",
+      "url": "https://api.github.com/users/blork",
+      "html_url": "https://github.com/blork",
+      "followers_url": "https://api.github.com/users/blork/followers",
+      "following_url": "https://api.github.com/users/blork/following{/other_user}",
+      "gists_url": "https://api.github.com/users/blork/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/blork/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/blork/subscriptions",
+      "organizations_url": "https://api.github.com/users/blork/orgs",
+      "repos_url": "https://api.github.com/users/blork/repos",
+      "events_url": "https://api.github.com/users/blork/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/blork/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4384fc7bf28b0cdbcbd7e043fa346be3f4c93bea",
+        "url": "https://api.github.com/repos/3squared/SQKDataKit/commits/4384fc7bf28b0cdbcbd7e043fa346be3f4c93bea",
+        "html_url": "https://github.com/3squared/SQKDataKit/commit/4384fc7bf28b0cdbcbd7e043fa346be3f4c93bea"
+      }
+    ]
+  }
+]

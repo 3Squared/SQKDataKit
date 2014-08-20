@@ -10,5 +10,5 @@
 
 @class Commit;
 @interface SQKCommitDetailViewController : UIViewController
-- (instancetype)initWithCommit:(Commit*)commit;
+- (instancetype)initWithCommit:(Commit *)commit;
 @end
