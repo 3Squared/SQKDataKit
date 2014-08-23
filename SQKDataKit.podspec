@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 	s.authors      = { 'Luke Stringer' => 'luke.stringer@3squared.com', 'Sam Oakley' => 'sam.oakley@3squared.com', 'Zack Brown' => 'zack.brown@3squared.com', 'Ken Boucher' => 'ken.boucher@3squared.com', 'Ste Prescott' => 'ste.prescott@3squared.com', 'Ben Walker' => 'ben.walker@3squared.com'}
 
 
-	s.source       = { :git => 'https://github.com/3squared/SQKDataKit.git', :tag => '#{s.version}' }
+	s.source       = { :git => 'https://github.com/3squared/SQKDataKit.git', :tag => "#{s.version}" }
 	s.framework  = 'CoreData'
 	s.requires_arc = true
 
