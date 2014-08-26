@@ -6,8 +6,9 @@
 //  Copyright (c) 2013 Sam Oakley. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
-#import <Foundation/Foundation.h>
+@import Foundation;
+@import CoreData;
+@import UIKit;
 
 /**
 This class provides a simpler way to replicate the often-used pattern of a searchable Core

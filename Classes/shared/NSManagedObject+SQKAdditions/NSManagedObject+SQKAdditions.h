@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 /**
  *  Domain for errors from SQKDataKit.

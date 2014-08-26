@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 3Squared. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>
+@import CoreData;
 
 @interface NSManagedObjectContext (SQKAdditions)
 

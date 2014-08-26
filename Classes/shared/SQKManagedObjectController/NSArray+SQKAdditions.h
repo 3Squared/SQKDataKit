@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Sam Oakley. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 @interface NSArray (SQKAdditions)
 - (NSIndexSet *)sqk_indexesOfObjects;

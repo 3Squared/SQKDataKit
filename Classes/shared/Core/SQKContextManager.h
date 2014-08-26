@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
+@import Foundation;
+@import CoreData;
 
 /**
  *  SQKContextManager creates and manages NSManagedObjectContext instances on your behalf.
