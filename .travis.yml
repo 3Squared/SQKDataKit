@@ -1,0 +1,5 @@
+language: objective-c
+before_install: 
+    - cd Project
+    - make install
+script: make test
