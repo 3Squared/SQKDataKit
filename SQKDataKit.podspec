@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 
 	s.subspec 'ContextManager' do |ss|
 		ss.source_files = 'Classes/shared/Core/**/*{h,m}'
-		ss.public_header_files = ['Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h']
+		ss.public_header_files = ['Classes/shared/Core/SQKContextManager.h', 'Classes/shared/Core/NSManagedObjectContext+SQKAdditions.h', 'Classes/shared/Core/NSPersistentStoreCoordinator+SQKAdditions.h']
 	end
 
 	s.subspec 'ManagedObjectExtensions' do |ss|
