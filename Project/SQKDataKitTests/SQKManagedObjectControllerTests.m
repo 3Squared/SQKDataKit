@@ -37,7 +37,7 @@
     self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     self.commit.sha = @"abcd";
     self.commit.date = [NSDate date];
-    [self.contextManager saveMainContext:nil];
+    [[self.contextManager mainContext] save:NULL];
 
     NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
@@ -126,7 +126,7 @@
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
 
-    [self.contextManager saveMainContext:nil];
+    [[self.contextManager mainContext] save:NULL];
 
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
@@ -292,7 +292,7 @@
     commit2.sha = @"Insert 2";
     commit2.date = [NSDate date];
 
-    [self.contextManager saveMainContext:nil];
+    [[self.contextManager mainContext] save:NULL];
 
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
@@ -302,7 +302,7 @@
     Commit *commit3 = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit3.sha = @"Insert 3";
     commit3.date = [NSDate date];
-    [self.contextManager saveMainContext:nil];
+    [[self.contextManager mainContext] save:NULL];
 
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");

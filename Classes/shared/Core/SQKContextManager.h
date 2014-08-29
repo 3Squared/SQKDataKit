@@ -75,14 +75,4 @@
  */
 - (NSManagedObjectContext *)newPrivateContext;
 
-/**
- *  A convenience method to save the main managed object context.
- *
- *  @param error A pointer to an NSError object. You do not need to create an NSError object. The
- *save operation aborts after the first failure if you pass NULL.
- *
- *  @return YES if the save succeeds, otherwise NO.
- */
-- (BOOL)saveMainContext:(NSError **)error;
-
 @end

@@ -127,16 +127,6 @@
     return context;
 }
 
-- (BOOL)saveMainContext:(NSError **)error
-{
-    if ([self.mainContext hasChanges])
-    {
-        [self.mainContext save:error];
-        return YES;
-    }
-    return NO;
-}
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self

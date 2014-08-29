@@ -160,34 +160,6 @@
 
 #pragma mark - Saving
 
-- (void)testSavesWhenThereAreChanges
-{
-    id contextWithChanges = [self mockMainContextWithStubbedHasChangesReturnValue:YES];
-    self.contextManager.mainContext = contextWithChanges;
-
-    [[contextWithChanges expect] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
-
-    NSError *saveError = nil;
-    BOOL didSave = [self.contextManager saveMainContext:&saveError];
-
-    XCTAssertTrue(didSave, @"");
-    [contextWithChanges verify];
-}
-
-- (void)testDoesNotSaveWhenThereAreNoChanges
-{
-    id contextWithoutChanges = [self mockMainContextWithStubbedHasChangesReturnValue:NO];
-    self.contextManager.mainContext = contextWithoutChanges;
-
-    [[contextWithoutChanges reject] save:(NSError * __autoreleasing *)[OCMArg anyPointer]];
-
-    NSError *saveError = nil;
-    BOOL didSave = [self.contextManager saveMainContext:&saveError];
-
-    XCTAssertFalse(didSave, @"");
-    [contextWithoutChanges verify];
-}
-
 - (void)testMergePropagatesChangesWhenMergingPrivateContextIsSaved
 {
     // Don't mock, testing IRL behavior.
