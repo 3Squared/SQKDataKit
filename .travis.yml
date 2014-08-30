@@ -1,5 +1,4 @@
 language: objective-c
-before_install: 
-    - cd Project
-    - make install
-script: make test
+podfile: Project/Podfile
+xcode_workspace: Project/SQKDataKit.xcworkspace
+xcode_scheme: SQKDataKit
