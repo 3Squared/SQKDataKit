@@ -1,4 +1,4 @@
 language: objective-c
-podfile: Project/Podfile
-xcode_workspace: Project/SQKDataKit.xcworkspace
-xcode_scheme: SQKDataKit
+before_install: 
+    - cd Project
+script: make travis-test

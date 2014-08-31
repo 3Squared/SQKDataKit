@@ -1,14 +1,18 @@
 PROJECT_NAME=SQKDataKit
 WORKSPACE=$(PROJECT_NAME).xcworkspace
-DEFAULT_SCHEME=$(PROJECT_NAME)
-DEFAULT_FLAGS=-sdk iphonesimulator
+SCHEME=$(PROJECT_NAME)
+SQK=iphonesimulator
 TESTING_TOOL=xcodebuild
 OUTPUT_PATH=test-report
 
-DEFAULT_TASK=$(TESTING_TOOL) -workspace $(WORKSPACE) -scheme $(DEFAULT_SCHEME) $(DEFAULT_FLAGS) test | xcpretty --color
+DEFAULT_TASK=xcodebuild -workspace $(WORKSPACE) -scheme $(SCHEME) -sdk $(SQK) clean test | xcpretty --color ; exit ${PIPESTATUS[0]}
 
 test:
 	$(DEFAULT_TASK)
+
+travis-test:
+	# travis-ci.org uses xctool rather than xcodebuild
+	xctool -workspace $(WORKSPACE) -scheme $(SCHEME) test -sdk $(SQK)
 
 report-junit:
 	$(DEFAULT_TASK) -r junit --output $(OUTPUT_PATH).xml
