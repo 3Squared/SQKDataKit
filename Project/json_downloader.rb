@@ -5,7 +5,7 @@ require 'pp'
 all_commits = []
 
 url = "https://api.github.com/repos/torvalds/linux/commits"
-token = "62ace8411c371516ebb3f237cfec017312a2bc2a"
+token = "your_token_here"
 
 iterations = 70
 
