@@ -12,7 +12,7 @@ test:
 
 travis-test:
 	# travis-ci.org uses xctool rather than xcodebuild
-	xctool -workspace $(WORKSPACE) -scheme $(SCHEME) test -sdk $(SQK)
+	xctool -workspace $(WORKSPACE) -scheme $(SCHEME) test -sdk $(SQK) ONLY_ACTIVE_ARCH=NO
 
 report-junit:
 	$(DEFAULT_TASK) -r junit --output $(OUTPUT_PATH).xml
