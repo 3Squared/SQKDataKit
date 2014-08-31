@@ -47,10 +47,6 @@
 
 #pragma mark - Helpers
 
-- (void)testFailureOnTravis {
-    XCTFail(@"This should fail");
-}
-
 - (id)mockMainContextWithStubbedHasChangesReturnValue:(BOOL)hasChanges
 {
     id mock = [OCMockObject mockForClass:[NSManagedObjectContext class]];
