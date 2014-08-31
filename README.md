@@ -1,4 +1,7 @@
-# SQKDataKit ![Version](https://cocoapod-badges.herokuapp.com/v/SQKDataKit/badge.png)&nbsp;![Platforms](https://cocoapod-badges.herokuapp.com/p/SQKDataKit/badge.png)
+# SQKDataKit 
+
+![Version](https://cocoapod-badges.herokuapp.com/v/SQKDataKit/badge.png)&nbsp;![Platforms](https://cocoapod-badges.herokuapp.com/p/SQKDataKit/badge.png)
+[![Build Status](https://travis-ci.org/3squared/SQKDataKit.svg?branch=master)](https://travis-ci.org/3squared/SQKDataKit)
 
 Collection of classes to make working with Core Data easier and help DRY-up your code. Provides convenience methods and classes for working in a multi-threaded environment with `NSManagedObject`s and `NSManagedObjectContext`s. Codifies some good practises for importing large data sets efficiently.
 
