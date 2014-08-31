@@ -1,3 +1,0 @@
-language: objective-c
-before_install: make install
-script: make test
