@@ -22,7 +22,7 @@ Data-backed table view. Must be used as a subclass.
  *UISearchDispalyController.
  *
  *  @param context The managed object context to use when query Core Data.
- *  @param style   A constant that specifies the style of table view that the controller object is
+ *  @param style A constant that specifies the style of table view that the controller object is
  *to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  *
  *  @return An initialized SQKFetchedTableViewController object or nil if the object couldn’t be
@@ -32,9 +32,31 @@ Data-backed table view. Must be used as a subclass.
                           style:(UITableViewStyle)style;
 
 /**
+ *  Initialises a Core Data-backed UITableViewController with a configured with a
+ *UISearchDispalyController.
+ *
+ *  @param context The managed object context to use when query Core Data.
+ *  @param searchingEnabled BOOL that when set to YES sets the table view controller's header view to a search view controller.
+ *  @param style A constant that specifies the style of table view that the controller object is
+ *to manage (UITableViewStylePlain or UITableViewStyleGrouped).
+ *
+ *  @return An initialized SQKFetchedTableViewController object or nil if the object couldn’t be
+ *created.
+ */
+- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
+               searchingEnabled:(BOOL)searchingEnabled
+                          style:(UITableViewStyle)style;
+
+/**
  *  The managed object context backing the fetched results controller.
  */
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+/**
+ *  BOOL that when set to YES sets the table view controller's header view to a search view controller.
+ *  Default is set to YES
+ */
+@property (nonatomic, assign) BOOL searchingEnabled;
 
 /**
  *  Returns YES if the user is actively searching, i.e. the search bar has begun editing. Returns NO

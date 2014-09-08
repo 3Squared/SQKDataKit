@@ -31,9 +31,19 @@
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
                           style:(UITableViewStyle)style
 {
+    return [self initWithContext:managedObjectContext
+                searchingEnabled:YES
+                           style:style];
+}
+
+- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
+              searchingEnabled:(BOOL)searchingEnabled
+                          style:(UITableViewStyle)style
+{
     if (self = [super initWithStyle:style])
     {
         self.managedObjectContext = managedObjectContext;
+        self.searchingEnabled = searchingEnabled;
     }
     return self;
 }
@@ -42,15 +52,18 @@
 {
     [super viewDidLoad];
 
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    _searchController =
+    if(self.searchingEnabled)
+    {
+        UISearchBar *searchBar = [[UISearchBar alloc] init];
+        _searchController =
         [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
-    self.searchController.searchResultsDelegate = self;
-    self.searchController.searchResultsDataSource = self;
-    self.searchController.delegate = self;
-    self.searchController.searchBar.frame = CGRectMake(0, 0, 0, 44);
-    self.searchController.searchBar.delegate = self;
-    self.tableView.tableHeaderView = searchBar;
+        self.searchController.searchResultsDelegate = self;
+        self.searchController.searchResultsDataSource = self;
+        self.searchController.delegate = self;
+        self.searchController.searchBar.frame = CGRectMake(0, 0, 0, 44);
+        self.searchController.searchBar.delegate = self;
+        self.tableView.tableHeaderView = searchBar;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -311,6 +324,7 @@
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
 {
+    self.searchIsActive = NO;
     [searchBar sizeToFit];
     [searchBar resignFirstResponder];
     return YES;
@@ -324,6 +338,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    self.searchIsActive = NO;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
