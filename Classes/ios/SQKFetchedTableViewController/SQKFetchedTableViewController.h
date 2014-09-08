@@ -34,7 +34,7 @@ Data-backed table view. Must be used as a subclass.
 /**
  *  The managed object context backing the fetched results controller.
  */
-@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 /**
  *  Returns YES if the user is actively searching, i.e. the search bar has begun editing. Returns NO
