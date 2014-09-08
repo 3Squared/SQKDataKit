@@ -30,6 +30,14 @@
 @implementation SQKFetchedTableViewController
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
+                          style:(UITableViewStyle)style
+{
+    return [self initWithContext:managedObjectContext
+                searchingEnabled:YES
+                           style:style];
+}
+
+- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
               searchingEnabled:(BOOL)searchingEnabled
                           style:(UITableViewStyle)style
 {
