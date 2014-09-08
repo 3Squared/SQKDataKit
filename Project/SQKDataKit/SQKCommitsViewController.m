@@ -28,7 +28,7 @@
 
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager
 {
-    self = [super initWithContext:[contextManager mainContext] searchingEnabled:YES style:UITableViewStylePlain];
+    self = [super initWithContext:[contextManager mainContext] style:UITableViewStylePlain];
     if (self)
     {
         self.contextManager = contextManager;
