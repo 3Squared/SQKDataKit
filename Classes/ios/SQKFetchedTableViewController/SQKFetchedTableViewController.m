@@ -317,6 +317,7 @@
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
 {
+    self.searchIsActive = NO;
     [searchBar sizeToFit];
     [searchBar resignFirstResponder];
     return YES;
@@ -330,6 +331,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    self.searchIsActive = NO;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
