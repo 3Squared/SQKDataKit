@@ -213,6 +213,7 @@
     }];
 
     AGWW_WAIT_WHILE(!edited, 2.0);
+    [fetchedObject.managedObjectContext refreshObject:fetchedObject mergeChanges:YES];
     XCTAssertEqualObjects([fetchedObject sha], @"Edit test", @"");
 
 
@@ -233,7 +234,8 @@
     }];
 
     AGWW_WAIT_WHILE(!deleted, 2.0);
-
+    [fetchedObject.managedObjectContext refreshObject:fetchedObject mergeChanges:YES];
+    
     XCTAssertTrue(!fetchedObject.isFault, @"");
     [self.contextManager.mainContext refreshObject:fetchedObject mergeChanges:NO];
     XCTAssertTrue(fetchedObject.isFault, @"");
