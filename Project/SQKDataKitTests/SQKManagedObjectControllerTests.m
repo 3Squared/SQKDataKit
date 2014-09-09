@@ -331,13 +331,17 @@
  */
 - (void)testFetchedEntitiesAreOfCorrectType
 {
+    User *user = [User sqk_insertInContext:[self.contextManager mainContext]];
+    user.name = @"Sam";
+
     Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
     
-    User *user = [User sqk_insertInContext:[self.contextManager mainContext]];
-    user.name = @"Sam";
-    
+    User *user1 = [User sqk_insertInContext:[self.contextManager mainContext]];
+    user1.name = @"Luke";
+
+
     [[self.contextManager mainContext] save:NULL];
 
     __block bool blockUpdateDone = NO;

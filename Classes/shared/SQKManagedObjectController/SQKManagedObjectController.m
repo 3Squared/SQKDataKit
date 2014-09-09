@@ -181,14 +181,16 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
             for (NSManagedObject *insertedObject in insertedObjects)
             {
                 BOOL isCorrectEntityType = [insertedObject.entity.name isEqualToString:self.fetchRequest.entityName];
-                if (isCorrectEntityType && (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject]))
+                if (isCorrectEntityType)
                 {
-                    NSManagedObject *localObject =
-                        [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
+                    BOOL matchesPredicate = !self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject];
+                    if (matchesPredicate) {
+                        NSManagedObject *localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
                                                                   error:nil];
-                    if (localObject && self.filterReturnedObjectsBlock(localObject))
-                    {
-                        [array addObject:localObject];
+                        if (localObject && self.filterReturnedObjectsBlock(localObject))
+                        {
+                            [array addObject:localObject];
+                        }
                     }
                 }
             }
@@ -228,7 +230,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }
     }
 
-    if (!self.managedObjects)
+    if (!self.managedObjects || self.managedObjects.count == 0)
     {
         return;
     }
