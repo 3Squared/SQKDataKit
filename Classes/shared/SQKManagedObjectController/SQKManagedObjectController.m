@@ -175,12 +175,13 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     {
         NSArray *insertedObjects = [[notification userInfo] objectForKey:NSInsertedObjectsKey];
 
-        if (insertedObjects)
+        if (insertedObjects.count > 0)
         {
             NSMutableArray *array = [NSMutableArray arrayWithArray:self.managedObjects];
             for (NSManagedObject *insertedObject in insertedObjects)
             {
-                if (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObjects])
+                BOOL isCorrectEntityType = [insertedObject.entity.name isEqualToString:self.fetchRequest.entityName];
+                if (isCorrectEntityType && (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject]))
                 {
                     NSManagedObject *localObject =
                         [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
