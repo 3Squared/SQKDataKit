@@ -271,7 +271,7 @@ How to subclass:
            }
                 privateContext:self.privateContext
                          error:NULL];
-    [context save:NULL];
+    [self completeOperationBySavingContext:context];
 }
 
 - (id)animalJSONFromWebservice {
