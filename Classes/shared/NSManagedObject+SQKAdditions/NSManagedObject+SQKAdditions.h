@@ -113,48 +113,39 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary *dictionary, id managedObjec
 
 /**
  *  Perform a batch insert-or-update.
+    
+    This method codifies the pattern found in the Apple guide to [Implementing Find-or-Create Efficiently](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/Articles/cdImporting.html#//apple_ref/doc/uid/TP40003174-SW4).
+    Usage:
+    ```
+    NSArray *dictArray = @[
+                       @{@"IDAnimal" : @"123", @"Name" : @"Cat", @"Age" : @10},
+                       @{@"IDAnimal" : @"456", @"Name" : @"Dog", @"Age" : @5},
+                       @{@"IDAnimal" : @"789", @"Name" : @"Mouse", @"Age" : @1}
+                       ];
 
- *  @discussion This method codifies the pattern found in the Apple guide to [Implementing
- Find-or-Create
- Efficiently](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/Articles/cdImporting.html#//apple_ref/doc/uid/TP40003174-SW4).
- Usage:
+    self.privateContext = [self.contextManager newPrivateContext];
 
-        NSArray *dictArray = @[
-                           @{@"IDAnimal" : @"123", @"Name" : @"Cat", @"Age" : @10},
-                           @{@"IDAnimal" : @"456", @"Name" : @"Dog", @"Age" : @5},
-                           @{@"IDAnimal" : @"789", @"Name" : @"Mouse", @"Age" : @1}
-                           ];
-
-        self.privateContext = [self.contextManager newPrivateContext];
-
-        NSError *error = nil;
-        [Animal sqk_insertOrUpdate:dictArray
-                    uniqueModelKey:@"animalID"
-                   uniqueRemoteKey:@"IDAnimal"
-               propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
-                   Animal *animal = (Animal *)managedObject;
-                   animal.name = dictionary[@"Name"];
-                   animal.age = dictionary[@"Age"];
-               }
-                    privateContext:self.privateContext
-                             error:&error];
- *
- *  @param dictArray           An array of dictionaries corresponding to the objects you wish to
- insert/update. This is most likely data from a remote source, i.e. a web service.
- *  @param modelKey            The key path name of the primary key property of the managed object
- subclass being inserted/updated.
- *  @param remoteDataKey       The dictionary key in the remote data to map to the primary key for
- the managed object.
- *  @param propertySetterBlock A block called to facilitate setting properties of the managed
- object. You should not initiate any other fetch requests here, you should only apply the logic
- necessary to set the properties of the managed object.
- *  @param privateContext      A managed object context that must have the concurrency type
- NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain
- one.
- *  @param error               If there is a problem executing the fetch, upon return contains an
- instance of NSError that describes the problem.
+    NSError *error = nil;
+    [Animal sqk_insertOrUpdate:dictArray
+                uniqueModelKey:@"animalID"
+               uniqueRemoteKey:@"IDAnimal"
+           propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+               Animal *animal = (Animal *)managedObject;
+               animal.name = dictionary[@"Name"];
+               animal.age = dictionary[@"Age"];
+           }
+                privateContext:self.privateContext
+                         error:&error];
+    ```
+ 
+    @param remoteData           A array of dictionaries, or strings corresponding to primary key values, you wish to use for insert/update. This is most likely data from a remote source, i.e. a web service.
+    @param modelKey            The key path name of the primary key property of the managed object subclass being inserted/updated.
+    @param remoteDataKey       The dictionary key in the remote data to map to the primary key for the managed object. If `remoteData` is an array of strings then pass `self`.
+    @param propertySetterBlock A block called to facilitate setting properties of the managed object. You should not initiate any other fetch requests here, you should only apply the logic necessary to set the properties of the managed object.
+    @param privateContext      A managed object context that must have the concurrency type NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain one.
+    @param error               If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  */
-+ (void)sqk_insertOrUpdate:(NSArray *)dictArray
++ (void)sqk_insertOrUpdate:(NSArray *)remoteData
             uniqueModelKey:(id)modelKey
            uniqueRemoteKey:(id)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
