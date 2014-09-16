@@ -93,9 +93,9 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
 }
 
-+ (void)sqk_insertOrUpdate:(NSArray *)dictArray
++ (void)sqk_insertOrUpdate:(NSArray *)remoteData
             uniqueModelKey:(id)modelKey
-           uniqueRemoteKey:(id)remoteObjectKey
+           uniqueRemoteKey:(id)remoteDataKey
        propertySetterBlock:(SQKPropertySetterBlock)propertySetterBlock
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error
@@ -112,9 +112,9 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     [context performBlockAndWait:^{
         @autoreleasepool
         {
-            NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteObjectKey ascending:YES];
-            NSArray *sortedDictArray = [dictArray sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
-            NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteObjectKey];
+            NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+            NSArray *sortedDictArray = [remoteData sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
+            NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
             
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
@@ -137,7 +137,7 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             id managedObject = [managedObjectEnumerator nextObject];
             
             while (remoteObject = [remoteObjectEnumerator nextObject]) {
-                if (managedObject && [[managedObject valueForKey:modelKey] isEqual:[remoteObject valueForKey:remoteObjectKey]]) {
+                if (managedObject && [[managedObject valueForKey:modelKey] isEqual:[remoteObject valueForKey:remoteDataKey]]) {
                     if (propertySetterBlock) {
                         propertySetterBlock(remoteObject, managedObject);
                     }
@@ -145,7 +145,7 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
                 }
                 else {
                     id newObject = [[self class] sqk_insertInContext:context];
-                    [newObject setValue:[remoteObject valueForKey:remoteObjectKey] forKey:modelKey];
+                    [newObject setValue:[remoteObject valueForKey:remoteDataKey] forKey:modelKey];
                     if (propertySetterBlock) {
                         propertySetterBlock(remoteObject, newObject);
                     }
