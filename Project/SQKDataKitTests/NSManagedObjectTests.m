@@ -381,6 +381,25 @@
     XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
 }
 
+- (void)testInsertsStubObjectsWhenOnlyUniqueModelKeyValuesAreSpecified {
+    __block NSInteger blockCallCount = 0;
+    SQKPropertySetterBlock propertySetterBlock
+    = ^void(NSDictionary *dictionary, NSManagedObject *managedObject) { ++blockCallCount; };
+    
+    NSArray *commitHashes = @[@"sha-abc", @"sha-def", @"sha-ghi"];
+    
+    NSError *error = nil;
+    [Commit sqk_insertOrUpdate:commitHashes
+                uniqueModelKey:@"sha"
+               uniqueRemoteKey:@"self"
+           propertySetterBlock:propertySetterBlock
+                privateContext:self.privateContext
+                         error:&error];
+    
+    XCTAssertNil(error, @"");
+    XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
+}
+
 #pragma mark - Errors
 
 - (void)testInsertOrUpdateFailsWithUnsupportedConcurencyTypeError
