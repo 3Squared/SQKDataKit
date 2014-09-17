@@ -9,7 +9,7 @@ Collection of classes to make working with Core Data easier and help DRY-up your
 
 # Installation
 
-* Using [Cocoapods](http://cocoapods.org), add `pod SQKDataKit` to your Podfile.
+* Using [Cocoapods](http://cocoapods.org), add `pod 'SQKDataKit'` to your Podfile.
 * `#import <SQKDataKit/SQKDataKit.h>` as necessary.
 
 
@@ -96,27 +96,57 @@ When using SQKDataKit you do not need to pass a reference to a persistent store 
 
 Additions to `NSManagedObject` to reduce boilerplate and simplify common operations, such as creating a fetch request or inserting a new instance of an object. These methods never should never be called directly on NSManagedObject (e.g. `[NSManagedObject sqk_entityName]`), but instead only on subclasses.
 
+### Optimised batch insert-or-update
+
 Includes a method for optimised batch insert-or-update, a common pattern in apps when updating from a web service. This method codifies the pattern found in the Apple guide to [Implementing Find-or-Create Efficiently](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/Articles/cdImporting.html#//apple_ref/doc/uid/TP40003174-SW4). Usage (on a background queue):
- 
-	NSArray *dictArray = @[
-	                   @{@"IDAnimal" : @"123", @"Name" : @"Cat", @"Age" : @10},
-	                   @{@"IDAnimal" : @"456", @"Name" : @"Dog", @"Age" : @5},
-	                   @{@"IDAnimal" : @"789", @"Name" : @"Mouse", @"Age" : @1}
-	                   ];
-	
-	self.privateContext = [self.contextManager newPrivateContext];
-	
-	NSError *error = nil;
-	[Animal SQK_insertOrUpdate:dictArray
-	            uniqueModelKey:@"animalID"
-	           uniqueRemoteKey:@"IDAnimal"
-	       propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
-	           Animal *animal = (Animal *)managedObject;
-	           animal.name = dictionary[@"Name"];
-	           animal.age = dictionary[@"Age"];
-	       }
-	            privateContext:self.privateContext
-	                     error:&error];
+
+```
+NSArray *dictArray = @[
+                       @{@"UserID" : @"123", @"Name" : @"Bob", @"Age" : @65, @"PostIDs" : @[@"abc", @"def"]},
+                       @{@"UserID" : @"456", @"Name" : @"Alice", @"Age" : @17, @"PostIDs" : @[@"ghi", @"jkl"]},
+                       @{@"UserID" : @"789", @"Name" : @"Charlie", @"Age" : @47, @"PostIDs" : @[@"mno", @"pqr", @"stu"]}
+                       ];
+
+self.privateContext = [self.contextManager newPrivateContext];
+
+NSError *error = nil;
+[User SQK_insertOrUpdate:dictArray
+          uniqueModelKey:@"userID" // property name for the primary key of User model
+         uniqueRemoteKey:@"UserID"
+     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+         User *user = (User *)managedObject;
+         user.name = dictionary[@"Name"];
+         user.age = dictionary[@"Age"];
+     }
+          privateContext:self.privateContext
+                   error:&error];
+	                     
+```
+
+It is often the case that you only know the GUIDs of objects when working with data from a web service. Say for example a user has a number of posts, but the JSON object for the user only specifies an array of GUIDs of those posts rather than the full commit objects themselves. e.g.:
+
+```
+User *user = ... // parsed somewhere else
+
+NSArray *postIDs = @[
+                     @"mno",
+                     @"pqr"
+                     @"stu"
+                     ];
+
+NSError *error = nil;
+[Post sqk_insertOrUpdate:postIDs
+          uniqueModelKey:@"postID" // property name for the primary key of Post model
+         uniqueRemoteKey:@"self"
+     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+         Post *post = (Post *)managedObject;
+         post.user = user;
+     }
+          privateContext:self.privateContext
+                   error:&error];
+
+	                     
+```
 	                     
 
 ## `SQKManagedObjectController`
