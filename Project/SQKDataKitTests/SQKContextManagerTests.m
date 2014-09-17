@@ -44,7 +44,6 @@
     self.contextManager = nil;
 }
 
-
 #pragma mark - Helpers
 
 - (id)mockMainContextWithStubbedHasChangesReturnValue:(BOOL)hasChanges
@@ -160,14 +159,8 @@
 
 #pragma mark - Saving
 
-- (void)testMergePropagatesChangesWhenMergingPrivateContextIsSaved
+- (void)testInsertsAreMergedIntoMainContextWhenPrivateContextIsSaved
 {
-    // Don't mock, testing IRL behavior.
-
-    NSArray *initialObjects =
-        [self.contextManager.mainContext executeFetchRequest:[Commit sqk_fetchRequest] error:nil];
-    XCTAssertTrue(initialObjects.count == 0, @"");
-
     __block BOOL inserted = NO;
 
     NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
@@ -193,16 +186,23 @@
     XCTAssertTrue(fetchedObjects.count == 1, @"");
     Commit *fetchedObject = fetchedObjects.firstObject;
     XCTAssertEqualObjects([fetchedObject sha], @"Insert test", @"");
+}
 
-
-    NSManagedObjectID *objectID = fetchedObject.objectID;
+- (void)testEditsAreMergedIntoMainContextWhenPrivateContextIsSaved
+{
+    Commit *commit = [Commit sqk_insertInContext:self.contextManager.mainContext];
+    commit.sha = @"Edit test";
+    [self.contextManager.mainContext save:nil];
+    NSManagedObjectID *objectID = commit.objectID;
+    
     __block BOOL edited = NO;
+    NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
     [privateQueue addOperationWithBlock:^{
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
         [privateContext performBlockAndWait:^{
             NSError *error = nil;
             Commit *commit = (Commit *)[privateContext objectWithID:objectID];
-            commit.sha = @"Edit test";
+            commit.sha = @"Edited in a private context";
             [privateContext save:&error];
             if (error)
             {
@@ -213,45 +213,7 @@
     }];
 
     AGWW_WAIT_WHILE(!edited, 2.0);
-    [fetchedObject.managedObjectContext refreshObject:fetchedObject mergeChanges:YES];
-    XCTAssertEqualObjects([fetchedObject sha], @"Edit test", @"");
-
-
-    __block BOOL deleted = NO;
-    [privateQueue addOperationWithBlock:^{
-        NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
-        [privateContext performBlockAndWait:^{
-            NSError *error = nil;
-            Commit *commit = (Commit *)[privateContext objectWithID:objectID];
-            [privateContext deleteObject:commit];
-            [privateContext save:&error];
-            if (error)
-            {
-                XCTFail(@"There was an error saving! %@", [error localizedDescription]);
-            }
-            deleted = YES;
-        }];
-    }];
-
-    AGWW_WAIT_WHILE(!deleted, 2.0);
-    [fetchedObject.managedObjectContext refreshObject:fetchedObject mergeChanges:YES];
-    
-    XCTAssertTrue(!fetchedObject.isFault, @"");
-    [self.contextManager.mainContext refreshObject:fetchedObject mergeChanges:NO];
-    XCTAssertTrue(fetchedObject.isFault, @"");
-
-    __block BOOL exceptionThrown = NO;
-    @try
-    {
-        fetchedObject.sha = @"An exception should be thrown right now.";
-        XCTFail(@"An exception should be thrown when accessing properties of a deleted object.");
-    }
-    @catch (NSException *exception)
-    {
-        exceptionThrown = YES;
-    }
-
-    XCTAssertTrue(exceptionThrown, @"");
+    XCTAssertEqualObjects([commit sha], @"Edited in a private context", @"");
 }
 
 @end
