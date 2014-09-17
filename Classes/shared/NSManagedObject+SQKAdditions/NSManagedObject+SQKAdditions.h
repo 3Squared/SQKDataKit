@@ -114,6 +114,7 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary *dictionary, id managedObjec
 /**
  *  Perform a batch insert-or-update.
     This method codifies the pattern found in the Apple guide to [Implementing Find-or-Create Efficiently](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/Articles/cdImporting.html#//apple_ref/doc/uid/TP40003174-SW4).
+You should call this method from inside a `performBlockAndWait` to avoid threading issues. [See for more info](https://developer.apple.com/library/ios/documentation/cocoa/Reference/CoreDataFramework/Classes/NSManagedObjectContext_Class/NSManagedObjectContext.html#//apple_ref/doc/uid/TP30001182-SW39).
     @param remoteData          Array of KVO compliant objects you wish to use for insert/update. This is most likely data from a remote source, i.e. a web service.
     @param modelKey            The KVO keypath of the primary key property of the managed object being inserted/updated.
     @param remoteDataKey       The KVO keypath of the objects in `remoteData` to map to the primary key for the managed object.
