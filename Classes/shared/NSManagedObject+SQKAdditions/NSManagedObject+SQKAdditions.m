@@ -137,17 +137,20 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             id managedObject = [managedObjectEnumerator nextObject];
             
             while (remoteObject = [remoteObjectEnumerator nextObject]) {
-                if (managedObject && [[managedObject valueForKey:modelKey] isEqual:[remoteObject valueForKey:remoteDataKey]]) {
-                    if (propertySetterBlock) {
-                        propertySetterBlock(remoteObject, managedObject);
+                id remoteObjectKeyValue = [remoteObject valueForKey:remoteDataKey];
+                if (remoteObjectKeyValue && remoteObjectKeyValue != [NSNull null]) {
+                    if (managedObject && [[managedObject valueForKey:modelKey] isEqual:remoteObjectKeyValue]) {
+                        if (propertySetterBlock) {
+                            propertySetterBlock(remoteObject, managedObject);
+                        }
+                        managedObject = [managedObjectEnumerator nextObject];
                     }
-                    managedObject = [managedObjectEnumerator nextObject];
-                }
-                else {
-                    id newObject = [[self class] sqk_insertInContext:context];
-                    [newObject setValue:[remoteObject valueForKey:remoteDataKey] forKey:modelKey];
-                    if (propertySetterBlock) {
-                        propertySetterBlock(remoteObject, newObject);
+                    else {
+                        id newObject = [[self class] sqk_insertInContext:context];
+                        [newObject setValue:remoteObjectKeyValue forKey:modelKey];
+                        if (propertySetterBlock) {
+                            propertySetterBlock(remoteObject, newObject);
+                        }
                     }
                 }
             }
