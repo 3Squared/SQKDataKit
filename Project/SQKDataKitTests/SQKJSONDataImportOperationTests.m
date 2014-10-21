@@ -19,7 +19,7 @@
 @interface ConcreteDataImportOperation : SQKCoreDataOperation
 @end
 @implementation ConcreteDataImportOperation
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
 }
 @end
@@ -62,7 +62,7 @@
 {
     ConcreteDataImportOperationWithoutOverride *dataImportOperation =
         [[ConcreteDataImportOperationWithoutOverride alloc] initWithContextManager:self.contextManager];
-    XCTAssertThrowsSpecificNamed([dataImportOperation performWorkPrivateContext:nil],
+    XCTAssertThrowsSpecificNamed([dataImportOperation performWorkWithPrivateContext:nil],
                                  NSException,
                                  NSInternalInconsistencyException,
                                  @"");
@@ -73,7 +73,7 @@
     ConcreteDataImportOperation *dataImportOperation =
         [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
     id dataImportOperationPartialMock = [OCMockObject partialMockForObject:dataImportOperation];
-    [[dataImportOperationPartialMock expect] performWorkPrivateContext:[OCMArg any]];
+    [[dataImportOperationPartialMock expect] performWorkWithPrivateContext:[OCMArg any]];
 
     [(ConcreteDataImportOperation *)dataImportOperationPartialMock start];
 

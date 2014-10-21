@@ -16,7 +16,7 @@
 
 @implementation OptimisedImportOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
 {
     self.startDate = [NSDate date];
     [Commit sqk_insertOrUpdate:data

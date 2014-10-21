@@ -16,7 +16,7 @@
 
 @implementation NaiveImportOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
 {
     self.startDate = [NSDate date];
     [data enumerateObjectsUsingBlock:^(NSDictionary *dictionary, NSUInteger idx, BOOL *stop) {

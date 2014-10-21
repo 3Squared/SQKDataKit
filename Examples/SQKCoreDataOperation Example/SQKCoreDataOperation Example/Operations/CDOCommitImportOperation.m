@@ -16,7 +16,7 @@
 
 @implementation CDOCommitImportOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
 	NSLog(@"Executing %@", NSStringFromClass([self class]));
 
 	NSError *error = nil;

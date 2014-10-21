@@ -13,9 +13,9 @@
 
 /**
  *  Use an SQKCoreDataOperation when you need to perform work with Core Data off the main thread.
-You need to subclass and must override the `performWorkPrivateContext:` method, which is where you
+You need to subclass and must override the `performWorkWithPrivateContext:` method, which is where you
 should perform your work with Core Data. The operation will use it's `SQKContextManager` to obtain a
-private managed object context. This is passed to the `performWorkPrivateContext:` method for you to
+private managed object context. This is passed to the `performWorkWithPrivateContext:` method for you to
 use. When your work is complete call the `completeOperationBySavingContext:` method passing in the
 private context you have used. This saves the (private) managed object context, merges the changes
 into main context, and finishes operation.
@@ -36,7 +36,7 @@ http://www.objc.io/issue-2/concurrency-apis-and-pitfalls.html
 
 @implementation AnimalImportOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
     id animalJSON = [self animalJSONFromWebservice];
 
     [Animal SQK_insertOrUpdate:animalJSON
@@ -120,7 +120,7 @@ initWithContextManager:self.contextManager];
  *
  *  @param context A private managed object context for you to use.
  */
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context;
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context;
 
 /**
  *  Override to return any error that occurred during the operation.

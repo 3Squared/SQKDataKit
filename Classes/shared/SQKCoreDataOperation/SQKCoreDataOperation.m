@@ -41,7 +41,7 @@
                  userInfo:nil];
 }
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
     @throw [NSException
         exceptionWithName:NSInternalInconsistencyException
@@ -71,7 +71,7 @@
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
     self.managedObjectContextToMerge.shouldMergeOnSave = NO;
     [self.managedObjectContextToMerge
-        performBlockAndWait:^{ [self performWorkPrivateContext:self.managedObjectContextToMerge]; }];
+        performBlockAndWait:^{ [self performWorkWithPrivateContext:self.managedObjectContextToMerge]; }];
 }
 
 - (BOOL)isConcurrent

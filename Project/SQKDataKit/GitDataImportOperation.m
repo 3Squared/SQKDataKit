@@ -25,12 +25,12 @@
     return self;
 }
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
-    [self performWorkPrivateContext:context usingData:self.data];
+    [self performWorkWithPrivateContext:context usingData:self.data];
 }
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
 {
     @throw [NSException
         exceptionWithName:NSInternalInconsistencyException
