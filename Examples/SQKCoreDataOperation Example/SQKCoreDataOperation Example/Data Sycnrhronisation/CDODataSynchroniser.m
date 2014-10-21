@@ -66,7 +66,7 @@
 		if (dependentOperation.error || [dependentOperation isCancelled]) {
 			NSString *dependentOperationName = NSStringFromClass([dependentOperation class]);
 			if (dependentOperation.error) NSLog(@"Dependency \'%@\' errored; %@", dependentOperationName, dependentOperation.error);
-			if (dependentOperation.error) NSLog(@"Dependency \'%@\' cancelled", dependentOperationName);
+			if (dependentOperation.cancelled) NSLog(@"Dependency \'%@\' cancelled", dependentOperationName);
 			[nextOperation cancel];
 		}
 	}
