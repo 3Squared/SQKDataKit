@@ -1,3 +1,5 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 target "SQKCoreDataOperation Example" do
 	pod 'SQKDataKit/ContextManager', :path => '../../SQKDataKit.podspec'
 	pod 'SQKDataKit/CoreDataOperation', :path => '../../SQKDataKit.podspec'
