@@ -211,6 +211,12 @@
                 [tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex]
                          withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
+            case NSFetchedResultsChangeMove:
+                // Not used for section changes
+                break;
+            case NSFetchedResultsChangeUpdate:
+                // Not used for section changes
+                break;
         }
     }];
 }
