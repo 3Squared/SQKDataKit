@@ -28,7 +28,9 @@
 	 */
 	NSSet *usernames = [NSSet setWithArray:[JSON valueForKeyPath:@"committer.login"]];
 	for (NSString *username in usernames) {
-		[User sqk_insertOrFetchWithKey:@"username" value:username context:self.managedObjectContext error:NULL];
+        if (username != (id)[NSNull null]) {
+            [User sqk_insertOrFetchWithKey:@"username" value:username context:self.managedObjectContext error:NULL];
+        }
 	}
 }
 
