@@ -84,7 +84,7 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	SQKCoreDataOperation *nextOperation = [[self.operationQueue operations] firstObject];
-	for (SQKCoreDataOperation *dependentOperation in[nextOperation dependencies]) {
+	for (SQKCoreDataOperation *dependentOperation in [nextOperation dependencies]) {
 		/**
 		 *  Next operation to be executed should be cancelled if any of it's dependencies have
 		 *  errored or were also cancelled. By cancelling the next operation we will also
