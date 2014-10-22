@@ -12,6 +12,7 @@
 #import "CDOCommitImportOperation.h"
 #import "CDOUserImportOperation.h"
 #import "CDONotificationManager.h"
+#import "CDOGithubAPIClient.h"
 
 NSString * const CDOSynchronisationRequestNotification = @"CDOSynchronisationRequestNotification";
 NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationResponseNotification";
@@ -19,6 +20,7 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
 @interface CDOSynchronisationCoordinator ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
+@property (nonatomic, strong, readwrite) CDOGithubAPIClient *APIClient;
 @property (nonatomic, assign, readwrite) NSInteger pendingSyncs;
 @end
 
@@ -41,11 +43,13 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
 
 #pragma mark - Public
 
-- (instancetype)initWithContextManager:(SQKContextManager *)contextManager {
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient {
 	if (self = [super init]) {
 		self.contextManager = contextManager;
 		self.operationQueue = [[NSOperationQueue alloc] init];
 		[self.operationQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
+        
+        self.APIClient = APIClient;
         
         [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(synchronise)];
 	}
@@ -69,8 +73,8 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
 - (void)startSynchronise {
 	NSLog(@"Starting Synchronise");
 
-	CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager];
-	CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager];
+	CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
+	CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
 
 	[userOperation addDependency:commitOperation];
 

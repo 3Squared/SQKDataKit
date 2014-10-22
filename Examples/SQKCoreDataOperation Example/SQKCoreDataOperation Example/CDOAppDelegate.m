@@ -26,10 +26,6 @@
 	// Set your Github API access token for the CDOGithubAPIClient
 	// See: https://github.com/settings/applications#personal-access-tokens
 	// I'm loading mine from a .plist (ignored in the git repo)
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
-	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
-	NSString *accessToken = plistDict[@"token"];
-	[CDOGithubAPIClient sharedInstance].accessToken = accessToken;
 
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
@@ -40,7 +36,12 @@
     [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(didRequestSynchronisation:)];
     [CDONotificationManager addObserverForSynchronisationResponseNotification:self selector:@selector(didCompleteSynchronisation:)];
 
-	self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:self.contextManager];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
+    NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    NSString *accessToken = plistDict[@"token"];
+
+    CDOGithubAPIClient *APIClient = [[CDOGithubAPIClient alloc] initWithAccessToken:accessToken];
+    self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:self.contextManager APIClient:APIClient];
 
     [CDOSynchronisationCoordinator synchronise];
     

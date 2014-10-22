@@ -11,12 +11,12 @@
 extern NSString * const CDOSynchronisationRequestNotification;
 extern NSString * const CDOSynchronisationResponseNotification;
 
-@class SQKContextManager;
+@class SQKContextManager, CDOGithubAPIClient;
 @interface CDOSynchronisationCoordinator : NSObject
 
 @property (nonatomic, strong, readonly) SQKContextManager *contextManager;
 
-- (instancetype)initWithContextManager:(SQKContextManager *)contextManager;
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient;
 
 + (void)synchronise;
 

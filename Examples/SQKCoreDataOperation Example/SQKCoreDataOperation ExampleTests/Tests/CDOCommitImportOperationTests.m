@@ -32,13 +32,13 @@
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
 	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
 	NSString *accessToken = plistDict[@"token"];
-	[CDOGithubAPIClient sharedInstance].accessToken = accessToken;
+    CDOGithubAPIClient *APIClient = [[CDOGithubAPIClient alloc] initWithAccessToken:accessToken];
 
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
-	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager];
+	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClient];
 	self.queue = [NSOperationQueue new];
 }
 

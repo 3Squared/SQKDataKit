@@ -11,20 +11,22 @@
 static NSString *const CDOHBaseURL = @"https://api.github.com";
 static NSString *const CDOGithubAPIClientErrorDomain = @"com.3squared.CDOGithubAPIClientErrorDomain";
 
+@interface CDOGithubAPIClient ()
+@property (nonatomic, strong) NSString *accessToken;
+@end
+
 @implementation CDOGithubAPIClient
 
-#pragma mark - Singleton setup
-+ (CDOGithubAPIClient *)sharedInstance {
-	static CDOGithubAPIClient *sharedSingleton;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-	    sharedSingleton = [[CDOGithubAPIClient alloc] init];
-	});
-
-	return sharedSingleton;
-}
-
 #pragma mark - Public
+
+- (instancetype)initWithAccessToken:(NSString *)accessToken
+{
+    self = [super init];
+    if (self) {
+        self.accessToken = accessToken;
+    }
+    return self;
+}
 
 - (id)getCommitsForRepo:(NSString *)repoName error:(NSError **)error {
 	NSString *endpoint = [NSString stringWithFormat:@"repos/3squared/%@/commits", repoName];
