@@ -43,6 +43,7 @@
 		CBC1182619F6AC56006BAF51 /* CDOSynchronisationCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1182519F6AC56006BAF51 /* CDOSynchronisationCoordinator.m */; };
 		CBC1182D19F6B8C5006BAF51 /* CDONotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1182C19F6B8C5006BAF51 /* CDONotificationManager.m */; };
 		CBC1183219F7AE8F006BAF51 /* CDONotificationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */; };
+		CBC1183419F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,7 @@
 		CBC1182B19F6B8C5006BAF51 /* CDONotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDONotificationManager.h; sourceTree = "<group>"; };
 		CBC1182C19F6B8C5006BAF51 /* CDONotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDONotificationManager.m; sourceTree = "<group>"; };
 		CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDONotificationManagerTests.m; sourceTree = "<group>"; };
+		CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOSynchronisationCoordinatorTests.m; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -286,6 +288,7 @@
 				A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */,
 				A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */,
 				CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */,
+				CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */,
+				CBC1183419F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m in Sources */,
 				CBC1183219F7AE8F006BAF51 /* CDONotificationManagerTests.m in Sources */,
 				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
 				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
