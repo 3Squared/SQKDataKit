@@ -8,18 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const CDOSynchronisationRequestNotification;
+extern NSString * const CDOSynchronisationResponseNotification;
+
 @class SQKContextManager;
-@interface CDODataSynchroniser : NSObject
+@interface CDOSynchronisationCoordinator : NSObject
 
 @property (nonatomic, strong, readonly) SQKContextManager *contextManager;
-@property (nonatomic, assign, readonly) BOOL isSynchronising;
 
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager;
 
-/**
- *  Synchronises now, or if currently synchronising queues up another synchronise to occur after the current synchronise finishes.
- */
-- (void)synchronise;
-
++ (void)synchronise;
 
 @end

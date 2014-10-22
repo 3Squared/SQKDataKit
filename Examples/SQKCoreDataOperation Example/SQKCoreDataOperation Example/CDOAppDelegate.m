@@ -8,12 +8,13 @@
 
 #import "CDOAppDelegate.h"
 #import "CDOGithubAPIClient.h"
-#import "CDODataSynchroniser.h"
+#import "CDOSynchronisationCoordinator.h"
 #import "SQKContextManager.h"
 #import "CDORunningTestsHelper.h"
+#import "CDONotificationManager.h"
 
 @interface CDOAppDelegate ()
-@property (nonatomic, strong) CDODataSynchroniser *dataSynchroniser;
+@property (nonatomic, strong) CDOSynchronisationCoordinator *syncCoordinator;
 @property (nonatomic, strong) SQKContextManager *contextManager;
 @end
 
@@ -35,10 +36,25 @@
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
 
-	self.dataSynchroniser = [[CDODataSynchroniser alloc] initWithContextManager:self.contextManager];
-	[self.dataSynchroniser synchronise];
+    
+    [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(didRequestSynchronisation:)];
+    [CDONotificationManager addObserverForSynchronisationResponseNotification:self selector:@selector(didCompleteSynchronisation:)];
 
+	self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:self.contextManager];
+
+    [CDOSynchronisationCoordinator synchronise];
+    
 	return YES;
+}
+
+- (void) didRequestSynchronisation:(NSNotification*)notification
+{
+    NSLog(@"didRequestSynchronisation: %@", notification);
+}
+
+- (void) didCompleteSynchronisation:(NSNotification*)notification
+{
+    NSLog(@"didCompleteSynchronisation: %@", notification);
 }
 
 @end

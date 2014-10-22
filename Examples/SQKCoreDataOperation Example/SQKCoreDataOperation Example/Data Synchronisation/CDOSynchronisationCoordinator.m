@@ -6,20 +6,38 @@
 //  Copyright (c) 2014 3Squared Ltd. All rights reserved.
 //
 
-#import "CDODataSynchroniser.h"
+#import "CDOSynchronisationCoordinator.h"
 #import "SQKContextManager.h"
 #import "SQKCoreDataOperation.h"
 #import "CDOCommitImportOperation.h"
 #import "CDOUserImportOperation.h"
+#import "CDONotificationManager.h"
 
-@interface CDODataSynchroniser ()
+NSString * const CDOSynchronisationRequestNotification = @"CDOSynchronisationRequestNotification";
+NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationResponseNotification";
+
+@interface CDOSynchronisationCoordinator ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
-@property (nonatomic, assign, readwrite) BOOL isSynchronising;
 @property (nonatomic, assign, readwrite) NSInteger pendingSyncs;
 @end
 
-@implementation CDODataSynchroniser
+@implementation CDOSynchronisationCoordinator
+
++ (void)synchronise
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:CDOSynchronisationRequestNotification object:nil];
+    }];
+}
+
++ (void)finishSynchronise
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:CDOSynchronisationResponseNotification object:nil];
+    }];
+}
+
 
 #pragma mark - Public
 
@@ -28,9 +46,15 @@
 		self.contextManager = contextManager;
 		self.operationQueue = [[NSOperationQueue alloc] init];
 		[self.operationQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
-		self.isSynchronising = NO;
+        
+        [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(synchronise)];
 	}
 	return self;
+}
+
+-(void)dealloc
+{
+    [CDONotificationManager removeObserverForSynchronisationRequestNotification:self];
 }
 
 - (void)synchronise {
@@ -44,7 +68,6 @@
 
 - (void)startSynchronise {
 	NSLog(@"Starting Synchronise");
-	self.isSynchronising = YES;
 
 	CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager];
 	CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager];
@@ -85,8 +108,8 @@
 		}
 	    else {
 	        NSLog(@"Finished Synchronise");
-	        self.isSynchronising = NO;
 	        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            [CDOSynchronisationCoordinator finishSynchronise];
 		}
 	}];
 }
