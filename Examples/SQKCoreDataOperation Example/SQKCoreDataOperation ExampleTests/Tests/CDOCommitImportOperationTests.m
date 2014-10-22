@@ -7,13 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
-
 #import "SQKContextManager.h"
 #import "NSManagedObject+SQKAdditions.h"
 #import "CDOCommitImportOperation.h"
 #import "Commit.h"
 #import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "CDOGithubAPIClient.h"
+#import <OCMock/OCMock.h>
+#import "CDOJSONFixtureLoader.h"
 
 @interface CDOCommitImportOperationTests : XCTestCase
 @property (nonatomic, strong) SQKContextManager *contextManager;
@@ -26,19 +27,17 @@
 - (void)setUp {
 	[super setUp];
     
-    // Set your Github API access token for the CDOGithubAPIClient
-	// See: https://github.com/settings/applications#personal-access-tokens
-	// I'm loading mine from a .plist (ignored in the git repo)
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
-	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
-	NSString *accessToken = plistDict[@"token"];
-    CDOGithubAPIClient *APIClient = [[CDOGithubAPIClient alloc] initWithAccessToken:accessToken];
-
+    CDOGithubAPIClient *APIClientMock = OCMClassMock([CDOGithubAPIClient class]);
+    
+    NSArray *commitsJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
+    
+    OCMStub([APIClientMock getCommitsForRepo:[OCMArg any] error:[OCMArg anyObjectRef]]).andReturn(commitsJSON);
+    
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
-	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClient];
+	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
 	self.queue = [NSOperationQueue new];
 }
 
