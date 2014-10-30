@@ -148,6 +148,15 @@ You should call this method from inside a `performBlockAndWait` to avoid threadi
 + (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error;
 
 /**
+ *  Remove all objects of the class matching the given predicate from the store asynchronously.
+ *
+ *  @param context   The managed object context to use. Must not be nil.
+ *  @param predicate The predicate to be used to filter the objects to be deleted.
+ *  @param error     If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
+ */
++ (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context withPredicate:(NSPredicate *)predicate error:(NSError **)error;
+
+/**
  *  @name Property description.
  */
 
