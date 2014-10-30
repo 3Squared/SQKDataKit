@@ -175,6 +175,32 @@
     XCTAssertNil(error, @"");
 }
 
+- (void)testDeletionWithPredicate
+{
+    NSError *error = nil;
+    NSManagedObjectContext *context = [self.contextManager mainContext];
+    
+    Commit *commit = [Commit sqk_insertInContext:context];
+    commit.sha = @"To delete";
+    commit.date = [NSDate date];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sha == 'To delete'"];
+    [Commit sqk_deleteAllObjectsInContext:context withPredicate:predicate error:&error];
+    XCTAssertNil(error, @"");
+    
+    [context save:&error];
+    XCTAssertNil(error, @"");
+    
+    NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
+    NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
+    XCTAssertNil(error, @"");
+    
+    Commit *fetchedCommit = [objects firstObject];
+    
+    XCTAssertEqual([objects count], (NSUInteger)1, @"");
+    XCTAssertEqual(fetchedCommit.sha, @"abcd");
+}
+
 #pragma mark - Other Initialisers
 
 /**
