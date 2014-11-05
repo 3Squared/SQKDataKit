@@ -26,11 +26,6 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
         return YES;
     }
 
-    // Fewer than 2 models provided, assume we don't need to migrate
-    if (!modelNames || modelNames.count <= 1)
-    {
-        return YES;
-    }
 
     // Get the persistent store's metadata.  The metadata is used to
     // get information about the store's managed object model.
@@ -48,6 +43,14 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
     {
         return YES;
     }
+    else if (!modelNames || modelNames.count <= 1)
+    {
+        // If it's not compatible and we only have fewer than 2 models, back it up
+        NSString *backupPath = [[sourceStoreURL path] stringByAppendingPathExtension:@"_backup"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        return (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]);
+    }
+
 
     // Find the current model used by the store.
     NSManagedObjectModel *sourceModel = [self modelForStoreMetadata:sourceMetadata error:error];
