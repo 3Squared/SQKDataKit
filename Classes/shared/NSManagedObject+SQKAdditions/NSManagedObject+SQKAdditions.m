@@ -18,7 +18,7 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     {
         return nil;
     }
-    return NSStringFromClass([self class]);
+    return [[NSStringFromClass([self class]) componentsSeparatedByString:@"."] lastObject];
 }
 
 + (NSEntityDescription *)sqk_entityDescriptionInContext:(NSManagedObjectContext *)context
