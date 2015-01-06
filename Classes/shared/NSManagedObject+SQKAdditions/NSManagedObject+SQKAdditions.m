@@ -93,6 +93,26 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
 }
 
++ (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context withPredicate:(NSPredicate *)predicate error:(NSError **)error
+{
+    NSError *localError = nil;
+    NSFetchRequest *fetchRequest = [self sqk_fetchRequest];
+    fetchRequest.includesPropertyValues = NO;
+    fetchRequest.returnsObjectsAsFaults = NO;
+    fetchRequest.predicate = predicate;
+    NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
+    if (localError)
+    {
+        if (error)
+        {
+            *error = localError;
+        }
+        return;
+    }
+    
+    [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
+}
+
 + (void)sqk_insertOrUpdate:(NSArray *)remoteData
             uniqueModelKey:(id)modelKey
            uniqueRemoteKey:(id)remoteDataKey
