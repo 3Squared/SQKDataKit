@@ -48,6 +48,13 @@ Pod::Spec.new do |s|
 		ss.frameworks  = 'CoreData', 'UIKit'
 	end
 
+	s.subspec 'FetchedCollectionViewController' do |ss|
+		ss.platform    = :ios, '6.0'
+		ss.source_files = 'Classes/ios/SQKFetchedCollectionViewController/**/*{h,m}'
+		ss.public_header_files = 'Classes/ios/SQKFetchedCollectionViewController.h'
+		ss.frameworks  = 'CoreData', 'UIKit'
+	end
+
 	s.subspec 'CoreDataOperation' do |ss|
 		ss.source_files = 'Classes/shared/SQKCoreDataOperation/**/*{h,m}'
 		ss.public_header_files = 'Classes/shared/SQKCoreDataOperation.h'
