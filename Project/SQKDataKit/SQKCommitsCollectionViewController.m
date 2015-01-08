@@ -18,6 +18,7 @@
 #import <SQKDataKit/NSManagedObject+SQKAdditions.h>
 
 @interface SQKCommitsCollectionViewController ()
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation SQKCommitsCollectionViewController
@@ -35,6 +36,9 @@
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title
                                                         image:[UIImage imageNamed:@"collection"]
                                                           tag:0];
+        
+        self.dateFormatter = [[NSDateFormatter alloc] init];
+        self.dateFormatter.dateFormat = @"dd/MM/yy at hh:mm";
     }
     return self;
 }
@@ -53,6 +57,12 @@
     [self.collectionView addGestureRecognizer:longPressGesture];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.collectionView reloadData];
+}
+
 #pragma mark -
 
 - (NSFetchRequest *)fetchRequest
@@ -65,11 +75,11 @@
 - (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController configureItemCell:(UICollectionViewCell *)theItemCell atIndexPath:(NSIndexPath *)indexPath
 {
     SQKCommitItemCell *itemCell = (SQKCommitItemCell *)theItemCell;
-//    Commit *commit = [fetchedResultsController objectAtIndexPath:indexPath];
-//    itemCell.authorNameLabel.text = [[self firstCharactersForString:commit.authorName] uppercaseString];
-//    itemCell.dateLabel.text = [commit.date description];
-    itemCell.authorNameLabel.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
-    itemCell.dateLabel.text = [NSString stringWithFormat:@"Section %ld row %ld", (long)indexPath.section, (long)indexPath.row];
+    Commit *commit = [fetchedResultsController objectAtIndexPath:indexPath];
+    itemCell.authorNameLabel.text = [[self firstCharactersForString:commit.authorName] uppercaseString];
+    itemCell.dateLabel.text = [self.dateFormatter stringFromDate:commit.date];
+//    itemCell.authorNameLabel.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
+//    itemCell.dateLabel.text = [NSString stringWithFormat:@"Section %ld row %ld", (long)indexPath.section, (long)indexPath.row];
     itemCell.isEditing = self.editing;
 }
 
@@ -104,7 +114,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(10, 26, 10, 26); // top, left, bottom, right
+    return UIEdgeInsetsMake(10, 26, 10, 26);
 }
 
 - (NSString *)firstCharactersForString:(NSString *)string

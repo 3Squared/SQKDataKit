@@ -14,7 +14,4 @@
 @property (nonatomic, readonly) UILabel *authorNameLabel;
 @property (nonatomic, readonly) UILabel *dateLabel;
 
-- (void)startJiggling;
-- (void)stopJiggling;
-
 @end
