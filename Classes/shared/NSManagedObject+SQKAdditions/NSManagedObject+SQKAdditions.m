@@ -120,6 +120,11 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
             privateContext:(NSManagedObjectContext *)context
                      error:(NSError **)error
 {
+    if (!remoteData || remoteData.count == 0)
+    {
+        return;
+    }
+
     if (context.concurrencyType != NSPrivateQueueConcurrencyType)
     {
         if (error)
@@ -132,43 +137,54 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
     [context performBlockAndWait:^{
         @autoreleasepool
         {
-            NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-            NSArray *sortedDictArray = [remoteData sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
+            NSSortDescriptor *remoteDataSortDescriptor =
+                [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+            NSArray *sortedDictArray =
+                [remoteData sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
             NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
-            
+
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
-            [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
-            
-            NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
-            [fetchRequest setSortDescriptors: @[localDataSortDescriptor]];
-            
+            [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
+
+            NSSortDescriptor *localDataSortDescriptor =
+                [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
+            [fetchRequest setSortDescriptors:@[localDataSortDescriptor]];
+
             NSError *localError = nil;
-            NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
-            if (localError) {
+            NSArray *objectsMatchingKey =
+                [context executeFetchRequest:fetchRequest error:&localError];
+            if (localError)
+            {
                 *error = localError;
                 return;
             }
-            
+
             NSEnumerator *managedObjectEnumerator = [objectsMatchingKey objectEnumerator];
             NSEnumerator *remoteObjectEnumerator = [sortedDictArray objectEnumerator];
-            
+
             id remoteObject;
             id managedObject = [managedObjectEnumerator nextObject];
-            
-            while (remoteObject = [remoteObjectEnumerator nextObject]) {
+
+            while (remoteObject = [remoteObjectEnumerator nextObject])
+            {
                 id remoteObjectKeyValue = [remoteObject valueForKey:remoteDataKey];
-                if (remoteObjectKeyValue && remoteObjectKeyValue != [NSNull null]) {
-                    if (managedObject && [[managedObject valueForKey:modelKey] isEqual:remoteObjectKeyValue]) {
-                        if (propertySetterBlock) {
+                if (remoteObjectKeyValue && remoteObjectKeyValue != [NSNull null])
+                {
+                    if (managedObject && [[managedObject valueForKey:modelKey] isEqual:remoteObjectKeyValue])
+                    {
+                        if (propertySetterBlock)
+                        {
                             propertySetterBlock(remoteObject, managedObject);
                         }
                         managedObject = [managedObjectEnumerator nextObject];
                     }
-                    else {
+                    else
+                    {
                         id newObject = [[self class] sqk_insertInContext:context];
                         [newObject setValue:remoteObjectKeyValue forKey:modelKey];
-                        if (propertySetterBlock) {
+                        if (propertySetterBlock)
+                        {
                             propertySetterBlock(remoteObject, newObject);
                         }
                     }
@@ -188,8 +204,7 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
 
 + (NSError *)errorForUnsupportedQueueConcurencyType
 {
-    NSDictionary *userInfo = @
-    {
+    NSDictionary *userInfo = @{
         NSLocalizedDescriptionKey:
             NSLocalizedString(@"Insert or update operation failed due to unsupported concurrency "
                               @"type of the NSManagedObjectContext",
