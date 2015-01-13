@@ -28,6 +28,7 @@
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
 																  managedObjectModel:model
+                                                      orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
 																			storeURL:nil];
 	self.managedObjectContext = [contextManager newPrivateContext];
 	

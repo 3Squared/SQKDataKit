@@ -30,6 +30,7 @@
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
 	                                                managedObjectModel:model
+                           orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
 	                                                          storeURL:nil];
 
     

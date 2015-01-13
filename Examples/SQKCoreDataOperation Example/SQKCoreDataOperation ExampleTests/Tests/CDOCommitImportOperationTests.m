@@ -36,6 +36,7 @@
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
 	                                                managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
 	                                                          storeURL:nil];
 	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
 	self.queue = [NSOperationQueue new];
