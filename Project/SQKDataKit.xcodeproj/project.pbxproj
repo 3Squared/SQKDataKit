@@ -37,6 +37,7 @@
 		A3F70A90185A041D00C0A389 /* SQKMetricsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */; };
 		AFFC25DF40274C52A419927E /* libPods-SQKDataKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2868235566F44D78765833F /* libPods-SQKDataKit.a */; };
 		C8CFF472097F4E5BBA949BDB /* libPods-SQKDataKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB52E80206042BCB848D249 /* libPods-SQKDataKitTests.a */; };
+		CB40EDD41A65633900181627 /* SQKAlternateCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,8 @@
 		A3F70A8E185A041D00C0A389 /* SQKMetricsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKMetricsViewController.h; sourceTree = "<group>"; };
 		A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKMetricsViewController.m; sourceTree = "<group>"; };
 		B2868235566F44D78765833F /* libPods-SQKDataKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB40EDD21A65633900181627 /* SQKAlternateCommitsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKAlternateCommitsViewController.h; sourceTree = "<group>"; };
+		CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKAlternateCommitsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +180,8 @@
 				A3F70A8F185A041D00C0A389 /* SQKMetricsViewController.m */,
 				A3DC7C991868731100C45DB0 /* SQKJSONLoader.h */,
 				A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */,
+				CB40EDD21A65633900181627 /* SQKAlternateCommitsViewController.h */,
+				CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -435,6 +440,7 @@
 			files = (
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
+				CB40EDD41A65633900181627 /* SQKAlternateCommitsViewController.m in Sources */,
 				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
 				22780673196AB3DE00F8DED4 /* SQKCommitDetailViewController.m in Sources */,
 				A31AB0E71857769D00B240AB /* Commit.m in Sources */,

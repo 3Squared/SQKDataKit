@@ -9,6 +9,7 @@
 #import "SQKAppDelegate.h"
 #import "SQKCommitsViewController.h"
 #import "SQKMetricsViewController.h"
+#import "SQKAlternateCommitsViewController.h"
 
 #import <SQKDataKit/SQKContextManager.h>
 
@@ -50,9 +51,15 @@ static BOOL isRunningTests(void)
     UINavigationController *metricsNavController =
         [[UINavigationController alloc] initWithRootViewController:metricsViewController];
 
+    
+    SQKAlternateCommitsViewController *altCommitsViewController = [[SQKAlternateCommitsViewController alloc]
+                                                                   initWithContextManager:self.contextManager];
+    UINavigationController *altCommitsNavController =
+    [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
+
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[metricsNavController, commitsNavController];
+    tabBarController.viewControllers = @[metricsNavController, commitsNavController, altCommitsNavController];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
