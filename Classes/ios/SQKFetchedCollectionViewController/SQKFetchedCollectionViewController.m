@@ -21,12 +21,15 @@
          stringWithFormat:@"%s must be set in your subclass init method", __PRETTY_FUNCTION__] \
                  userInfo:nil]
 
-@interface SQKFetchedCollectionViewController ()
+@interface SQKFetchedCollectionViewController () <UISearchBarDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
-@property (nonatomic, strong) NSMutableArray *sectionChanges;
-@property (nonatomic, strong) NSMutableArray *itemChanges;
+@property (strong, nonatomic) UISearchBar *searchBar;
+@property (nonatomic, assign, readwrite) BOOL searchIsActive;
+
+@property (strong, nonatomic) NSMutableArray *sectionChanges;
+@property (strong, nonatomic) NSMutableArray *itemChanges;
 @end
 
 @implementation SQKFetchedCollectionViewController
@@ -38,6 +41,7 @@
     if (self)
     {
         self.managedObjectContext = context;
+        self.searchingEnabled = YES;
     }
     
     return self;
@@ -46,6 +50,34 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
+    
+    if(self.searchingEnabled)
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        
+        self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.collectionView.frame), 44)];
+        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.searchBar.delegate = self;
+        [self.collectionView addSubview:self.searchBar];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if(self.searchingEnabled && !self.searchIsActive)
+    {
+        [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    self.editing = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -141,113 +173,203 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.collectionView performBatchUpdates:^{
-        
-        //Deal with the sections
-        [self.sectionChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
+    if ([self shouldReloadCollectionViewToPreventKnownIssue] || self.collectionView.window == nil)
+    {
+        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+    }
+    else
+    {
+        [self.collectionView performBatchUpdates:^{
             
-            [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            //Deal with the sections
+            [self.sectionChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
                 
-                NSFetchedResultsChangeType type = [key integerValue];
-                
-                switch(type)
-                {
-                    case NSFetchedResultsChangeInsert:
+                [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                    
+                    NSFetchedResultsChangeType type = [key integerValue];
+                    
+                    switch(type)
                     {
-                        [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
-                        break;
+                        case NSFetchedResultsChangeInsert:
+                        {
+                            [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        }
+                        case NSFetchedResultsChangeUpdate:
+                        {
+                            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        }
+                        case NSFetchedResultsChangeMove:
+                        {
+                            NSArray *moves = change[key];
+                            [moves enumerateObjectsUsingBlock:^(NSArray *move, NSUInteger idx, BOOL *stop) {
+                                [self.collectionView moveSection:[move[0] integerValue] toSection:[move[1] integerValue]];
+                            }];
+                            break;
+                        }
+                        case NSFetchedResultsChangeDelete:
+                        {
+                            [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        }
                     }
-                    case NSFetchedResultsChangeUpdate:
-                    {
-                        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
-                        break;
-                    }
-                    case NSFetchedResultsChangeMove:
-                    {
-                        NSArray *moves = change[key];
-                        [moves enumerateObjectsUsingBlock:^(NSArray *move, NSUInteger idx, BOOL *stop) {
-                            [self.collectionView moveSection:[move[0] integerValue] toSection:[move[1] integerValue]];
-                        }];
-                        break;
-                    }
-                    case NSFetchedResultsChangeDelete:
-                    {
-                        [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
-                        break;
-                    }
-                }
+                }];
             }];
-        }];
-        
-        //Now deal with the items
-        [self.itemChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
             
-            [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            //Now deal with the items
+            [self.itemChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
                 
-                NSFetchedResultsChangeType type = [key unsignedIntegerValue];
-                
-                switch(type)
-                {
-                    case NSFetchedResultsChangeInsert:
+                [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                    
+                    NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                    
+                    switch(type)
                     {
-                        [self.collectionView insertItemsAtIndexPaths:@[obj]];
-                        break;
+                        case NSFetchedResultsChangeInsert:
+                        {
+                            [self.collectionView insertItemsAtIndexPaths:@[obj]];
+                            break;
+                        }
+                        case NSFetchedResultsChangeDelete:
+                        {
+                            [self.collectionView deleteItemsAtIndexPaths:@[obj]];
+                            break;
+                        }
+                        case NSFetchedResultsChangeUpdate:
+                        {
+                            [self fetchedResultsController:self.fetchedResultsController
+                                         configureItemCell:[self.collectionView cellForItemAtIndexPath:obj]
+                                               atIndexPath:obj];
+                            break;
+                        }
+                        case NSFetchedResultsChangeMove:
+                        {
+                            [self.collectionView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];
+                            break;
+                        }
                     }
-                    case NSFetchedResultsChangeDelete:
-                    {
-                        [self.collectionView deleteItemsAtIndexPaths:@[obj]];
-                        break;
-                    }
-                    case NSFetchedResultsChangeUpdate:
-                    {
-                        [self fetchedResultsController:self.fetchedResultsController
-                                     configureItemCell:[self.collectionView cellForItemAtIndexPath:obj]
-                                           atIndexPath:obj];
-                        break;
-                    }
-                    case NSFetchedResultsChangeMove:
-                    {
-                        [self.collectionView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];
-                        break;
-                    }
-                }
+                }];
             }];
+            
+        } completion:^(BOOL finished) {
+            self.sectionChanges = nil;
+            self.itemChanges = nil;
         }];
-        
-    } completion:^(BOOL finished) {
-        self.sectionChanges = nil;
-        self.itemChanges = nil;
-    }];
+    }
 }
 
-#pragma mark - FetchedResultsController creation
+- (BOOL)shouldReloadCollectionViewToPreventKnownIssue
+{
+    __block BOOL shouldReload = NO;
+    [self.itemChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
+        [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+            NSIndexPath *indexPath = obj;
+            
+            switch (type)
+            {
+                case NSFetchedResultsChangeInsert:
+                {
+                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 0)
+                    {
+                        shouldReload = YES;
+                    }
+                    else
+                    {
+                        shouldReload = NO;
+                    }
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeDelete:
+                {
+                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 1)
+                    {
+                        shouldReload = YES;
+                    }
+                    else
+                    {
+                        shouldReload = NO;
+                    }
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeUpdate:
+                {
+                    shouldReload = NO;
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeMove:
+                {
+                    shouldReload = NO;
+                    break;
+                }
+            }
+        }];
 
-- (NSFetchRequest *)fetchRequest
+    }];
+    
+    return shouldReload;
+}
+
+#pragma mark - FetchedResultsController
+
+- (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
 {
     mustOverride();
 }
 
-- (NSFetchedResultsController *)fetchedResultsController
+- (NSFetchedResultsController *)fetchedResultsControllerWithSearch:(NSString *)searchString
 {
-    if (_fetchedResultsController != nil)
-    {
-        return _fetchedResultsController;
-    }
-
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequest]
+    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForSearch:searchString]
                                                                     managedObjectContext:self.managedObjectContext
                                                                       sectionNameKeyPath:nil
                                                                                cacheName:nil];
-    _fetchedResultsController.delegate = self;
+    self.fetchedResultsController.delegate = self;
     
     NSError *error = nil;
-    if (![_fetchedResultsController performFetch:&error])
+    if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
     
-    return _fetchedResultsController;
+    return self.fetchedResultsController;
+}
+
+#pragma mark - Search bar
+
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    self.searchIsActive = YES;
+    [searchBar sizeToFit];
+    [searchBar setShowsCancelButton:YES animated:YES];
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
+    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+    
+    self.searchIsActive = NO;
+    self.searchBar.text = nil;
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
+                     }];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [self fetchedResultsControllerWithSearch:searchText];
+    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+    [self.searchBar becomeFirstResponder];
 }
 
 @end

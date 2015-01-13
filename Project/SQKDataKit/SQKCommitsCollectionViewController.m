@@ -18,7 +18,11 @@
 #import <SQKDataKit/NSManagedObject+SQKAdditions.h>
 
 @interface SQKCommitsCollectionViewController ()
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, strong) id json;
 @end
 
 @implementation SQKCommitsCollectionViewController
@@ -29,6 +33,9 @@
     
     if (self)
     {
+        self.queue = [[NSOperationQueue alloc] init];
+        self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
+        
         [self.collectionView registerClass:[SQKCommitItemCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
         
         self.contextManager = contextManager;
@@ -55,6 +62,12 @@
     longPressGesture.minimumPressDuration = 0.5;
     longPressGesture.delaysTouchesBegan = YES;
     [self.collectionView addGestureRecognizer:longPressGesture];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                       action:@selector(refresh:)
+             forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -63,12 +76,36 @@
     [self.collectionView reloadData];
 }
 
+- (void)refresh:(id)sender
+{
+    [self.refreshControl beginRefreshing];
+    OptimisedImportOperation *importOperation =
+    [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
+                                                        data:self.json];
+    __weak typeof(self) weakSelf = self;
+    [importOperation setCompletionBlock:^{
+        [[NSOperationQueue mainQueue]
+         addOperationWithBlock:^{ [weakSelf.refreshControl endRefreshing]; }];
+    }];
+    
+    [self.queue addOperation:importOperation];
+}
+
 #pragma mark -
 
-- (NSFetchRequest *)fetchRequest
+- (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
 {
     NSFetchRequest *request = [Commit sqk_fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
+    
+    NSPredicate *filterPredicate = nil;
+    if (searchString.length)
+    {
+        filterPredicate = [NSPredicate predicateWithFormat:@"authorName CONTAINS[cd] %@", searchString];
+    }
+    
+    [request setPredicate:filterPredicate];
+    
     return request;
 }
 
@@ -78,8 +115,6 @@
     Commit *commit = [fetchedResultsController objectAtIndexPath:indexPath];
     itemCell.authorNameLabel.text = [[self firstCharactersForString:commit.authorName] uppercaseString];
     itemCell.dateLabel.text = [self.dateFormatter stringFromDate:commit.date];
-//    itemCell.authorNameLabel.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
-//    itemCell.dateLabel.text = [NSString stringWithFormat:@"Section %ld row %ld", (long)indexPath.section, (long)indexPath.row];
     itemCell.isEditing = self.editing;
 }
 
@@ -114,7 +149,7 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(10, 26, 10, 26);
+    return UIEdgeInsetsMake(self.searchingEnabled ? 54 : 10, 26, 10, 26);
 }
 
 - (NSString *)firstCharactersForString:(NSString *)string

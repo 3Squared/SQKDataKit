@@ -23,7 +23,11 @@
                configureItemCell:(UICollectionViewCell *)theItemCell
                      atIndexPath:(NSIndexPath *)indexPath;
 
-- (NSFetchRequest *)fetchRequest;
+@property (nonatomic, assign) BOOL searchingEnabled;
+@property (nonatomic, assign, readonly) BOOL searchIsActive;
+@property (strong, nonatomic, readonly) UISearchDisplayController *searchController;
+
+- (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString;
 - (NSFetchedResultsController *)fetchedResultsController;
 
 @end
