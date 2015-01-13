@@ -68,6 +68,7 @@ static BOOL isRunningTests(void)
         NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
         _contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
                                                     managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
         [_contextManager.mainContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
     }

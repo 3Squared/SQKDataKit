@@ -20,8 +20,9 @@
 @implementation SQKContextManager
 
 - (instancetype)initWithStoreType:(NSString *)storeType
-               managedObjectModel:(NSManagedObjectModel *)managedObjectModel
-                         storeURL:(NSURL *)storeURL
+                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+    orderedManagedObjectModelNames:(NSArray *)modelNames
+                          storeURL:(NSURL *)storeURL
 {
     if (!storeType || !managedObjectModel)
     {
@@ -42,6 +43,7 @@
         _persistentStoreCoordinator =
             [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
                                                          managedObjectModel:managedObjectModel
+                                             orderedManagedObjectModelNames:modelNames
                                                                    storeURL:storeURL];
         [self observeForSavedNotification];
     }

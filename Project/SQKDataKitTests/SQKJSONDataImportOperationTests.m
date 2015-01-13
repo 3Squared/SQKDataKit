@@ -38,6 +38,7 @@
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     self.context = [self.contextManager newPrivateContext];
 }

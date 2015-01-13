@@ -12,6 +12,6 @@
 
 + (instancetype)sqk_storeCoordinatorWithStoreType:(NSString *)storeType
                                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                   orderedManagedObjectModelNames:(NSArray *)modelNames
                                          storeURL:(NSURL *)storeURL;
-
 @end

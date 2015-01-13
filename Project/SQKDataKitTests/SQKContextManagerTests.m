@@ -35,6 +35,7 @@
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
 }
 
@@ -59,6 +60,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNotNil(self.contextManager, @"");
     XCTAssertEqualObjects(self.contextManager.storeType, NSInMemoryStoreType, @"");
@@ -69,6 +71,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:nil
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -77,6 +80,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:nil
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -85,6 +89,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:@"unsupported"
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
