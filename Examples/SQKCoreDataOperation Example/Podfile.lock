@@ -2,6 +2,7 @@ PODS:
   - AGAsyncTestHelper (1.0):
     - AGAsyncTestHelper/Core
   - AGAsyncTestHelper/Core (1.0)
+  - OCMock (3.1.1)
   - SQKDataKit/ContextManager (0.5.2)
   - SQKDataKit/CoreDataOperation (0.5.2):
     - SQKDataKit/ContextManager
@@ -10,6 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - AGAsyncTestHelper (~> 1.0)
+  - OCMock (~> 3.1)
   - SQKDataKit/ContextManager (from `../../SQKDataKit.podspec`)
   - SQKDataKit/CoreDataOperation (from `../../SQKDataKit.podspec`)
 
@@ -19,6 +21,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AGAsyncTestHelper: fc9d44460933d8167ae431f466ab3a09a5121582
+  OCMock: f6cb8c162ab9d5620dddf411282c7b2c0ee78854
   SQKDataKit: a7b2f37587588927c7f683d96883d5594a54b50e
 
 COCOAPODS: 0.34.4

@@ -12,15 +12,25 @@
 
 @interface CDOCommitImportOperation ()
 @property (nonatomic, strong) NSError *operationError;
+@property (nonatomic, strong) CDOGithubAPIClient *APIClient;
 @end
 
 @implementation CDOCommitImportOperation
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient
+{
+    self = [super initWithContextManager:contextManager];
+    if (self) {
+        self.APIClient = APIClient;
+    }
+    return self;
+}
 
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
 	NSLog(@"Executing %@", NSStringFromClass([self class]));
 
 	NSError *error = nil;
-	NSArray *commits = [[CDOGithubAPIClient sharedInstance] getCommitsForRepo:@"sqkdatakit" error:&error];
+	NSArray *commits = [self.APIClient getCommitsForRepo:@"sqkdatakit" error:&error];
 	if (error) {
 		self.operationError = error;
 		NSLog(@"%@", error);

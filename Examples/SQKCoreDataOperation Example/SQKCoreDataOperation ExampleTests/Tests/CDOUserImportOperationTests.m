@@ -13,6 +13,8 @@
 #import "User.h"
 #import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "CDOGithubAPIClient.h"
+#import <OCMock/OCMock.h>
+#import "CDOJSONFixtureLoader.h"
 
 @interface CDOUserImportOperationTests : XCTestCase
 @property (nonatomic, strong) SQKContextManager *contextManager;
@@ -25,19 +27,18 @@
 - (void)setUp {
 	[super setUp];
 
-	// Set your Github API access token for the CDOGithubAPIClient
-	// See: https://github.com/settings/applications#personal-access-tokens
-	// I'm loading mine from a .plist (ignored in the git repo)
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
-	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
-	NSString *accessToken = plistDict[@"token"];
-	[CDOGithubAPIClient sharedInstance].accessToken = accessToken;
+    CDOGithubAPIClient *APIClientMock = OCMClassMock([CDOGithubAPIClient class]);
+    
+    NSArray *usersJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"users"];
+
+    OCMStub([APIClientMock getUser:@"lukestringer90" error:[OCMArg anyObjectRef]]).andReturn(usersJSON[0]);
+    OCMStub([APIClientMock getUser:@"blork" error:[OCMArg anyObjectRef]]).andReturn(usersJSON[1]);
 
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
 	                                                managedObjectModel:model
 	                                                          storeURL:nil];
-	self.operation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager];
+	self.operation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
 	self.queue = [NSOperationQueue new];
 }
 

@@ -8,6 +8,9 @@
 
 #import "SQKCoreDataOperation.h"
 
+@class CDOGithubAPIClient;
 @interface CDOCommitImportOperation : SQKCoreDataOperation
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient;
 
 @end
