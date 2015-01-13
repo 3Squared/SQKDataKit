@@ -14,9 +14,20 @@
 
 @interface CDOUserImportOperation ()
 @property (nonatomic, strong) NSError *operationError;
+@property (nonatomic, strong) CDOGithubAPIClient *APIClient;
 @end
 
 @implementation CDOUserImportOperation
+
+
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient
+{
+    self = [super initWithContextManager:contextManager];
+    if (self) {
+        self.APIClient = APIClient;
+    }
+    return self;
+}
 
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
 	NSLog(@"Executing %@", NSStringFromClass([self class]));
@@ -28,7 +39,7 @@
 
 	if (users.count > 0) {
 		for (User *user in users) {
-			id JSON = [[CDOGithubAPIClient sharedInstance] getUser:user.username error:NULL];
+			id JSON = [self.APIClient getUser:user.username error:NULL];
 			[usersJSON addObject:JSON];
 		}
 		CDOUserImporter *importer = [[CDOUserImporter alloc] initWithManagedObjectContext:context];

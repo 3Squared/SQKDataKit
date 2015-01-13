@@ -10,9 +10,7 @@
 
 @interface CDOGithubAPIClient : NSObject
 
-@property (nonatomic, strong) NSString *accessToken;
-
-+ (CDOGithubAPIClient *)sharedInstance;
+- (instancetype)initWithAccessToken:(NSString *)accessToken;
 
 - (id)getCommitsForRepo:(NSString *)repoName error:(NSError **)error;
 - (id)getUser:(NSString *)username error:(NSError **)error;
