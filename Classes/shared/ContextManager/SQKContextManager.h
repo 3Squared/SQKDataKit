@@ -24,21 +24,14 @@
 @interface SQKContextManager : NSObject
 
 /**
- *  The persistent store type used by the manager's persistent store coordinator. A string constant
- * (such as NSSQLiteStoreType or NSInMemoryStoreType) that specifies the store type
+ *  The persistent store coordinator used by the context manager.
  */
-@property (nonatomic, readonly) NSString *storeType;
+@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 /**
- *  The managed object model used by the manager's persistent store coordinator.
-
- */
-@property (nonatomic, readonly) NSManagedObjectModel *managedObjectModel;
-
-/**
- *  Initialises the a context manager with a store type and managed object model.
+ *  Initialises a context manager with a persistent store coordinator using the specifed store type and managed object model.
  *
- *  @param storeType A string constant (such as NSSQLiteStoreType or NSInMemoryStoreType)
+ *  @param storeType A string specifying a supported store type by NSPersistentStoreCoordinator.
  *that specifies the store type.
  *  @param managedObjectModel A managed object model.
  *  @param orderedManagedObjectModelNames The names of the MOM/MOMD/.xcdatamodel files in the app
@@ -46,23 +39,29 @@
  *  @param storeURL Optional. Specify a custom location to create the persistent store, or nil.
  *          Useful if you want to put the store in a shared location using App Groups.
 
- *  @return A context manager.
+ *  @return A context manager, or nil if a) the store type is not unspported by NSPersistentStoreCoordinator, or b) the managed object model is nil.
  */
 - (instancetype)initWithStoreType:(NSString *)storeType
                 managedObjectModel:(NSManagedObjectModel *)managedObjectModel
     orderedManagedObjectModelNames:(NSArray *)modelNames
                           storeURL:(NSURL *)storeURL;
 
+
 /**
- *  The main managed object context to be used for UI based Core
- *Data work (on the main thread). A
- *`SQKContextManager` instance has a single main managed object
- *context which is returned here. **Do
- *not use the main mamaged object context in a background
- *thread.**
+ *  Initialises a context manager with a persistent store coordinator.
  *
- *  @return The main managed object context to be used for UI
- *based Core Data work (on the main
+ *  @param persistentStoreCoordinator A configured persistent store coordinator.
+ *
+ *  @return A context manager.
+ */
+- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator;
+
+/**
+ *  The main managed object context to be used for UI based Core Data work (on the main thread). A
+ *`SQKContextManager` instance has a single main managed object context which is returned here. **Do
+ *not use the main mamaged object context in a background thread.**
+ *
+ *  @return The main managed object context to be used for UI based Core Data work (on the main
  *thread).
  */
 - (NSManagedObjectContext *)mainContext;
