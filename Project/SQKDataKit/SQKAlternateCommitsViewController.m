@@ -102,13 +102,7 @@
     (SQKCommitCell *)[self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
                                          forIndexPath:indexPath];
 
-    Commit *commit = [self.controller.managedObjects objectAtIndex:indexPath.row];
-
-    cell.authorNameLabel.text = commit.authorName;
-    cell.authorEmailLabel.text = commit.authorEmail;
-    cell.dateLabel.text = [commit.date description];
-    cell.shaLabel.text = commit.sha;
-    cell.messageLabel.text = commit.message;
+    [self configureCell:cell atIndexPath:indexPath];
     
     return cell;
 }
@@ -155,21 +149,69 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 -(void)controller:(SQKManagedObjectController *)controller didInsertObjects:(NSIndexSet *)insertedObjectIndexes
 {
     NSLog(@"didInsertObjects");
-    for (Commit *commit in [self.controller.managedObjects objectsAtIndexes:insertedObjectIndexes]) {
-        NSLog(@"Inserted commit: %@", commit.sha);
-    }
-    [self.controller performFetch:nil];
-    [self.tableView reloadData];
+    [[self.contextManager mainContext] performBlock:^{
+        [self.tableView beginUpdates];
+        
+        [self.controller performFetch:nil notify:NO];
+        
+        NSMutableArray *indexPaths = [NSMutableArray array];
+        [insertedObjectIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+            [indexPaths addObject:[NSIndexPath indexPathForItem:idx inSection:0]];
+        }];
+        
+        [self.tableView insertRowsAtIndexPaths:indexPaths
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [self.tableView endUpdates];
+    }];
 }
 
 -(void)controller:(SQKManagedObjectController *)controller didDeleteObjects:(NSIndexSet *)deletedObjectIndexes
 {
     NSLog(@"didDeleteObjects");
-    for (Commit *commit in [self.controller.managedObjects objectsAtIndexes:deletedObjectIndexes]) {
-        NSLog(@"Deleted commit: %@", commit);
-    }
-    [self.controller performFetch:nil];
-    [self.tableView reloadData];
+    [[self.contextManager mainContext] performBlock:^{
+        [self.tableView beginUpdates];
+
+        [self.controller performFetch:nil notify:NO];
+
+        NSMutableArray *indexPaths = [NSMutableArray array];
+        [deletedObjectIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+            [indexPaths addObject:[NSIndexPath indexPathForItem:idx inSection:0]];
+        }];
+
+        [self.tableView deleteRowsAtIndexPaths:indexPaths
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+
+        [self.tableView endUpdates];
+    }];
+}
+
+-(void)controller:(SQKManagedObjectController *)controller didSaveObjects:(NSIndexSet *)savedObjectIndexes
+{
+    NSLog(@"didSaveObjects");
+    [[self.contextManager mainContext] performBlock:^{
+        [self.tableView beginUpdates];
+
+        [savedObjectIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:idx inSection:0];
+            [self configureCell:[self.tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+        }];
+        
+        [self.tableView endUpdates];
+    }];
+}
+
+
+- (void)configureCell:(UITableViewCell *)theCell
+          atIndexPath:(NSIndexPath *)indexPath
+{
+    SQKCommitCell *cell = (SQKCommitCell*)theCell;
+    Commit *commit = [self.controller.managedObjects objectAtIndex:indexPath.row];
+    cell.authorNameLabel.text = commit.authorName;
+    cell.authorEmailLabel.text = commit.authorEmail;
+    cell.dateLabel.text = [commit.date description];
+    cell.shaLabel.text = commit.sha;
+    cell.messageLabel.text = commit.message;
 }
 
 @end
