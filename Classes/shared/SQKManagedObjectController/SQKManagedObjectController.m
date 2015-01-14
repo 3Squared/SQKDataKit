@@ -90,6 +90,11 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 - (BOOL)performFetch:(NSError **)error
 {
+    return [self performFetch:error notify:YES];
+}
+
+- (BOOL)performFetch:(NSError **)error notify:(BOOL)shouldNotify
+{
     if (!self.fetchRequest)
     {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
@@ -108,15 +113,18 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
     self.managedObjects = [fetchedObjects objectsAtIndexes:indexes];
 
-    NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
-    if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
-    {
-        [self.delegate controller:self fetchedObjects:allIndexes error:error];
+    if (shouldNotify) {
+        NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
+        if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
+        {
+            [self.delegate controller:self fetchedObjects:allIndexes error:error];
+        }
+        if (self.fetchedObjectsBlock)
+        {
+            self.fetchedObjectsBlock(self, allIndexes, *error);
+        }
     }
-    if (self.fetchedObjectsBlock)
-    {
-        self.fetchedObjectsBlock(self, allIndexes, *error);
-    }
+    
     return error ? NO : YES;
 }
 

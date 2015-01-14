@@ -154,16 +154,32 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  */
 - (instancetype)initWithManagedObject:(NSManagedObject *)managedObject;
 
+
 /**
  *  Execute the fetch request and store the results in self.managedObjects.
  *  Blocks the main thread. On returning, fetchedObjects will be available.
  *
  *  @param error If there is a problem executing the fetch, upon return contains an instance of
- *NSError that describes the problem.
+ *  NSError that describes the problem.
  *
  *  @return YES if the fetch succeeds, otherwise NO.
  */
 - (BOOL)performFetch:(NSError **)error;
+
+
+/**
+ *  Execute the fetch request and store the results in self.managedObjects.
+ *  Blocks the main thread. On returning, fetchedObjects will be available.
+ *
+ *  @param error If there is a problem executing the fetch, upon return contains an instance of
+ *  NSError that describes the problem.
+ *
+ *  @param notify If NO, does not fire delegate or block callbacks.
+ *
+ *  @return YES if the fetch succeeds, otherwise NO.
+ */
+- (BOOL)performFetch:(NSError **)error notify:(BOOL)shouldNotify;
+
 
 /**
  *  Deleted the fetched objects from self.managedObjectContext and saves.
