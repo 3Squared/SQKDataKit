@@ -247,7 +247,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 {
                     if ([updatedObject.objectID isEqual:existingObject.objectID])
                     {
-                        [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        [self.managedObjectContext performBlockAndWait:^{
+                            [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        }];
                         return YES;
                     }
                 }
@@ -278,7 +280,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 {
                     if ([deletedObject.objectID isEqual:existingObject.objectID])
                     {
-                        [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        [self.managedObjectContext performBlockAndWait:^{
+                            [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        }];
                         return YES;
                     }
                 }

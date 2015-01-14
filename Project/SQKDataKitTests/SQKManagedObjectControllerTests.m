@@ -270,7 +270,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
+    AGWW_WAIT_WHILE(!blockUpdateDone, 1.0);
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
                           @"");
@@ -281,8 +281,9 @@
  */
 - (void)testInitialisingWithObjectAsync
 {
-    [self.controller performFetch:nil];
     self.controller.delegate = nil;
+    [self.controller performFetch:nil];
+    
     SQKManagedObjectController *objectsController =
         [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
@@ -301,7 +302,7 @@
         }];
     });
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+    AGWW_WAIT_WHILE(!blockUpdateDone, 100.0);
     XCTAssertEqual([[objectsController managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
