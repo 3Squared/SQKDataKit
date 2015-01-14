@@ -129,53 +129,51 @@ NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
         return;
     }
 
-    [context performBlockAndWait:^{
-        @autoreleasepool
-        {
-            NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-            NSArray *sortedDictArray = [remoteData sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
-            NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
-            
-            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-            [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
-            [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
-            
-            NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
-            [fetchRequest setSortDescriptors: @[localDataSortDescriptor]];
-            
-            NSError *localError = nil;
-            NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
-            if (localError) {
-                *error = localError;
-                return;
-            }
-            
-            NSEnumerator *managedObjectEnumerator = [objectsMatchingKey objectEnumerator];
-            NSEnumerator *remoteObjectEnumerator = [sortedDictArray objectEnumerator];
-            
-            id remoteObject;
-            id managedObject = [managedObjectEnumerator nextObject];
-            
-            while (remoteObject = [remoteObjectEnumerator nextObject]) {
-                id remoteObjectKeyValue = [remoteObject valueForKey:remoteDataKey];
-                if (remoteObjectKeyValue && remoteObjectKeyValue != [NSNull null]) {
-                    if (managedObject && [[managedObject valueForKey:modelKey] isEqual:remoteObjectKeyValue]) {
-                        if (propertySetterBlock) {
-                            propertySetterBlock(remoteObject, managedObject);
-                        }
-                        managedObject = [managedObjectEnumerator nextObject];
+    @autoreleasepool
+    {
+        NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
+        NSArray *sortedDictArray = [remoteData sortedArrayUsingDescriptors:@[remoteDataSortDescriptor]];
+        NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
+        [fetchRequest setPredicate: [NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
+        
+        NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
+        [fetchRequest setSortDescriptors: @[localDataSortDescriptor]];
+        
+        NSError *localError = nil;
+        NSArray *objectsMatchingKey = [context executeFetchRequest:fetchRequest error:&localError];
+        if (localError) {
+            *error = localError;
+            return;
+        }
+        
+        NSEnumerator *managedObjectEnumerator = [objectsMatchingKey objectEnumerator];
+        NSEnumerator *remoteObjectEnumerator = [sortedDictArray objectEnumerator];
+        
+        id remoteObject;
+        id managedObject = [managedObjectEnumerator nextObject];
+        
+        while (remoteObject = [remoteObjectEnumerator nextObject]) {
+            id remoteObjectKeyValue = [remoteObject valueForKey:remoteDataKey];
+            if (remoteObjectKeyValue && remoteObjectKeyValue != [NSNull null]) {
+                if (managedObject && [[managedObject valueForKey:modelKey] isEqual:remoteObjectKeyValue]) {
+                    if (propertySetterBlock) {
+                        propertySetterBlock(remoteObject, managedObject);
                     }
-                    else {
-                        id newObject = [[self class] sqk_insertInContext:context];
-                        [newObject setValue:remoteObjectKeyValue forKey:modelKey];
-                        if (propertySetterBlock) {
-                            propertySetterBlock(remoteObject, newObject);
-                        }
+                    managedObject = [managedObjectEnumerator nextObject];
+                }
+                else {
+                    id newObject = [[self class] sqk_insertInContext:context];
+                    [newObject setValue:remoteObjectKeyValue forKey:modelKey];
+                    if (propertySetterBlock) {
+                        propertySetterBlock(remoteObject, newObject);
                     }
                 }
             }
         }
-    }];
+    }
 }
 
 + (NSPropertyDescription *)sqk_propertyDescriptionForName:(NSString *)name
