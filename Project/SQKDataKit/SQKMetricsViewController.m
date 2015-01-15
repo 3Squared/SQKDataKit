@@ -250,8 +250,10 @@ static NSString *CellIdentifier = @"Cell";
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isOptimisedImporting = NO;
             self.optimisedImportDuration = [[NSDate date] timeIntervalSinceDate:strongOperation.startDate];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:MetricsSectionOptimised]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:MetricsSectionOptimised]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
         }];
     }];
 
@@ -264,16 +266,20 @@ static NSString *CellIdentifier = @"Cell";
 {
     NSBlockOperation *deleteOperation = [NSBlockOperation blockOperationWithBlock:^{
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
-        privateContext.shouldMergeOnSave = YES;
-        [Commit sqk_deleteAllObjectsInContext:privateContext error:nil];
-        [privateContext save:nil];
-
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            self.isDeleting = NO;
-            [self.tableView
-                reloadRowsAtIndexPaths:
-                    @[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        [privateContext performBlockAndWait:^{
+            privateContext.shouldMergeOnSave = YES;
+            [Commit sqk_deleteAllObjectsInContext:privateContext error:nil];
+            [privateContext save:nil];
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                self.isDeleting = NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView
+                     reloadRowsAtIndexPaths:
+                     @[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]]
+                     withRowAnimation:UITableViewRowAnimationAutomatic];
+                });
+            }];
         }];
     }];
 
