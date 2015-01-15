@@ -14,13 +14,6 @@
                    reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
                  userInfo:nil]
 
-#define mustSet()                                                                                                   \
-    @throw [NSException                                                                                             \
-        exceptionWithName:NSInvalidArgumentException                                                                \
-                   reason:[NSString                                                                                 \
-         stringWithFormat:@"%s must be set in your subclass init method", __PRETTY_FUNCTION__] \
-                 userInfo:nil]
-
 @interface SQKFetchedCollectionViewController () <UISearchBarDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -69,9 +62,16 @@
 {
     [super viewWillAppear:animated];
     
-    if(self.searchingEnabled && !self.searchIsActive)
+    if(self.searchingEnabled)
     {
-        [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
+        if(self.searchIsActive)
+        {
+            [self.searchBar becomeFirstResponder];
+        }
+        else
+        {
+            [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
+        }
     }
 }
 
