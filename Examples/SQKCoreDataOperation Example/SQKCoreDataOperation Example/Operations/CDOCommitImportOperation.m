@@ -11,7 +11,6 @@
 #import "CDOCommitImporter.h"
 
 @interface CDOCommitImportOperation ()
-@property (nonatomic, strong) NSError *operationError;
 @property (nonatomic, strong) CDOGithubAPIClient *APIClient;
 @end
 
@@ -35,8 +34,8 @@
     NSArray *commits = [self.APIClient getCommitsForRepo:@"sqkdatakit" error:&error];
     if (error)
     {
-        self.operationError = error;
         NSLog(@"%@", error);
+        [self addError:error];
         [self completeOperationBySavingContext:context];
         return;
     }
@@ -47,9 +46,5 @@
     [self completeOperationBySavingContext:context];
 }
 
-- (NSError *)error
-{
-    return self.operationError;
-}
 
 @end
