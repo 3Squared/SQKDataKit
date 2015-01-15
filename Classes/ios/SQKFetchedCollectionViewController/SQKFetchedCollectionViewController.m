@@ -14,7 +14,7 @@
                    reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
                  userInfo:nil]
 
-@interface SQKFetchedCollectionViewController () <UISearchBarDelegate>
+@interface SQKFetchedCollectionViewController ()
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
@@ -37,6 +37,30 @@
         self.searchingEnabled = YES;
     }
     
+    return self;
+}
+
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled
+{
+    self = [super initWithCollectionViewLayout:layout];
+    
+    if (self)
+    {
+        self.managedObjectContext = context;
+        self.searchingEnabled = searchingEnabled;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    
+    if (self)
+    {
+        self.searchingEnabled = YES;
+    }
     return self;
 }
 
