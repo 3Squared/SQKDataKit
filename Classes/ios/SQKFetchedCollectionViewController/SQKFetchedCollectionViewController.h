@@ -29,6 +29,11 @@
 @property (nonatomic, assign) BOOL searchingEnabled;
 
 /**
+ *  Exposing the search bar so it can be customised.
+ */
+@property (strong, nonatomic, readonly) UISearchBar *searchBar;
+
+/**
  *  Returns YES if the user is actively searching, i.e. the search bar has begun editing. 
  *  Returns NO after the user has cancelled the search.
  */
@@ -79,5 +84,12 @@
  *  @warning This method must be overidden in your subclass.
  */
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString;
+
+/**
+ *  Forces the fetched results controller to be recreated, causing performFetch to be fired again.
+ *
+ *  @param search Search text for the request to be filtered by.
+ */
+- (void)reloadFetchedResultsControllerForSearch:(NSString *)search;
 
 @end
