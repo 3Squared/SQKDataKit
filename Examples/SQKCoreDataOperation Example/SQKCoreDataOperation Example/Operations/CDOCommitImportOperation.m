@@ -20,32 +20,36 @@
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient
 {
     self = [super initWithContextManager:contextManager];
-    if (self) {
+    if (self)
+    {
         self.APIClient = APIClient;
     }
     return self;
 }
 
-- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
-	NSLog(@"Executing %@", NSStringFromClass([self class]));
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
+{
+    NSLog(@"Executing %@", NSStringFromClass([self class]));
 
-	NSError *error = nil;
-	NSArray *commits = [self.APIClient getCommitsForRepo:@"sqkdatakit" error:&error];
-	if (error) {
-		self.operationError = error;
-		NSLog(@"%@", error);
-		[self completeOperationBySavingContext:context];
-		return;
-	}
+    NSError *error = nil;
+    NSArray *commits = [self.APIClient getCommitsForRepo:@"sqkdatakit" error:&error];
+    if (error)
+    {
+        self.operationError = error;
+        NSLog(@"%@", error);
+        [self completeOperationBySavingContext:context];
+        return;
+    }
 
-	CDOCommitImporter *importer = [[CDOCommitImporter alloc] initWithManagedObjectContext:context];
-	[importer importJSON:commits];
+    CDOCommitImporter *importer = [[CDOCommitImporter alloc] initWithManagedObjectContext:context];
+    [importer importJSON:commits];
 
-	[self completeOperationBySavingContext:context];
+    [self completeOperationBySavingContext:context];
 }
 
-- (NSError *)error {
-	return self.operationError;
+- (NSError *)error
+{
+    return self.operationError;
 }
 
 @end

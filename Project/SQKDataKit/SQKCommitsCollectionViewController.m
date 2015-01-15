@@ -30,20 +30,20 @@
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout contextManager:(SQKContextManager *)contextManager
 {
     self = [super initWithCollectionViewLayout:layout context:[contextManager mainContext]];
-    
+
     if (self)
     {
         self.queue = [[NSOperationQueue alloc] init];
         self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
-        
+
         [self.collectionView registerClass:[SQKCommitItemCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
-        
+
         self.contextManager = contextManager;
         self.title = @"Collection";
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title
                                                         image:[UIImage imageNamed:@"collection"]
                                                           tag:0];
-        
+
         self.dateFormatter = [[NSDateFormatter alloc] init];
         self.dateFormatter.dateFormat = @"dd/MM/yy at hh:mm";
     }
@@ -53,24 +53,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+
     self.collectionView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    
+
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPressGesture.minimumPressDuration = 0.5;
     longPressGesture.delaysTouchesBegan = YES;
     [self.collectionView addGestureRecognizer:longPressGesture];
-    
+
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self
-                       action:@selector(refresh:)
-             forControlEvents:UIControlEventValueChanged];
+                            action:@selector(refresh:)
+                  forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.collectionView reloadData];
@@ -79,15 +79,15 @@
 - (void)refresh:(id)sender
 {
     [self.refreshControl beginRefreshing];
-    OptimisedImportOperation *importOperation =
-    [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
-                                                        data:self.json];
+    OptimisedImportOperation *importOperation = [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
+                                                                                                    data:self.json];
     __weak typeof(self) weakSelf = self;
     [importOperation setCompletionBlock:^{
-        [[NSOperationQueue mainQueue]
-         addOperationWithBlock:^{ [weakSelf.refreshControl endRefreshing]; }];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [weakSelf.refreshControl endRefreshing];
+        }];
     }];
-    
+
     [self.queue addOperation:importOperation];
 }
 
@@ -96,16 +96,16 @@
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
 {
     NSFetchRequest *request = [Commit sqk_fetchRequest];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
-    
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ];
+
     NSPredicate *filterPredicate = nil;
     if (searchString.length)
     {
         filterPredicate = [NSPredicate predicateWithFormat:@"authorName CONTAINS[cd] %@", searchString];
     }
-    
+
     [request setPredicate:filterPredicate];
-    
+
     return request;
 }
 
@@ -134,8 +134,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     Commit *commit = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    
-    if(self.editing)
+
+    if (self.editing)
     {
         [commit sqk_deleteObject];
     }
@@ -147,7 +147,7 @@
     }
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(self.searchingEnabled ? 54 : 10, 26, 10, 26);
 }
@@ -155,18 +155,18 @@
 - (NSString *)firstCharactersForString:(NSString *)string
 {
     NSMutableString *firstCharacters = [NSMutableString string];
-    
+
     NSArray *words = [string componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
+
     [words enumerateObjectsUsingBlock:^(NSString *word, NSUInteger idx, BOOL *stop) {
         NSString * firstLetter = [word substringToIndex:1];
         [firstCharacters appendString:firstLetter];
     }];
-    
+
     return firstCharacters;
 }
 
--(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if (gestureRecognizer.state != UIGestureRecognizerStateEnded)
     {
@@ -177,13 +177,13 @@
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
     [super setEditing:editing animated:animated];
-    
+
     [self.collectionView reloadData];
 }
 
 - (void)toggleEditing
 {
-    if(self.editing)
+    if (self.editing)
     {
         self.editing = NO;
     }

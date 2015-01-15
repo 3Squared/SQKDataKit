@@ -24,39 +24,41 @@
 
 @implementation CDOUserImportOperationTests
 
-- (void)setUp {
-	[super setUp];
+- (void)setUp
+{
+    [super setUp];
 
     CDOGithubAPIClient *APIClientMock = OCMClassMock([CDOGithubAPIClient class]);
-    
+
     NSArray *usersJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"users"];
 
     OCMStub([APIClientMock getUser:@"lukestringer90" error:[OCMArg anyObjectRef]]).andReturn(usersJSON[0]);
     OCMStub([APIClientMock getUser:@"blork" error:[OCMArg anyObjectRef]]).andReturn(usersJSON[1]);
 
-	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-	                                                managedObjectModel:model
-                                        orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
-	                                                          storeURL:nil];
-	self.operation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
-	self.queue = [NSOperationQueue new];
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                                    managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[ @"SQKCoreDataOperation_Example" ]
+                                                              storeURL:nil];
+    self.operation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
+    self.queue = [NSOperationQueue new];
 }
 
-- (void)testOperation {
-	__block BOOL operationFinished = NO;
-    
+- (void)testOperation
+{
+    __block BOOL operationFinished = NO;
+
     NSManagedObjectContext *context = [self.contextManager mainContext];
 
     User *luke = [User sqk_insertInContext:context];
     luke.username = @"lukestringer90";
-    
+
     User *blork = [User sqk_insertInContext:context];
     blork.username = @"blork";
-    
+
     [context save:NULL];
 
-	[self.operation setCompletionBlock: ^{
+    [self.operation setCompletionBlock:^{
 	    [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
 
 	        NSFetchRequest *userFetchRequest = [User sqk_fetchRequest];
@@ -72,10 +74,10 @@
 		}];
 
 	    operationFinished = YES;
-	}];
+    }];
 
-	[self.queue addOperation:self.operation];
-	AGWW_WAIT_WHILE(!operationFinished, 5.0);
+    [self.queue addOperation:self.operation];
+    AGWW_WAIT_WHILE(!operationFinished, 5.0);
 }
 
 @end

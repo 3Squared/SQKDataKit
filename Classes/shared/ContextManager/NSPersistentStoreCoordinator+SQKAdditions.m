@@ -22,9 +22,7 @@
         storeURL = [self storeURL];
     }
 
-    NSPersistentStoreCoordinator *persistentStoreCoordinator =
-        [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
-
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
     NSError *migrationError = nil;
     [SQKModelMigrator iterativeMigrateURL:storeURL
@@ -39,8 +37,8 @@
     }
 
     NSDictionary *options = @{
-        NSMigratePersistentStoresAutomaticallyOption: @(YES),
-        NSInferMappingModelAutomaticallyOption: @(YES)
+        NSMigratePersistentStoresAutomaticallyOption : @(YES),
+        NSInferMappingModelAutomaticallyOption : @(YES)
     };
 
     NSError *addPersistentStoreError = nil;
@@ -63,15 +61,11 @@
     NSString *applicationName = [applicationInfo objectForKey:@"CFBundleDisplayName"];
 
 #if TARGET_OS_IPHONE
-
     NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory
                                                                   inDomains:NSUserDomainMask] lastObject];
-
 #else
-
     NSURL *documentsURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory
                                                                   inDomains:NSUserDomainMask] lastObject];
-
 #endif
 
     return [documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", applicationName]];

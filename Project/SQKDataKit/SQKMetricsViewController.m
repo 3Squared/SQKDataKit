@@ -18,15 +18,19 @@
 #import <SQKDataKit/NSManagedObjectContext+SQKAdditions.h>
 
 typedef NS_ENUM(NSInteger, MetricsSection)
-{ MetricsSectionNaive,
-  MetricsSectionOptimised,
-  MetricsSectionDeleteAll,
-  MetricsSectionCount };
+{
+    MetricsSectionNaive,
+    MetricsSectionOptimised,
+    MetricsSectionDeleteAll,
+    MetricsSectionCount
+};
 
 typedef NS_ENUM(NSInteger, MetricsRow)
-{ MetricsRowStart,
-  MetricsRowInformation,
-  MetricsRowCount };
+{
+    MetricsRowStart,
+    MetricsRowInformation,
+    MetricsRowCount
+};
 
 @interface SQKMetricsViewController ()
 @property (nonatomic, assign) BOOL isNaiveImporting;
@@ -63,7 +67,6 @@ static NSString *CellIdentifier = @"Cell";
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:CellIdentifier];
 }
-
 
 #pragma mark - Table view data source
 
@@ -115,8 +118,7 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)configureDeleteCell:(UITableViewCell *)cell
 {
-    UIActivityIndicatorView *activityView =
-        [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     if (self.isDeleting)
     {
         [activityView startAnimating];
@@ -132,10 +134,8 @@ static NSString *CellIdentifier = @"Cell";
 
 - (void)configureStartCell:(UITableViewCell *)cell inSection:(MetricsSection)section
 {
-    UIActivityIndicatorView *activityView =
-        [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    if ((section == MetricsSectionNaive && self.isNaiveImporting)
-        || (section == MetricsSectionOptimised && self.isOptimisedImporting))
+    UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if ((section == MetricsSectionNaive && self.isNaiveImporting) || (section == MetricsSectionOptimised && self.isOptimisedImporting))
     {
         cell.textLabel.text = @"Importing...";
         [activityView startAnimating];
@@ -186,8 +186,7 @@ static NSString *CellIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BOOL indexPathIsStartNaiveImport = indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionNaive;
-    BOOL indePathIsStartOptmisedImport = indexPath.row == MetricsRowStart
-                                         && indexPath.section == MetricsSectionOptimised;
+    BOOL indePathIsStartOptmisedImport = indexPath.row == MetricsRowStart && indexPath.section == MetricsSectionOptimised;
     BOOL indexPathIsDeleteAll = indexPath.section == MetricsSectionDeleteAll;
     BOOL notImporting = !self.isOptimisedImporting && !self.isNaiveImporting;
 
@@ -270,15 +269,12 @@ static NSString *CellIdentifier = @"Cell";
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             self.isDeleting = NO;
-            [self.tableView
-                reloadRowsAtIndexPaths:
-                    @[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MetricsSectionDeleteAll]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
 
     [self.queue addOperation:deleteOperation];
 }
-
 
 @end

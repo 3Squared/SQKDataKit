@@ -35,10 +35,10 @@
 {
     [super setUp];
     NSManagedObjectModel *managedObjectModel =
-        [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+        [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle mainBundle] ]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
     self.context = [self.contextManager newPrivateContext];
 }

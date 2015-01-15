@@ -13,11 +13,11 @@
 
 @interface User : NSManagedObject
 
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSNumber * followers;
-@property (nonatomic, retain) NSString * avatarURL;
-@property (nonatomic, retain) NSNumber * following;
-@property (nonatomic, retain) NSString * email;
+@property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSNumber *followers;
+@property (nonatomic, retain) NSString *avatarURL;
+@property (nonatomic, retain) NSNumber *following;
+@property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSSet *commits;
 @end
 

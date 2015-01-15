@@ -25,11 +25,10 @@
 {
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-    SQKContextManager *contextManager =
-        [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-                                  managedObjectModel:model
-                      orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
-                                            storeURL:nil];
+    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                                                  managedObjectModel:model
+                                                      orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
+                                                                            storeURL:nil];
     self.privateContext = [contextManager newPrivateContext];
     self.mainContext = [contextManager mainContext];
 }
@@ -67,8 +66,7 @@
 
 - (void)testPropertyDescription
 {
-    NSPropertyDescription *propertyDescription =
-        [Commit sqk_propertyDescriptionForName:@"sha" context:self.mainContext];
+    NSPropertyDescription *propertyDescription = [Commit sqk_propertyDescriptionForName:@"sha" context:self.mainContext];
     XCTAssertEqualObjects(propertyDescription.name, @"sha", @"");
 }
 
@@ -179,16 +177,12 @@
 - (void)testInsertOrUpdateCallsPropertySetterBlockForEach
 {
     __block NSInteger blockCallCount = 0;
-    SQKPropertySetterBlock propertySetterBlock
-        = ^void(NSDictionary *dictionary, NSManagedObject *managedObject) { ++blockCallCount; };
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, NSManagedObject *managedObject) { ++blockCallCount; };
 
     NSArray *dictArray = @[
-        @
-        { @"sha": @"123" },
-        @
-        { @"sha": @"456" },
-        @
-        { @"sha": @"789" }
+        @{ @"sha" : @"123" },
+        @{ @"sha" : @"456" },
+        @{ @"sha" : @"789" }
     ];
     __block NSError *error = nil;
     [self.privateContext performBlockAndWait:^{
@@ -199,7 +193,7 @@
                     privateContext:self.privateContext
                              error:&error];
     }];
-    
+
     XCTAssertNil(error, @"");
     XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
 }
@@ -213,9 +207,8 @@
         capturedManagedObject = managedObject;
     };
 
-    NSDictionary *propertyDictionary = @
-    { @"sha": @"123" };
-    NSArray *dictArray = @[propertyDictionary];
+    NSDictionary *propertyDictionary = @{ @"sha" : @"123" };
+    NSArray *dictArray = @[ propertyDictionary ];
 
     __block NSError *error = nil;
     [self.privateContext performBlockAndWait:^{
@@ -235,12 +228,9 @@
 - (void)testInsertsAllNewObjectsInInsertOrUpdateWithSameLocalAndRemoteKeys
 {
     NSArray *dictArray = @[
-        @
-        { @"sha": @"123" },
-        @
-        { @"sha": @"456" },
-        @
-        { @"sha": @"789" }
+        @{ @"sha" : @"123" },
+        @{ @"sha" : @"456" },
+        @{ @"sha" : @"789" }
     ];
     __block NSError *insertOrUpdateError = nil;
     [self.privateContext performBlockAndWait:^{
@@ -268,12 +258,9 @@
 - (void)testInsertsWithCorrectUniqueKeySet
 {
     NSArray *dictArray = @[
-        @
-        { @"sha": @"123" },
-        @
-        { @"sha": @"456" },
-        @
-        { @"sha": @"789" }
+        @{ @"sha" : @"123" },
+        @{ @"sha" : @"456" },
+        @{ @"sha" : @"789" }
     ];
     __block NSError *insertOrUpdateError = nil;
     [self.privateContext performBlockAndWait:^{
@@ -284,7 +271,7 @@
                     privateContext:self.privateContext
                              error:&insertOrUpdateError];
     }];
-    
+
     XCTAssertNil(insertOrUpdateError, @"");
 
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -311,12 +298,9 @@
 - (void)testInsertsNewObjectsInInsertOrUpdateWithDifferingLocalAndRemoteUniqueKeys
 {
     NSArray *dictArray = @[
-        @
-        { @"remote-sha": @"123" },
-        @
-        { @"remote-sha": @"456" },
-        @
-        { @"remote-sha": @"789" }
+        @{ @"remote-sha" : @"123" },
+        @{ @"remote-sha" : @"456" },
+        @{ @"remote-sha" : @"789" }
     ];
     __block NSError *insertOrUpdateError = nil;
     [self.privateContext performBlockAndWait:^{
@@ -327,7 +311,7 @@
                     privateContext:self.privateContext
                              error:&insertOrUpdateError];
     }];
-    
+
     XCTAssertNil(insertOrUpdateError, @"");
 
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -350,15 +334,14 @@
         existingCommit.message = @"existing";
         [self.privateContext save:nil];
     }];
-    
+
     SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, Commit *entity) {
         entity.message = dictionary[@"message"];
     };
 
     NSArray *dictArray = @[
-        @
-        { @"sha": @"123",
-          @"message": @"updated" },
+        @{ @"sha" : @"123",
+           @"message" : @"updated" },
     ];
     __block NSError *insertOrUpdateError = nil;
     [self.privateContext performBlockAndWait:^{
@@ -386,15 +369,14 @@
         existingCommit.sha = @"123";
         existingCommit.message = @"existing";
     }];
-    
+
     SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, Commit *entity) {
         entity.message = dictionary[@"message"];
     };
 
     NSArray *dictArray = @[
-        @
-        { @"remote-sha": @"123",
-          @"message": @"updated" }
+        @{ @"remote-sha" : @"123",
+           @"message" : @"updated" }
     ];
     __block NSError *insertOrUpdateError = nil;
     [self.privateContext performBlockAndWait:^{
@@ -414,13 +396,13 @@
     }];
 }
 
-- (void)testInsertsStubObjectsWhenOnlyUniqueModelKeyValuesAreSpecified {
+- (void)testInsertsStubObjectsWhenOnlyUniqueModelKeyValuesAreSpecified
+{
     __block NSInteger blockCallCount = 0;
-    SQKPropertySetterBlock propertySetterBlock
-    = ^void(NSDictionary *dictionary, NSManagedObject *managedObject) { ++blockCallCount; };
-    
-    NSArray *commitHashes = @[@"sha-abc", @"sha-def", @"sha-ghi"];
-    
+    SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, NSManagedObject *managedObject) { ++blockCallCount; };
+
+    NSArray *commitHashes = @[ @"sha-abc", @"sha-def", @"sha-ghi" ];
+
     __block NSError *error = nil;
     [self.privateContext performBlockAndWait:^{
         [Commit sqk_insertOrUpdate:commitHashes
@@ -430,7 +412,7 @@
                     privateContext:self.privateContext
                              error:&error];
     }];
-    
+
     XCTAssertNil(error, @"");
     XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
 }

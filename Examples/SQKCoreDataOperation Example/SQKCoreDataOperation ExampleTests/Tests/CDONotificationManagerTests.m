@@ -17,28 +17,31 @@
 
 @implementation CDONotificationManagerTests
 
--(void)tearDown
+- (void)tearDown
 {
     self.notificationExpectation = nil;
 }
 
-- (void)testSynchronisationRequestObserver {
+- (void)testSynchronisationRequestObserver
+{
     self.notificationExpectation = [self expectationWithDescription:@"Request notification observed"];
     [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(notificationSelector:)];
     [[NSNotificationCenter defaultCenter] postNotificationName:CDOSynchronisationRequestNotification object:nil];
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)testSynchronisationResponseObserver {
+- (void)testSynchronisationResponseObserver
+{
     self.notificationExpectation = [self expectationWithDescription:@"Response notification observed"];
     [CDONotificationManager addObserverForSynchronisationResponseNotification:self selector:@selector(notificationSelector:)];
     [[NSNotificationCenter defaultCenter] postNotificationName:CDOSynchronisationResponseNotification object:nil];
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void) notificationSelector:(NSNotification*)notification {
+- (void)notificationSelector:(NSNotification *)notification
+{
     [self.notificationExpectation fulfill];
 }
 

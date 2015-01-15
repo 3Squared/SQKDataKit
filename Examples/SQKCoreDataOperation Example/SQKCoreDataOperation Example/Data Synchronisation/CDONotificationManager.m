@@ -11,22 +11,22 @@
 
 @implementation CDONotificationManager
 
-+ (void) addObserverForSynchronisationRequestNotification:(id)observer selector:(SEL)aSelector
++ (void)addObserverForSynchronisationRequestNotification:(id)observer selector:(SEL)aSelector
 {
     [[NSNotificationCenter defaultCenter] addObserver:observer selector:aSelector name:CDOSynchronisationRequestNotification object:nil];
 }
 
-+ (void) removeObserverForSynchronisationRequestNotification:(id)observer
++ (void)removeObserverForSynchronisationRequestNotification:(id)observer
 {
     [[NSNotificationCenter defaultCenter] removeObserver:observer name:CDOSynchronisationRequestNotification object:nil];
 }
 
-+ (void) addObserverForSynchronisationResponseNotification:(id)observer selector:(SEL)aSelector
++ (void)addObserverForSynchronisationResponseNotification:(id)observer selector:(SEL)aSelector
 {
     [[NSNotificationCenter defaultCenter] addObserver:observer selector:aSelector name:CDOSynchronisationResponseNotification object:nil];
 }
 
-+ (void) removeObserverForSynchronisationResponseNotification:(id)observer
++ (void)removeObserverForSynchronisationResponseNotification:(id)observer
 {
     [[NSNotificationCenter defaultCenter] removeObserver:observer name:CDOSynchronisationResponseNotification object:nil];
 }

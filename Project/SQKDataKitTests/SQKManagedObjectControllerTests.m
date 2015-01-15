@@ -29,11 +29,10 @@
 {
     [super setUp];
 
-    NSManagedObjectModel *managedObjectModel =
-        [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle mainBundle] ]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
 
     self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
@@ -42,16 +41,14 @@
     [[self.contextManager mainContext] save:NULL];
 
     NSFetchRequest *request = [Commit sqk_fetchRequest];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ];
 
-    self.controller =
-        [[SQKManagedObjectController alloc] initWithFetchRequest:request
-                                            managedObjectContext:[self.contextManager mainContext]];
+    self.controller = [[SQKManagedObjectController alloc] initWithFetchRequest:request
+                                                          managedObjectContext:[self.contextManager mainContext]];
     self.controller.savedObjectsBlock = nil;
     self.controller.fetchedObjectsBlock = nil;
     self.controller.deletedObjectsBlock = nil;
 }
-
 
 - (void)tearDown
 {
@@ -181,24 +178,24 @@
 {
     NSError *error = nil;
     NSManagedObjectContext *context = [self.contextManager mainContext];
-    
+
     Commit *commit = [Commit sqk_insertInContext:context];
     commit.sha = @"To delete";
     commit.date = [NSDate date];
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"sha == 'To delete'"];
     [Commit sqk_deleteAllObjectsInContext:context withPredicate:predicate error:&error];
     XCTAssertNil(error, @"");
-    
+
     [context save:&error];
     XCTAssertNil(error, @"");
-    
+
     NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
     NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
     XCTAssertNil(error, @"");
-    
+
     Commit *fetchedCommit = [objects firstObject];
-    
+
     XCTAssertEqual([objects count], (NSUInteger)1, @"");
     XCTAssertEqual(fetchedCommit.sha, @"abcd");
 }
@@ -210,15 +207,20 @@
  */
 - (void)testInitialisers
 {
-    XCTAssertNil(
-        [[SQKManagedObjectController alloc] initWithFetchRequest:nil managedObjectContext:nil], @"");
+    XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:nil
+                                                     managedObjectContext:nil],
+                 @"");
+
     XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:nil
                                                      managedObjectContext:[self.contextManager mainContext]],
                  @"");
+
     XCTAssertNil([[SQKManagedObjectController alloc] initWithFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Post"]
                                                      managedObjectContext:nil],
                  @"");
+
     XCTAssertNil([[SQKManagedObjectController alloc] initWithManagedObject:nil], @"");
+
     XCTAssertNil([[SQKManagedObjectController alloc] initWithManagedObjects:nil], @"");
 }
 
@@ -229,8 +231,7 @@
 {
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
-    SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithManagedObjects:[self.controller managedObjects]];
+    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObjects:[self.controller managedObjects]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
@@ -256,8 +257,7 @@
 {
     [self.controller performFetch:nil];
     self.controller.delegate = nil;
-    SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
+    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
@@ -283,9 +283,8 @@
 {
     self.controller.delegate = nil;
     [self.controller performFetch:nil];
-    
-    SQKManagedObjectController *objectsController =
-        [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
+
+    SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
     __block bool blockUpdateDone = NO;
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
@@ -323,7 +322,6 @@
 
     [[self.contextManager mainContext] save:NULL];
 
-
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
 
     // ****
@@ -332,7 +330,6 @@
     commit3.sha = @"Insert 3";
     commit3.date = [NSDate date];
     [[self.contextManager mainContext] save:NULL];
-
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)0, @"");
 
@@ -346,8 +343,7 @@
 
     // ****
 
-    self.controller.filterReturnedObjectsBlock
-        = ^BOOL(Commit *obj) { return [obj.sha rangeOfString:@"Insert"].location != NSNotFound; };
+    self.controller.filterReturnedObjectsBlock = ^BOOL(Commit *obj) { return [obj.sha rangeOfString:@"Insert"].location != NSNotFound; };
 
     [self.controller performFetch:nil];
 
@@ -365,10 +361,9 @@
     Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
     commit.sha = @"Insert 1";
     commit.date = [NSDate date];
-    
+
     User *user1 = [User sqk_insertInContext:[self.contextManager mainContext]];
     user1.name = @"Luke";
-
 
     [[self.contextManager mainContext] save:NULL];
 
@@ -377,16 +372,13 @@
         blockUpdateDone = YES;
     };
 
-
     AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
-    
+
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
-    
+
     NSManagedObject *fetchedObject = [[self.controller managedObjects] firstObject];
-    
+
     XCTAssertTrue([fetchedObject isKindOfClass:[Commit class]], @"");
 }
-
-
 
 @end

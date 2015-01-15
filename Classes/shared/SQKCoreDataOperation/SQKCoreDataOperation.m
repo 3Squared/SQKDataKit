@@ -35,20 +35,17 @@
 
 - (NSError *)error
 {
-    @throw [NSException
-        exceptionWithName:NSInternalInconsistencyException
-                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                 userInfo:nil];
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
 
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
-    @throw [NSException
-        exceptionWithName:NSInternalInconsistencyException
-                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                 userInfo:nil];
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
-
 
 #pragma mark - NSOperation
 
@@ -70,8 +67,9 @@
 
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
     self.managedObjectContextToMerge.shouldMergeOnSave = NO;
-    [self.managedObjectContextToMerge
-        performBlockAndWait:^{ [self performWorkWithPrivateContext:self.managedObjectContextToMerge]; }];
+    [self.managedObjectContextToMerge performBlockAndWait:^{
+        [self performWorkWithPrivateContext:self.managedObjectContextToMerge];
+    }];
 }
 
 - (BOOL)isConcurrent
@@ -88,7 +86,6 @@
 {
     return self.sqk_finished;
 }
-
 
 #pragma mark - Completion
 
@@ -170,13 +167,11 @@
     });
 }
 
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:nil];
 }
-
 
 @end

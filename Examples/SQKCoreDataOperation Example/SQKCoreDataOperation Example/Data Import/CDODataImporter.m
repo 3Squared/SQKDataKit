@@ -14,18 +14,20 @@
 
 @implementation CDODataImporter
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	if (self = [super init]) {
-		self.managedObjectContext = managedObjectContext;
-	}
-	return self;
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    if (self = [super init])
+    {
+        self.managedObjectContext = managedObjectContext;
+    }
+    return self;
 }
 
-- (void)importJSON:(NSArray *)JSON {
-    @throw [NSException
-            exceptionWithName:NSInternalInconsistencyException
-            reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-            userInfo:nil];
+- (void)importJSON:(NSArray *)JSON
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
 
 @end

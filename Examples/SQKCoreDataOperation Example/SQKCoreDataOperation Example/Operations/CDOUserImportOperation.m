@@ -19,40 +19,45 @@
 
 @implementation CDOUserImportOperation
 
-
 - (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient
 {
     self = [super initWithContextManager:contextManager];
-    if (self) {
+    if (self)
+    {
         self.APIClient = APIClient;
     }
     return self;
 }
 
-- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
-	NSLog(@"Executing %@", NSStringFromClass([self class]));
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
+{
+    NSLog(@"Executing %@", NSStringFromClass([self class]));
 
-	NSMutableArray *usersJSON = [NSMutableArray array];
+    NSMutableArray *usersJSON = [NSMutableArray array];
 
-	NSFetchRequest *fetchRequest = [User sqk_fetchRequest];
-	NSArray *users = [context executeFetchRequest:fetchRequest error:NULL];
+    NSFetchRequest *fetchRequest = [User sqk_fetchRequest];
+    NSArray *users = [context executeFetchRequest:fetchRequest error:NULL];
 
-	if (users.count > 0) {
-		for (User *user in users) {
-			id JSON = [self.APIClient getUser:user.username error:NULL];
-			[usersJSON addObject:JSON];
-		}
-		CDOUserImporter *importer = [[CDOUserImporter alloc] initWithManagedObjectContext:context];
-		[importer importJSON:usersJSON];
-		[self completeOperationBySavingContext:context];
-	}
-	else {
-		[self completeOperationBySavingContext:context];
-	}
+    if (users.count > 0)
+    {
+        for (User *user in users)
+        {
+            id JSON = [self.APIClient getUser:user.username error:NULL];
+            [usersJSON addObject:JSON];
+        }
+        CDOUserImporter *importer = [[CDOUserImporter alloc] initWithManagedObjectContext:context];
+        [importer importJSON:usersJSON];
+        [self completeOperationBySavingContext:context];
+    }
+    else
+    {
+        [self completeOperationBySavingContext:context];
+    }
 }
 
-- (NSError *)error {
-	return self.operationError;
+- (NSError *)error
+{
+    return self.operationError;
 }
 
 @end

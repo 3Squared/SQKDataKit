@@ -21,11 +21,10 @@
 {
     [super setUp];
     self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    self.persitentStoreCoordinator =
-        [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType
-                                                     managedObjectModel:self.managedObjectModel
-                                         orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
-                                                               storeURL:nil];
+    self.persitentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType
+                                                                                  managedObjectModel:self.managedObjectModel
+                                                                      orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
+                                                                                            storeURL:nil];
 }
 
 - (void)testCorrectManagedObjectModel
@@ -52,6 +51,5 @@
     XCTAssertEqualObjects(store.options[NSMigratePersistentStoresAutomaticallyOption], @(YES), @"");
     XCTAssertEqualObjects(store.options[NSInferMappingModelAutomaticallyOption], @(YES), @"");
 }
-
 
 @end

@@ -57,7 +57,6 @@
     ];
 }
 
-
 - (void)updateCommit
 {
     [self.commit.managedObjectContext performBlock:^{

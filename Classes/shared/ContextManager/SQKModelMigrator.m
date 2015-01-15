@@ -20,12 +20,10 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
 {
     // If the persistent store does not exist at the given URL, or is a type that isn't persisted to
     // disk, assume that it hasn't yet been created and return success immediately.
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[sourceStoreURL path]]
-        || [sourceStoreType isEqualToString:NSInMemoryStoreType])
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[sourceStoreURL path]] || [sourceStoreType isEqualToString:NSInMemoryStoreType])
     {
         return YES;
     }
-
 
     // Get the persistent store's metadata.  The metadata is used to
     // get information about the store's managed object model.
@@ -50,7 +48,6 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
         NSFileManager *fileManager = [NSFileManager defaultManager];
         return (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]);
     }
-
 
     // Find the current model used by the store.
     NSManagedObjectModel *sourceModel = [self modelForStoreMetadata:sourceMetadata error:error];
@@ -151,13 +148,12 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
              error:(NSError **)error
 {
     // Build a temporary path to write the migrated store.
-    NSURL *tempDestinationStoreURL =
-        [NSURL fileURLWithPath:[[sourceStoreURL path] stringByAppendingPathExtension:@"_temp"]];
+    NSURL *tempDestinationStoreURL = [NSURL fileURLWithPath:[[sourceStoreURL path] stringByAppendingPathExtension:@"_temp"]];
 
     // Migrate from the source model to the target model using the mapping,
     // and store the resulting data at the temporary path.
-    NSMigrationManager *migrator =
-        [[NSMigrationManager alloc] initWithSourceModel:sourceModel destinationModel:targetModel];
+    NSMigrationManager *migrator = [[NSMigrationManager alloc] initWithSourceModel:sourceModel
+                                                                  destinationModel:targetModel];
 
     if (![migrator migrateStoreFromURL:sourceStoreURL
                                   type:sourceStoreType
@@ -201,7 +197,6 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
     return YES;
 }
 
-
 + (NSURL *)urlForModelName:(NSString *)modelName inDirectory:(NSString *)directory
 {
     NSBundle *bundle = [NSBundle mainBundle];
@@ -209,8 +204,7 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
     if (nil == url)
     {
         // Get mom file paths from momd directories.
-        NSArray *momdPaths =
-            [[NSBundle mainBundle] pathsForResourcesOfType:@"momd" inDirectory:directory];
+        NSArray *momdPaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"momd" inDirectory:directory];
         for (NSString *momdPath in momdPaths)
         {
             url = [bundle URLForResource:modelName
@@ -235,8 +229,7 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
             *error = [NSError errorWithDomain:SQKDataKitMigrationErrorDomain
                                          code:110
                                      userInfo:@{
-                                         NSLocalizedDescriptionKey: [NSString
-                                             stringWithFormat:@"No model found for %@ at URL %@", modelName, modelUrl]
+                                         NSLocalizedDescriptionKey : [NSString stringWithFormat:@"No model found for %@ at URL %@", modelName, modelUrl]
                                      }];
             return nil;
         }
@@ -256,8 +249,7 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
             errorWithDomain:SQKDataKitMigrationErrorDomain
                        code:100
                    userInfo:@{
-                       NSLocalizedDescriptionKey: [NSString
-                           stringWithFormat:@"Failed to find source model for metadata: %@", metadata]
+                       NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Failed to find source model for metadata: %@", metadata]
                    }];
     }
 

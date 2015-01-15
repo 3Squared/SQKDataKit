@@ -13,14 +13,14 @@
 - (instancetype)init
 {
     self = [super init];
-    
+
     if (self)
     {
         self.itemSize = CGSizeMake(120, 120);
         self.minimumInteritemSpacing = 10;
         self.minimumLineSpacing = 20;
     }
-    
+
     return self;
 }
 

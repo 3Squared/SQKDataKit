@@ -12,16 +12,18 @@
 
 @implementation CDOUserImporter
 
-- (void)importJSON:(NSArray *)JSON {
+- (void)importJSON:(NSArray *)JSON
+{
     [User sqk_insertOrUpdate:JSON
-	            uniqueModelKey:@"username"
-	           uniqueRemoteKey:@"login"
-	       propertySetterBlock: ^(NSDictionary *dictionary, User *user) {
+              uniqueModelKey:@"username"
+             uniqueRemoteKey:@"login"
+         propertySetterBlock:^(NSDictionary *dictionary, User *user) {
                user.followers = dictionary[@"followers"];
                user.avatarURL = dictionary[@"avatar_url"];
                user.following = dictionary[@"following"];
                user.email = dictionary[@"email"];
-           } privateContext:self.managedObjectContext error:NULL];
+         } privateContext:self.managedObjectContext
+                       error:NULL];
 }
 
 @end

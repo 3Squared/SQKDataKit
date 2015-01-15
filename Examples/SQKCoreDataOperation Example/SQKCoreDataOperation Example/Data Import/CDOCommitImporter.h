@@ -12,6 +12,4 @@
 
 @interface CDOCommitImporter : CDODataImporter
 
-
-
 @end

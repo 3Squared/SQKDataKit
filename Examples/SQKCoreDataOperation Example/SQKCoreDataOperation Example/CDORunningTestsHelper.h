@@ -10,11 +10,11 @@
 #define SQKCoreDataOperation_Example_CDORunningTestsHelper_h
 
 static BOOL isRunningTests(void) __attribute__((const));
-static BOOL isRunningTests(void) {
-    NSDictionary* environment = [[NSProcessInfo processInfo] environment];
-    NSString* injectBundle = environment[@"XCInjectBundle"];
+static BOOL isRunningTests(void)
+{
+    NSDictionary *environment = [[NSProcessInfo processInfo] environment];
+    NSString *injectBundle = environment[@"XCInjectBundle"];
     return [[injectBundle pathExtension] isEqualToString:@"octest"] || [[injectBundle pathExtension] isEqualToString:@"xctest"];
 }
-
 
 #endif

@@ -10,8 +10,9 @@
 
 @implementation CDOJSONFixtureLoader
 
-+ (id)loadJSONFileNamed:(NSString *)fileName {
-    NSString* filepath = [[NSBundle bundleForClass:[self class]] pathForResource:fileName ofType:@"json"];
++ (id)loadJSONFileNamed:(NSString *)fileName
+{
+    NSString *filepath = [[NSBundle bundleForClass:[self class]] pathForResource:fileName ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:filepath];
     return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 }

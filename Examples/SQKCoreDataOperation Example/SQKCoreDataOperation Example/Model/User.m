@@ -9,7 +9,6 @@
 #import "User.h"
 #import "Commit.h"
 
-
 @implementation User
 
 @dynamic username;

@@ -8,7 +8,6 @@
 
 #import "GitDataImportOperation.h"
 
-
 @interface GitDataImportOperation ()
 @property (nonatomic, strong, readwrite) NSDate *startDate;
 @property (nonatomic, strong) id data;
@@ -32,10 +31,9 @@
 
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context usingData:(id)data
 {
-    @throw [NSException
-        exceptionWithName:NSInternalInconsistencyException
-                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                 userInfo:nil];
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
 
 @end

@@ -14,8 +14,8 @@
 #import "CDONotificationManager.h"
 #import "CDOGithubAPIClient.h"
 
-NSString * const CDOSynchronisationRequestNotification = @"CDOSynchronisationRequestNotification";
-NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationResponseNotification";
+NSString *const CDOSynchronisationRequestNotification = @"CDOSynchronisationRequestNotification";
+NSString *const CDOSynchronisationResponseNotification = @"CDOSynchronisationResponseNotification";
 
 @interface CDOSynchronisationCoordinator ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
@@ -40,71 +40,86 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
     }];
 }
 
-
 #pragma mark - Public
 
-- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient {
-	if (self = [super init]) {
-		self.contextManager = contextManager;
-		self.operationQueue = [[NSOperationQueue alloc] init];
-		[self.operationQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
-        
+- (instancetype)initWithContextManager:(SQKContextManager *)contextManager APIClient:(CDOGithubAPIClient *)APIClient
+{
+    if (self = [super init])
+    {
+        self.contextManager = contextManager;
+        self.operationQueue = [[NSOperationQueue alloc] init];
+        [self.operationQueue addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:NULL];
+
         self.APIClient = APIClient;
-        
+
         [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(synchronise)];
-	}
-	return self;
+    }
+    return self;
 }
 
--(void)dealloc
+- (void)dealloc
 {
     [CDONotificationManager removeObserverForSynchronisationRequestNotification:self];
 }
 
-- (void)synchronise {
-	++self.pendingSyncs;
-	if (self.pendingSyncs == 1) {
-		[self startSynchronise];
-	}
+- (void)synchronise
+{
+    ++self.pendingSyncs;
+    if (self.pendingSyncs == 1)
+    {
+        [self startSynchronise];
+    }
 }
 
 #pragma mark - Starting and finishing syncrhonising
 
-- (void)startSynchronise {
-	NSLog(@"Starting Synchronise");
+- (void)startSynchronise
+{
+    NSLog(@"Starting Synchronise");
 
-	CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
-	CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
+    CDOCommitImportOperation *commitOperation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
+    CDOUserImportOperation *userOperation = [[CDOUserImportOperation alloc] initWithContextManager:self.contextManager APIClient:self.APIClient];
 
-	[userOperation addDependency:commitOperation];
+    [userOperation addDependency:commitOperation];
 
-	[self.operationQueue addOperation:commitOperation];
-	[self.operationQueue addOperation:userOperation];
+    [self.operationQueue addOperation:commitOperation];
+    [self.operationQueue addOperation:userOperation];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	SQKCoreDataOperation *nextOperation = [[self.operationQueue operations] firstObject];
-	for (SQKCoreDataOperation *dependentOperation in [nextOperation dependencies]) {
-		/**
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    SQKCoreDataOperation *nextOperation = [[self.operationQueue operations] firstObject];
+    for (SQKCoreDataOperation *dependentOperation in [nextOperation dependencies])
+    {
+        /**
 		 *  Next operation to be executed should be cancelled if any of it's dependencies have
 		 *  errored or were also cancelled. By cancelling the next operation we will also
 		 *  also ensure that any of it's dependencies will also be canclled.
 		 */
-		if (dependentOperation.error || [dependentOperation isCancelled]) {
-			NSString *dependentOperationName = NSStringFromClass([dependentOperation class]);
-			if (dependentOperation.error) NSLog(@"Dependency \'%@\' errored; %@", dependentOperationName, dependentOperation.error);
-			if (dependentOperation.cancelled) NSLog(@"Dependency \'%@\' cancelled", dependentOperationName);
-			[nextOperation cancel];
-		}
-	}
+        if (dependentOperation.error || [dependentOperation isCancelled])
+        {
+            NSString *dependentOperationName = NSStringFromClass([dependentOperation class]);
+            if (dependentOperation.error)
+            {
+                NSLog(@"Dependency \'%@\' errored; %@", dependentOperationName, dependentOperation.error);
+            }
+            if (dependentOperation.cancelled)
+            {
+                NSLog(@"Dependency \'%@\' cancelled", dependentOperationName);
+            }
+            [nextOperation cancel];
+        }
+    }
 
-	if (object == self.operationQueue && self.operationQueue.operationCount == 0) {
-		[self finishSynchronise];
-	}
+    if (object == self.operationQueue && self.operationQueue.operationCount == 0)
+    {
+        [self finishSynchronise];
+    }
 }
 
-- (void)finishSynchronise {
-	[[NSOperationQueue mainQueue] addOperationWithBlock: ^{
+- (void)finishSynchronise
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 	    --self.pendingSyncs;
 	    if (self.pendingSyncs > 0) {
 	        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -115,7 +130,7 @@ NSString * const CDOSynchronisationResponseNotification = @"CDOSynchronisationRe
 	        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             [CDOSynchronisationCoordinator finishSynchronise];
 		}
-	}];
+    }];
 }
 
 @end

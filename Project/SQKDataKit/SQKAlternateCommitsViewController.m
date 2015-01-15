@@ -37,30 +37,29 @@
                                                           tag:0];
         self.queue = [[NSOperationQueue alloc] init];
         self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
-        
+
         NSFetchRequest *request = [Commit sqk_fetchRequest];
-        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
+        request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ];
 
         self.controller =
-        [[SQKManagedObjectController alloc] initWithFetchRequest:request
-                                            managedObjectContext:[self.contextManager mainContext]];
+            [[SQKManagedObjectController alloc] initWithFetchRequest:request
+                                                managedObjectContext:[self.contextManager mainContext]];
         self.controller.delegate = self;
     }
     return self;
 }
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self.tableView registerClass:[SQKCommitCell class]
            forCellReuseIdentifier:NSStringFromClass([SQKCommitCell class])];
-    
+
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self
                             action:@selector(refresh:)
                   forControlEvents:UIControlEventValueChanged];
-    
+
     [self.controller performFetch:nil];
 }
 
@@ -68,14 +67,14 @@
 {
     [self.refreshControl beginRefreshing];
     OptimisedImportOperation *importOperation =
-    [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
-                                                        data:self.json];
+        [[OptimisedImportOperation alloc] initWithContextManager:self.contextManager
+                                                            data:self.json];
     __weak typeof(self) weakSelf = self;
     [importOperation setCompletionBlock:^{
         [[NSOperationQueue mainQueue]
          addOperationWithBlock:^{ [weakSelf.refreshControl endRefreshing]; }];
     }];
-    
+
     [self.queue addOperation:importOperation];
 }
 
@@ -99,11 +98,11 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SQKCommitCell *cell =
-    (SQKCommitCell *)[self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
-                                         forIndexPath:indexPath];
+        (SQKCommitCell *)[self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
+                                                              forIndexPath:indexPath];
 
     [self configureCell:cell atIndexPath:indexPath];
-    
+
     return cell;
 }
 
@@ -112,7 +111,7 @@
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.controller.managedObjects count];
 }
@@ -122,10 +121,9 @@
     return YES;
 }
 
-
 - (void)tableView:(UITableView *)tableView
-commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
-forRowAtIndexPath:(NSIndexPath *)indexPath
+    commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+     forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
@@ -137,16 +135,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
-
 #pragma mark - SQKManagedObjectControllerDelegate
 
--(void)controller:(SQKManagedObjectController *)controller fetchedObjects:(NSIndexSet *)fetchedObjectIndexes error:(NSError **)error
+- (void)controller:(SQKManagedObjectController *)controller fetchedObjects:(NSIndexSet *)fetchedObjectIndexes error:(NSError **)error
 {
     NSLog(@"fetchedObjects");
     [self.tableView reloadData];
 }
 
--(void)controller:(SQKManagedObjectController *)controller didInsertObjects:(NSIndexSet *)insertedObjectIndexes
+- (void)controller:(SQKManagedObjectController *)controller didInsertObjects:(NSIndexSet *)insertedObjectIndexes
 {
     NSLog(@"didInsertObjects");
     [[self.contextManager mainContext] performBlock:^{
@@ -166,7 +163,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }];
 }
 
--(void)controller:(SQKManagedObjectController *)controller didDeleteObjects:(NSIndexSet *)deletedObjectIndexes
+- (void)controller:(SQKManagedObjectController *)controller didDeleteObjects:(NSIndexSet *)deletedObjectIndexes
 {
     NSLog(@"didDeleteObjects");
     [[self.contextManager mainContext] performBlock:^{
@@ -186,7 +183,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }];
 }
 
--(void)controller:(SQKManagedObjectController *)controller didSaveObjects:(NSIndexSet *)savedObjectIndexes
+- (void)controller:(SQKManagedObjectController *)controller didSaveObjects:(NSIndexSet *)savedObjectIndexes
 {
     NSLog(@"didSaveObjects");
     [[self.contextManager mainContext] performBlock:^{
@@ -201,11 +198,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }];
 }
 
-
 - (void)configureCell:(UITableViewCell *)theCell
           atIndexPath:(NSIndexPath *)indexPath
 {
-    SQKCommitCell *cell = (SQKCommitCell*)theCell;
+    SQKCommitCell *cell = (SQKCommitCell *)theCell;
     Commit *commit = [self.controller.managedObjects objectAtIndex:indexPath.row];
     cell.authorNameLabel.text = commit.authorName;
     cell.authorEmailLabel.text = commit.authorEmail;

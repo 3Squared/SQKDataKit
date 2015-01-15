@@ -12,7 +12,6 @@
 #import "SQKCollectionViewFlowLayout.h"
 #import "SQKMetricsViewController.h"
 #import "SQKAlternateCommitsViewController.h"
-
 #import <SQKDataKit/SQKContextManager.h>
 
 @interface SQKAppDelegate ()
@@ -25,8 +24,7 @@ static BOOL isRunningTests(void)
 {
     NSDictionary *environment = [[NSProcessInfo processInfo] environment];
     NSString *injectBundle = environment[@"XCInjectBundle"];
-    return [[injectBundle pathExtension] isEqualToString:@"octest"]
-           || [[injectBundle pathExtension] isEqualToString:@"xctest"];
+    return [[injectBundle pathExtension] isEqualToString:@"octest"] || [[injectBundle pathExtension] isEqualToString:@"xctest"];
 }
 
 @implementation SQKAppDelegate
@@ -43,37 +41,30 @@ static BOOL isRunningTests(void)
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
 
-    SQKCommitsViewController *commitsViewController =
-        [[SQKCommitsViewController alloc] initWithContextManager:self.contextManager];
-    UINavigationController *commitsNavController =
-        [[UINavigationController alloc] initWithRootViewController:commitsViewController];
-    
-    SQKCommitsCollectionViewController *commitsCollectionViewController =
-    [[SQKCommitsCollectionViewController alloc] initWithCollectionViewLayout:[[SQKCollectionViewFlowLayout alloc] init] contextManager:self.contextManager];
-    UINavigationController *commitsCollectionNavController =
-    [[UINavigationController alloc] initWithRootViewController:commitsCollectionViewController];
+    SQKCommitsViewController *commitsViewController = [[SQKCommitsViewController alloc] initWithContextManager:self.contextManager];
+    UINavigationController *commitsNavController = [[UINavigationController alloc] initWithRootViewController:commitsViewController];
+
+    SQKCommitsCollectionViewController *commitsCollectionViewController = [[SQKCommitsCollectionViewController alloc] initWithCollectionViewLayout:[[SQKCollectionViewFlowLayout alloc] init]
+                                                                                                                                    contextManager:self.contextManager];
+    UINavigationController *commitsCollectionNavController = [[UINavigationController alloc] initWithRootViewController:commitsCollectionViewController];
 
     SQKMetricsViewController *metricsViewController = [[SQKMetricsViewController alloc] init];
     metricsViewController.contextManager = self.contextManager;
-    UINavigationController *metricsNavController =
-        [[UINavigationController alloc] initWithRootViewController:metricsViewController];
+    UINavigationController *metricsNavController = [[UINavigationController alloc] initWithRootViewController:metricsViewController];
 
-    
     SQKAlternateCommitsViewController *altCommitsViewController = [[SQKAlternateCommitsViewController alloc]
-                                                                   initWithContextManager:self.contextManager];
+        initWithContextManager:self.contextManager];
     UINavigationController *altCommitsNavController =
-    [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
-
+        [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController];
+    tabBarController.viewControllers = @[ metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController ];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
 
     return YES;
 }
-
 
 - (SQKContextManager *)contextManager
 {
@@ -82,7 +73,7 @@ static BOOL isRunningTests(void)
         NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
         _contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
                                                     managedObjectModel:model
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
         [_contextManager.mainContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
     }

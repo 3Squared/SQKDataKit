@@ -29,22 +29,25 @@
         return nil;
     }
 
-	return [self initWithPersistentStoreCoordinator:[NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
-																								 managedObjectModel:managedObjectModel
-                                                                                     orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
-																										   storeURL:storeURL]];
+    return [self initWithPersistentStoreCoordinator:[NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
+                                                                                                 managedObjectModel:managedObjectModel
+                                                                                     orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
+                                                                                                           storeURL:storeURL]];
 }
 
-- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-	if (!persistentStoreCoordinator) {
-		return nil;
-	}
-	if (self = [super init]) {
-		_persistentStoreCoordinator = persistentStoreCoordinator;
-		[self observeForSavedNotification];
-	}
-	
-	return self;
+- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+    if (!persistentStoreCoordinator)
+    {
+        return nil;
+    }
+    if (self = [super init])
+    {
+        _persistentStoreCoordinator = persistentStoreCoordinator;
+        [self observeForSavedNotification];
+    }
+
+    return self;
 }
 
 + (NSArray *)validStoreTypes
@@ -52,7 +55,7 @@
     NSArray *validStoreTypes = nil;
     if (!validStoreTypes)
     {
-        validStoreTypes = @[NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType];
+        validStoreTypes = @[ NSSQLiteStoreType, NSInMemoryStoreType, NSBinaryStoreType ];
     }
     return validStoreTypes;
 }
@@ -102,10 +105,9 @@
 {
     if (![NSThread isMainThread])
     {
-        @throw
-            [NSException exceptionWithName:NSObjectInaccessibleException
-                                    reason:@"mainContext is only accessible from the main thread!"
-                                  userInfo:nil];
+        @throw [NSException exceptionWithName:NSObjectInaccessibleException
+                                       reason:@"mainContext is only accessible from the main thread!"
+                                     userInfo:nil];
     }
 
     if (_mainContext != nil)
@@ -120,8 +122,7 @@
 
 - (NSManagedObjectContext *)newPrivateContext
 {
-    NSManagedObjectContext *context =
-        [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     context.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return context;
 }
@@ -132,6 +133,5 @@
                                                     name:NSManagedObjectContextDidSaveNotification
                                                   object:nil];
 }
-
 
 @end

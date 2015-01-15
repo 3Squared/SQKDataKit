@@ -12,8 +12,7 @@
 
 - (NSIndexSet *)sqk_indexesOfObjects
 {
-    return
-        [self indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) { return YES; }];
+    return [self indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) { return YES; }];
 }
 
 @end

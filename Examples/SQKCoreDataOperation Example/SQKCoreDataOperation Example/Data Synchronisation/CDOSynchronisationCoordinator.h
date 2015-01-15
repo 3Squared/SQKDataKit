@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const CDOSynchronisationRequestNotification;
-extern NSString * const CDOSynchronisationResponseNotification;
+extern NSString *const CDOSynchronisationRequestNotification;
+extern NSString *const CDOSynchronisationResponseNotification;
 
 @class SQKContextManager, CDOGithubAPIClient;
 @interface CDOSynchronisationCoordinator : NSObject

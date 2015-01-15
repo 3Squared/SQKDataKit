@@ -19,26 +19,25 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
                                                               NSIndexSet *changedObjectIndexes,
                                                               NSError *error);
 
-
 /**
  *  The delegate of a SQKManagedObjectController object must adopt the
- * SQKManagedObjectControllerDeledate protocol.
+ *  SQKManagedObjectControllerDeledate protocol.
  *  Optional methods of the protocol allow the delegate to be informed of changes to the underlying
- * managed objects.
+ *  managed objects.
  */
 @protocol SQKManagedObjectControllerDelegate <NSObject>
 @optional
 
 /**
  *  Called when objects are fetched as a result of a call to performFetch: or
- *performFetchAsynchronously.
+ *  performFetchAsynchronously.
  *  Always called on the main thread.
  *
  *  @param controller           The SQKManagedObjectController where the objects are fetched.
  *  @param fetchedObjectIndexes The indexes of the newly fetched objects. Will be all objects in the
- *array.
+ *  array.
  *  @param error                If the fetch is not successful, this will be an error object that
- *describes the problem.
+ *  describes the problem.
  */
 - (void)controller:(SQKManagedObjectController *)controller
     fetchedObjects:(NSIndexSet *)fetchedObjectIndexes
@@ -46,7 +45,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
 
 /**
  *  Called when objects are updated after the main context is saved or changes are merged from a
- *background thread.
+ *  background thread.
  *
  *  @param controller           The SQKManagedObjectController where the changes occured.
  *  @param savedObjectIndexes The indexes of the updated objects.
@@ -56,7 +55,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
 
 /**
  *  Called when objects are inserted that match the fetch request in the current managed object
- *context.
+ *  context.
  *
  *  @param controller           The SQKManagedObjectController where the changes occured.
  *  @param insertedObjectIndexes The indexes of the inserted objects.
@@ -66,7 +65,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
 
 /**
  *  Called when objects are deleted after the main context is saved or changes are merged from a
- *background thread.
+ *  background thread.
  *
  *  @param controller           The SQKManagedObjectController where the deletions occured.
  *  @param deletedObjectIndexes The indexes of the deleted objects.
@@ -88,7 +87,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
 
 /**
  *  A block callback to be called when objects are fetched as a result of
- * performFetch:/performFetchAsync.
+ *  performFetch:/performFetchAsync.
  */
 @property (nonatomic, copy) SQKManagedObjectControllerObjectsFetchedBlock fetchedObjectsBlock;
 
@@ -107,23 +106,21 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  */
 @property (nonatomic, copy) SQKManagedObjectControllerObjectsChangedBlock insertedObjectsBlock;
 
-
 /**
  *  Use the provided block to filter the array of fetched objects before adding them to
- * managedObjects.
+ *  managedObjects.
  *  Useful if a predicate is not expressive enough for you.
  */
 @property (nonatomic, copy) BOOL (^filterReturnedObjectsBlock)(id managedObject);
-
 
 /**
  *  Returns a SQKManagedObjectController set up with the given fetch request and context.
  *  The fetch request is not executed until performFetch:/performFetchAsync is called.
  *
  *  @param fetchRequest A fetch request that specifies the search criteria for the fetch. Must not
- *be nil.
+ *  be nil.
  *  @param context      The managed object context to use. Must be created with
- *NSMainQueueConcurrencyType, and must not be nil.
+ *  NSMainQueueConcurrencyType, and must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
@@ -136,7 +133,7 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *  performFetch:/performFetchAsync are non-op for this controller.
  *
  *  @param managedObjects An array of NSManagedObjects created on a context with
- *NSMainQueueConcurrencyType. Must not be nil.
+ *  NSMainQueueConcurrencyType. Must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
@@ -148,12 +145,11 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *  performFetch:/performFetchAsync are non-op for this controller.
  *
  *  @param managedObjects A NSManagedObject created on a context with NSMainQueueConcurrencyType.
- *Must not be nil.
+ *  Must not be nil.
  *
  *  @return An initialised SQKManagedObjectController.
  */
 - (instancetype)initWithManagedObject:(NSManagedObject *)managedObject;
-
 
 /**
  *  Execute the fetch request and store the results in self.managedObjects.
@@ -165,7 +161,6 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *  @return YES if the fetch succeeds, otherwise NO.
  */
 - (BOOL)performFetch:(NSError **)error;
-
 
 /**
  *  Execute the fetch request and store the results in self.managedObjects.
@@ -180,7 +175,6 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  */
 - (BOOL)performFetch:(NSError **)error notify:(BOOL)shouldNotify;
 
-
 /**
  *  Deleted the fetched objects from self.managedObjectContext and saves.
  *  self.managedObjects must contain objects.
@@ -188,11 +182,10 @@ typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectCo
  *  Blocks the main thread. On returning, fetchedObjects will have been deleted.
  *
  *  @param error If there is a problem deleting, upon return contains an instance of NSError that
- *describes the problem.
+ *  describes the problem.
  *
  *  @return YES if the delete succeeds, otherwise NO.
  */
 - (BOOL)deleteObjects:(NSError **)error;
-
 
 @end

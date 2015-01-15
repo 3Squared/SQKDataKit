@@ -24,38 +24,40 @@
 
 @implementation CDOCommitImportOperationTests
 
-- (void)setUp {
-	[super setUp];
-    
+- (void)setUp
+{
+    [super setUp];
+
     CDOGithubAPIClient *APIClientMock = OCMClassMock([CDOGithubAPIClient class]);
-    
+
     NSArray *commitsJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
-    
+
     OCMStub([APIClientMock getCommitsForRepo:[OCMArg any] error:[OCMArg anyObjectRef]]).andReturn(commitsJSON);
-    
-	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-	                                                managedObjectModel:model
-                                        orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
-	                                                          storeURL:nil];
-	self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
-	self.queue = [NSOperationQueue new];
+
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                                    managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[ @"SQKCoreDataOperation_Example" ]
+                                                              storeURL:nil];
+    self.operation = [[CDOCommitImportOperation alloc] initWithContextManager:self.contextManager APIClient:APIClientMock];
+    self.queue = [NSOperationQueue new];
 }
 
-- (void)testOperation {
-	__block BOOL operationFinished = NO;
+- (void)testOperation
+{
+    __block BOOL operationFinished = NO;
 
-	[self.operation setCompletionBlock: ^{
+    [self.operation setCompletionBlock:^{
 	    [[NSOperationQueue mainQueue] addOperationWithBlock: ^{
 	        NSArray *commits = [[self.contextManager mainContext] executeFetchRequest:[Commit sqk_fetchRequest] error:NULL];
 	        XCTAssertTrue(commits.count > 0, @"");
 		}];
 
 	    operationFinished = YES;
-	}];
+    }];
 
-	[self.queue addOperation:self.operation];
-	AGWW_WAIT_WHILE(!operationFinished, 5.0);
+    [self.queue addOperation:self.operation];
+    AGWW_WAIT_WHILE(!operationFinished, 5.0);
 }
 
 @end

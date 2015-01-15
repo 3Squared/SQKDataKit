@@ -20,20 +20,21 @@
 
 @implementation CDOAppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	if (isRunningTests()) return YES;
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    if (isRunningTests())
+        return YES;
 
-	// Set your Github API access token for the CDOGithubAPIClient
-	// See: https://github.com/settings/applications#personal-access-tokens
-	// I'm loading mine from a .plist (ignored in the git repo)
+    // Set your Github API access token for the CDOGithubAPIClient
+    // See: https://github.com/settings/applications#personal-access-tokens
+    // I'm loading mine from a .plist (ignored in the git repo)
 
-	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
-	                                                managedObjectModel:model
-                           orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
-	                                                          storeURL:nil];
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+    self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
+                                                    managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[ @"SQKCoreDataOperation_Example" ]
+                                                              storeURL:nil];
 
-    
     [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(didRequestSynchronisation:)];
     [CDONotificationManager addObserverForSynchronisationResponseNotification:self selector:@selector(didCompleteSynchronisation:)];
 
@@ -45,16 +46,16 @@
     self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:self.contextManager APIClient:APIClient];
 
     [CDOSynchronisationCoordinator synchronise];
-    
-	return YES;
+
+    return YES;
 }
 
-- (void) didRequestSynchronisation:(NSNotification*)notification
+- (void)didRequestSynchronisation:(NSNotification *)notification
 {
     NSLog(@"didRequestSynchronisation: %@", notification);
 }
 
-- (void) didCompleteSynchronisation:(NSNotification*)notification
+- (void)didCompleteSynchronisation:(NSNotification *)notification
 {
     NSLog(@"didCompleteSynchronisation: %@", notification);
 }

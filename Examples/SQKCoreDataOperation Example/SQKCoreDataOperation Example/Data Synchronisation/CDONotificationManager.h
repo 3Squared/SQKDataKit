@@ -10,10 +10,10 @@
 
 @interface CDONotificationManager : NSObject
 
-+ (void) addObserverForSynchronisationRequestNotification:(id)observer selector:(SEL)aSelector;
-+ (void) removeObserverForSynchronisationRequestNotification:(id)observer;
++ (void)addObserverForSynchronisationRequestNotification:(id)observer selector:(SEL)aSelector;
++ (void)removeObserverForSynchronisationRequestNotification:(id)observer;
 
-+ (void) addObserverForSynchronisationResponseNotification:(id)observer selector:(SEL)aSelector;
-+ (void) removeObserverForSynchronisationResponseNotification:(id)observer;
++ (void)addObserverForSynchronisationResponseNotification:(id)observer selector:(SEL)aSelector;
++ (void)removeObserverForSynchronisationResponseNotification:(id)observer;
 
 @end

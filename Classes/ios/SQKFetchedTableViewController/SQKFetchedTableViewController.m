@@ -8,17 +8,14 @@
 
 #import "SQKFetchedTableViewController.h"
 
-#define mustOverride()                                                                                            \
-    @throw [NSException                                                                                           \
-        exceptionWithName:NSInvalidArgumentException                                                              \
-                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
-                 userInfo:nil]
-#define mustSet()                                                                                                   \
-    @throw [NSException                                                                                             \
-        exceptionWithName:NSInvalidArgumentException                                                                \
-                   reason:[NSString                                                                                 \
-                              stringWithFormat:@"%s must be set in your subclass init method", __PRETTY_FUNCTION__] \
-                 userInfo:nil]
+#define mustOverride()                                                                                                            \
+    @throw [NSException exceptionWithName:NSInvalidArgumentException                                                              \
+                                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
+                                 userInfo:nil]
+#define mustSet()                                                                                                                         \
+    @throw [NSException exceptionWithName:NSInvalidArgumentException                                                                      \
+                                   reason:[NSString stringWithFormat:@"%s must be set in your subclass init method", __PRETTY_FUNCTION__] \
+                                 userInfo:nil]
 
 @interface SQKFetchedTableViewController ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -37,7 +34,7 @@
 }
 
 - (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext
-              searchingEnabled:(BOOL)searchingEnabled
+               searchingEnabled:(BOOL)searchingEnabled
                           style:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style])
@@ -51,7 +48,7 @@
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    
+
     if (self)
     {
         self.searchingEnabled = YES;
@@ -63,11 +60,10 @@
 {
     [super viewDidLoad];
 
-    if(self.searchingEnabled)
+    if (self.searchingEnabled)
     {
         UISearchBar *searchBar = [[UISearchBar alloc] init];
-        _searchController =
-        [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
+        _searchController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
         self.searchController.searchResultsDelegate = self;
         self.searchController.searchResultsDataSource = self;
         self.searchController.delegate = self;
@@ -112,15 +108,12 @@
 
 - (UITableView *)activeTableView
 {
-    return [self activeFetchedResultsController] == self.fetchedResultsController ?
-               self.tableView :
-               self.searchController.searchResultsTableView;
+    return [self activeFetchedResultsController] == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
 }
 
 - (NSFetchedResultsController *)activeFetchedResultsController
 {
-    return (self.searchController && self.searchController.active) ? self.searchFetchedResultsController :
-                                                                     self.fetchedResultsController;
+    return (self.searchController && self.searchController.active) ? self.searchFetchedResultsController : self.fetchedResultsController;
 }
 
 - (NSFetchedResultsController *)fetchedResultsControllerForTableView:(UITableView *)tableView
@@ -147,7 +140,6 @@
     return count;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger numberOfRows = 0;
@@ -161,7 +153,6 @@
 
     return numberOfRows;
 }
-
 
 #pragma mark -
 #pragma mark Fetched results controller delegate
@@ -262,7 +253,6 @@
     }];
 }
 
-
 #pragma mark -
 #pragma mark FetchedResultsController creation
 
@@ -270,7 +260,6 @@
 {
     mustOverride();
 }
-
 
 - (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedTableViewController *)controller
 {
@@ -284,7 +273,7 @@
      *  Only use a sectionKeyPath when not searching becuase:
      *		- A a section index should not be shown while searching, and
      *		- B executed fetch requests take longer when sections are used. When searching this is
-     *especially noticable as a new fetch request is executed upon each key stroke during search.
+     * especially noticable as a new fetch request is executed upon each key stroke during search.
      */
     if (!self.searchIsActive)
     {
@@ -322,14 +311,12 @@
     {
         return _searchFetchedResultsController;
     }
-    _searchFetchedResultsController =
-        [self newFetchedResultsControllerWithSearch:self.searchController.searchBar.text];
+    _searchFetchedResultsController = [self newFetchedResultsControllerWithSearch:self.searchController.searchBar.text];
     return _searchFetchedResultsController;
 }
 
 #pragma mark -
 #pragma mark Searching
-
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
@@ -410,7 +397,6 @@
     return YES;
 }
 
-
 - (BOOL)searchController:(UISearchDisplayController *)controller
     shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
@@ -420,7 +406,6 @@
     // Return YES to cause the search result table view to be reloaded.
     return YES;
 }
-
 
 - (void)showEmptyView:(BOOL)show
 {
@@ -437,6 +422,5 @@
         }
     }
 }
-
 
 @end

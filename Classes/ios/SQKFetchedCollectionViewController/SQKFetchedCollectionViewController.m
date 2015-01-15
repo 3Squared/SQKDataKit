@@ -8,11 +8,10 @@
 
 #import "SQKFetchedCollectionViewController.h"
 
-#define mustOverride()                                                                                            \
-    @throw [NSException                                                                                           \
-        exceptionWithName:NSInvalidArgumentException                                                              \
-                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
-                 userInfo:nil]
+#define mustOverride()                                                                                                            \
+    @throw [NSException exceptionWithName:NSInvalidArgumentException                                                              \
+                                   reason:[NSString stringWithFormat:@"%s must be overridden in a subclass", __PRETTY_FUNCTION__] \
+                                 userInfo:nil]
 
 @interface SQKFetchedCollectionViewController ()
 
@@ -30,33 +29,33 @@
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context
 {
     self = [super initWithCollectionViewLayout:layout];
-    
+
     if (self)
     {
         self.managedObjectContext = context;
         self.searchingEnabled = YES;
     }
-    
+
     return self;
 }
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled
 {
     self = [super initWithCollectionViewLayout:layout];
-    
+
     if (self)
     {
         self.managedObjectContext = context;
         self.searchingEnabled = searchingEnabled;
     }
-    
+
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    
+
     if (self)
     {
         self.searchingEnabled = YES;
@@ -67,13 +66,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
-    
-    if(self.searchingEnabled)
+
+    if (self.searchingEnabled)
     {
         self.edgesForExtendedLayout = UIRectEdgeNone;
-        
+
         self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.collectionView.frame), 44)];
         self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -85,10 +84,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if(self.searchingEnabled)
+
+    if (self.searchingEnabled)
     {
-        if(self.searchIsActive)
+        if (self.searchIsActive)
         {
             [self.searchBar becomeFirstResponder];
         }
@@ -110,7 +109,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
 - (void)dealloc
 {
     _fetchedResultsController.delegate = nil;
@@ -124,19 +122,18 @@
     return count;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger numberOfItems = 0;
     NSFetchedResultsController *fetchController = [self fetchedResultsController];
     NSArray *sections = fetchController.sections;
-    
+
     if (sections.count > 0)
     {
         id<NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
         numberOfItems = [sectionInfo numberOfObjects];
     }
-    
+
     return numberOfItems;
 }
 
@@ -189,14 +186,14 @@
                 }
             }
         }];
-        
+
     }];
-    
+
     return shouldReload;
 }
 
 - (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController
-                   configureItemCell:(UICollectionViewCell *)theItemCell
+               configureItemCell:(UICollectionViewCell *)theItemCell
                      atIndexPath:(NSIndexPath *)indexPath
 {
     mustOverride();
@@ -210,43 +207,50 @@
     self.itemChanges = [NSMutableArray array];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+- (void)controller:(NSFetchedResultsController *)controller
+    didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo
+             atIndex:(NSUInteger)sectionIndex
+       forChangeType:(NSFetchedResultsChangeType)type
 {
     NSMutableDictionary *change = [NSMutableDictionary dictionary];
     change[@(type)] = @(sectionIndex);
     [_sectionChanges addObject:change];
 }
 
-- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+- (void)controller:(NSFetchedResultsController *)controller
+    didChangeObject:(id)anObject
+        atIndexPath:(NSIndexPath *)indexPath
+      forChangeType:(NSFetchedResultsChangeType)type
+       newIndexPath:(NSIndexPath *)newIndexPath
 {
     NSMutableDictionary *change = [[NSMutableDictionary alloc] init];
-    switch(type)
+    switch (type)
     {
         case NSFetchedResultsChangeInsert:
         {
             change[@(type)] = newIndexPath;
             break;
         }
-            
+
         case NSFetchedResultsChangeDelete:
         {
             change[@(type)] = indexPath;
             break;
         }
-            
+
         case NSFetchedResultsChangeUpdate:
         {
             change[@(type)] = indexPath;
             break;
         }
-            
+
         case NSFetchedResultsChangeMove:
         {
-            change[@(type)] = @[indexPath, newIndexPath];
+            change[@(type)] = @[ indexPath, newIndexPath ];
             break;
         }
     }
-    
+
     [_itemChanges addObject:change];
 }
 
@@ -330,7 +334,7 @@
                     }
                 }];
             }];
-            
+
         } completion:^(BOOL finished) {
             self.sectionChanges = nil;
             self.itemChanges = nil;
@@ -348,18 +352,18 @@
 - (NSFetchedResultsController *)fetchedResultsControllerWithSearch:(NSString *)searchString
 {
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForSearch:searchString]
-                                                                    managedObjectContext:self.managedObjectContext
-                                                                      sectionNameKeyPath:nil
-                                                                               cacheName:nil];
+                                                                        managedObjectContext:self.managedObjectContext
+                                                                          sectionNameKeyPath:nil
+                                                                                   cacheName:nil];
     self.fetchedResultsController.delegate = self;
-    
+
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    
+
     return self.fetchedResultsController;
 }
 
@@ -377,7 +381,7 @@
 {
     self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
     [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
-    
+
     self.searchIsActive = NO;
     self.searchBar.text = nil;
     [searchBar setShowsCancelButton:NO animated:YES];

@@ -18,7 +18,6 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 @property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
-
 @implementation SQKManagedObjectController
 
 - (instancetype)init
@@ -75,7 +74,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         return nil;
     }
 
-    return [self initWithManagedObjects:@[managedObject]];
+    return [self initWithManagedObjects:@[ managedObject ]];
 }
 
 - (void)dealloc
@@ -99,21 +98,22 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
                                      code:1
-                                 userInfo:@
-                                 { NSLocalizedDescriptionKey: @"No fetch request set!" }];
+                                 userInfo:@{
+                                     NSLocalizedDescriptionKey : @"No fetch request set!"
+                                 }];
         return NO;
     }
 
     NSArray *fetchedObjects =
         [self.managedObjectContext executeFetchRequest:self.fetchRequest error:error];
 
-    NSIndexSet *indexes =
-        [fetchedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject *obj, NSUInteger idx, BOOL *stop) {
+    NSIndexSet *indexes = [fetchedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject *obj, NSUInteger idx, BOOL *stop) {
             return self.filterReturnedObjectsBlock(obj);
-        }];
+    }];
     self.managedObjects = [fetchedObjects objectsAtIndexes:indexes];
 
-    if (shouldNotify) {
+    if (shouldNotify)
+    {
         NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
         if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
         {
@@ -124,7 +124,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
             self.fetchedObjectsBlock(self, allIndexes, *error);
         }
     }
-    
+
     return error ? NO : YES;
 }
 
@@ -136,11 +136,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
                                      code:2
-                                 userInfo:@
-                                 {
-                                     NSLocalizedDescriptionKey:
-                                         @"No objects to delete! You must call performFetch: first."
-                                         }];
+                                 userInfo:@{
+                                     NSLocalizedDescriptionKey : @"No objects to delete! You must call performFetch: first."
+                                 }];
         return NO;
     }
 
@@ -152,13 +150,11 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     return error ? NO : YES;
 }
 
-
 #pragma mark - Private context
 
 - (NSManagedObjectContext *)newPrivateContext
 {
-    NSManagedObjectContext *privateContext =
-        [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    NSManagedObjectContext *privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     privateContext.persistentStoreCoordinator = self.managedObjectContext.persistentStoreCoordinator;
     return privateContext;
 }
@@ -192,13 +188,13 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 if (isCorrectEntityType)
                 {
                     BOOL matchesPredicate = !self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject];
-                    if (matchesPredicate) {
+                    if (matchesPredicate)
+                    {
                         __block NSManagedObject *localObject = nil;
                         [self.managedObjectContext performBlockAndWait:^{
-                            localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
-                                                                                    error:nil];
+                            localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID] error:nil];
                         }];
-                        
+
                         if (localObject && self.filterReturnedObjectsBlock(localObject))
                         {
                             [array addObject:localObject];
@@ -210,7 +206,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
             if (self.fetchRequest.sortDescriptors)
             {
                 [self.managedObjectContext performBlockAndWait:^{
-                    [array sortUsingDescriptors:self.fetchRequest.sortDescriptors]; 
+                    [array sortUsingDescriptors:self.fetchRequest.sortDescriptors];
                 }];
             }
 
@@ -252,8 +248,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     NSArray *updatedObjects = [[notification userInfo] objectForKey:NSUpdatedObjectsKey];
     NSArray *deletedObjects = [[notification userInfo] objectForKey:NSDeletedObjectsKey];
 
-    if (([self.delegate respondsToSelector:@selector(controller:didSaveObjects:)] || self.savedObjectsBlock)
-        && updatedObjects && updatedObjects.count > 0)
+    if (([self.delegate respondsToSelector:@selector(controller:didSaveObjects:)] || self.savedObjectsBlock) && updatedObjects && updatedObjects.count > 0)
     {
         NSIndexSet *updatedIndexes =
             [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject *existingObject, NSUInteger idx, BOOL *stop) {
@@ -285,8 +280,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }
     }
 
-    if (([self.delegate respondsToSelector:@selector(controller:didDeleteObjects:)]
-         || self.deletedObjectsBlock) && deletedObjects && deletedObjects.count > 0)
+    if (([self.delegate respondsToSelector:@selector(controller:didDeleteObjects:)] || self.deletedObjectsBlock) && deletedObjects && deletedObjects.count > 0)
     {
         NSIndexSet *deletedIndexes =
             [self.managedObjects indexesOfObjectsPassingTest:^BOOL(NSManagedObject *existingObject, NSUInteger idx, BOOL *stop) {
@@ -318,6 +312,5 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }
     }
 }
-
 
 @end

@@ -8,7 +8,6 @@
 
 #import "Commit.h"
 
-
 @implementation Commit
 
 @dynamic sha;

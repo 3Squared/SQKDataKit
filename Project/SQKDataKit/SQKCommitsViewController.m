@@ -17,7 +17,6 @@
 #import <SQKDataKit/SQKContextManager.h>
 #import <SQKDataKit/NSManagedObject+SQKAdditions.h>
 
-
 @interface SQKCommitsViewController ()
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) SQKContextManager *contextManager;
@@ -45,8 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.tableView registerClass:[SQKCommitCell class]
-           forCellReuseIdentifier:NSStringFromClass([SQKCommitCell class])];
+    [self.tableView registerClass:[SQKCommitCell class] forCellReuseIdentifier:NSStringFromClass([SQKCommitCell class])];
 
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self
@@ -62,8 +60,9 @@
                                                             data:self.json];
     __weak typeof(self) weakSelf = self;
     [importOperation setCompletionBlock:^{
-        [[NSOperationQueue mainQueue]
-            addOperationWithBlock:^{ [weakSelf.refreshControl endRefreshing]; }];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [weakSelf.refreshControl endRefreshing];
+        }];
     }];
 
     [self.queue addOperation:importOperation];
@@ -88,21 +87,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell =
-        [self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
-                                             forIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SQKCommitCell class])
+                                                                 forIndexPath:indexPath];
+
     [self fetchedResultsController:[self fetchedResultsControllerForTableView:tableView]
                      configureCell:cell
                        atIndexPath:indexPath];
     return cell;
 }
 
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;
 }
-
 
 - (void)tableView:(UITableView *)tableView
     commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
@@ -123,7 +120,7 @@
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
 {
     NSFetchRequest *request = [Commit sqk_fetchRequest];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO]];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ];
 
     NSPredicate *filterPredicate = nil;
     if (searchString.length)

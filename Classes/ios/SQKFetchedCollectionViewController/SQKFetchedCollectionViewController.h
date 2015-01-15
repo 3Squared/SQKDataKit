@@ -58,24 +58,25 @@
 /**
  * @name Methods to be overridden in subclass
  */
+
 /**
- Configure a item cell for display.
- @discussion Override this method in your subclass to customise the appearance of your item cell.
- @param cell The item cell to be displayed.
- @param indexPath The index path for the item.
- @warning This method must be overidden in your subclass.
+ *  Configure a item cell for display.
+ *  @discussion Override this method in your subclass to customise the appearance of your item cell.
+ *  @param cell The item cell to be displayed.
+ *  @param indexPath The index path for the item.
+ *  @warning This method must be overidden in your subclass.
  */
 - (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController
                configureItemCell:(UICollectionViewCell *)theItemCell
                      atIndexPath:(NSIndexPath *)indexPath;
 
 /**
- Returns a new NSFetchRequest for the specified search string.
- @discussion Override this method in your subclass to return the appropriate NSFetchRequest for the
- search term. If searchString is nil, return your unfiltered dataset.
- @param searchString The query entered by a user. May be nil.
- @return The NSFetchRequest to be executed by the NSFetchedResultsController.
- @warning This method must be overidden in your subclass.
+ *  Returns a new NSFetchRequest for the specified search string.
+ *  @discussion Override this method in your subclass to return the appropriate NSFetchRequest for the
+ *  search term. If searchString is nil, return your unfiltered dataset.
+ *  @param searchString The query entered by a user. May be nil.
+ *  @return The NSFetchRequest to be executed by the NSFetchedResultsController.
+ *  @warning This method must be overidden in your subclass.
  */
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString;
 

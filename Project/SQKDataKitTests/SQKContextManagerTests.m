@@ -31,11 +31,10 @@
 - (void)setUp
 {
     [super setUp];
-    self.managedObjectModel =
-        [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
+    self.managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle mainBundle] ]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
 }
 
@@ -60,10 +59,10 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
-	
-	NSPersistentStore *store = [self.contextManager.persistentStoreCoordinator.persistentStores firstObject];
+
+    NSPersistentStore *store = [self.contextManager.persistentStoreCoordinator.persistentStores firstObject];
     XCTAssertNotNil(self.contextManager, @"");
     XCTAssertEqualObjects(store.type, NSInMemoryStoreType, @"");
     XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator.managedObjectModel, self.managedObjectModel, @"");
@@ -71,18 +70,18 @@
 
 - (void)testInitialisesWithSPersistentStoreCoordinator
 {
-	id storeCoordinator = [OCMockObject mockForClass:[NSPersistentStoreCoordinator class]];
-	
-	self.contextManager = [[SQKContextManager alloc] initWithPersistentStoreCoordinator:storeCoordinator];
-	XCTAssertNotNil(self.contextManager, @"");
-	XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator, storeCoordinator, @"");
+    id storeCoordinator = [OCMockObject mockForClass:[NSPersistentStoreCoordinator class]];
+
+    self.contextManager = [[SQKContextManager alloc] initWithPersistentStoreCoordinator:storeCoordinator];
+    XCTAssertNotNil(self.contextManager, @"");
+    XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator, storeCoordinator, @"");
 }
 
 - (void)testReturnsNilWithNoStoreType
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:nil
                                                     managedObjectModel:self.managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -91,7 +90,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:nil
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -100,11 +99,10 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:@"unsupported"
                                                     managedObjectModel:self.managedObjectModel
-                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                        orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
-
 
 #pragma mark - Contexts
 
@@ -154,7 +152,6 @@
 {
     XCTAssertTrue([self.contextManager mainContext].persistentStoreCoordinator.persistentStores.count == 1, @"");
 }
-
 
 - (void)testAccessingMainContextOffMainThreadThrowsException
 {
@@ -211,7 +208,7 @@
     commit.sha = @"Edit test";
     [self.contextManager.mainContext save:nil];
     NSManagedObjectID *objectID = commit.objectID;
-    
+
     __block BOOL edited = NO;
     NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
     [privateQueue addOperationWithBlock:^{

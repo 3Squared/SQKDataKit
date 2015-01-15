@@ -20,18 +20,18 @@
 
 @implementation CDOSynchronisationCoordinatorTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
-    
+
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
     SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                                   managedObjectModel:model
-                                                      orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
+                                                      orderedManagedObjectModelNames:@[ @"SQKCoreDataOperation_Example" ]
                                                                             storeURL:nil];
 
-
     CDOGithubAPIClient *APIClientMock = OCMClassMock([CDOGithubAPIClient class]);
-    
+
     NSArray *usersJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"users"];
     NSArray *commitsJSON = [CDOJSONFixtureLoader loadJSONFileNamed:@"commits"];
 
@@ -39,11 +39,11 @@
     OCMStub([APIClientMock getUser:[OCMArg any] error:[OCMArg anyObjectRef]]).andReturn(usersJSON[0]);
 
     self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:contextManager
-                                                                                                         APIClient:APIClientMock];
+                                                                               APIClient:APIClientMock];
 }
 
-
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
     self.syncCoordinator = nil;
 }
@@ -54,9 +54,8 @@
     [self expectationForNotification:CDOSynchronisationResponseNotification object:nil handler:nil];
 
     [CDOSynchronisationCoordinator synchronise];
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
-
 
 @end
