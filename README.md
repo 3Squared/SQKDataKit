@@ -1,7 +1,10 @@
 # SQKDataKit 
 
+<!--- 
 [![Build Status](https://travis-ci.org/3squared/SQKDataKit.svg?branch=master)](https://travis-ci.org/3squared/SQKDataKit)&nbsp;
 [![Coverage Status](https://coveralls.io/repos/3squared/SQKDataKit/badge.png)](https://coveralls.io/r/3squared/SQKDataKit)&nbsp;
+-->
+
 ![Version](https://cocoapod-badges.herokuapp.com/v/SQKDataKit/badge.png)&nbsp;
 ![Platforms](https://cocoapod-badges.herokuapp.com/p/SQKDataKit/badge.png)&nbsp;
 
