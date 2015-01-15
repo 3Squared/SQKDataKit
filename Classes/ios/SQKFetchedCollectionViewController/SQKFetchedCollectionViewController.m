@@ -18,7 +18,7 @@
 
 @property (strong, nonatomic, readwrite) NSFetchedResultsController *fetchedResultsController;
 
-@property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic, readwrite) UISearchBar *searchBar;
 @property (nonatomic, assign, readwrite) BOOL searchIsActive;
 
 @property (strong, nonatomic) NSMutableArray *sectionChanges;
@@ -361,6 +361,11 @@
     }
     
     return self.fetchedResultsController;
+}
+
+- (void)reloadFetchedResultsControllerForSearch:(NSString *)search
+{
+    self.fetchedResultsController = [self fetchedResultsControllerWithSearch:search];
 }
 
 #pragma mark - Search bar
