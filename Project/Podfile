@@ -5,6 +5,7 @@ target "SQKDataKit" do
     pod 'SQKDataKit/ManagedObjectExtensions', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/ManagedObjectController', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/FetchedTableViewController', :path => '../SQKDataKit.podspec'
+    pod 'SQKDataKit/FetchedCollectionViewController', :path => '../SQKDataKit.podspec'
     pod 'SQKDataKit/CoreDataOperation', :path => '../SQKDataKit.podspec'
 end
 

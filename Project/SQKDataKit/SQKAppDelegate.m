@@ -8,6 +8,8 @@
 
 #import "SQKAppDelegate.h"
 #import "SQKCommitsViewController.h"
+#import "SQKCommitsCollectionViewController.h"
+#import "SQKCollectionViewFlowLayout.h"
 #import "SQKMetricsViewController.h"
 
 #import <SQKDataKit/SQKContextManager.h>
@@ -44,6 +46,11 @@ static BOOL isRunningTests(void)
         [[SQKCommitsViewController alloc] initWithContextManager:self.contextManager];
     UINavigationController *commitsNavController =
         [[UINavigationController alloc] initWithRootViewController:commitsViewController];
+    
+    SQKCommitsCollectionViewController *commitsCollectionViewController =
+    [[SQKCommitsCollectionViewController alloc] initWithCollectionViewLayout:[[SQKCollectionViewFlowLayout alloc] init] contextManager:self.contextManager];
+    UINavigationController *commitsCollectionNavController =
+    [[UINavigationController alloc] initWithRootViewController:commitsCollectionViewController];
 
     SQKMetricsViewController *metricsViewController = [[SQKMetricsViewController alloc] init];
     metricsViewController.contextManager = self.contextManager;
@@ -52,7 +59,7 @@ static BOOL isRunningTests(void)
 
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[metricsNavController, commitsNavController];
+    tabBarController.viewControllers = @[metricsNavController, commitsNavController, commitsCollectionNavController];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
