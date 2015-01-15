@@ -90,6 +90,11 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 - (BOOL)performFetch:(NSError **)error
 {
+    return [self performFetch:error notify:YES];
+}
+
+- (BOOL)performFetch:(NSError **)error notify:(BOOL)shouldNotify
+{
     if (!self.fetchRequest)
     {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
@@ -108,15 +113,18 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
     self.managedObjects = [fetchedObjects objectsAtIndexes:indexes];
 
-    NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
-    if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
-    {
-        [self.delegate controller:self fetchedObjects:allIndexes error:error];
+    if (shouldNotify) {
+        NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
+        if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
+        {
+            [self.delegate controller:self fetchedObjects:allIndexes error:error];
+        }
+        if (self.fetchedObjectsBlock)
+        {
+            self.fetchedObjectsBlock(self, allIndexes, *error);
+        }
     }
-    if (self.fetchedObjectsBlock)
-    {
-        self.fetchedObjectsBlock(self, allIndexes, *error);
-    }
+    
     return error ? NO : YES;
 }
 
@@ -185,8 +193,12 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 {
                     BOOL matchesPredicate = !self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject];
                     if (matchesPredicate) {
-                        NSManagedObject *localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
-                                                                  error:nil];
+                        __block NSManagedObject *localObject = nil;
+                        [self.managedObjectContext performBlockAndWait:^{
+                            localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
+                                                                                    error:nil];
+                        }];
+                        
                         if (localObject && self.filterReturnedObjectsBlock(localObject))
                         {
                             [array addObject:localObject];
@@ -197,7 +209,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
             if (self.fetchRequest.sortDescriptors)
             {
-                [array sortUsingDescriptors:self.fetchRequest.sortDescriptors];
+                [self.managedObjectContext performBlockAndWait:^{
+                    [array sortUsingDescriptors:self.fetchRequest.sortDescriptors]; 
+                }];
             }
 
             self.managedObjects = [NSArray arrayWithArray:array];
