@@ -18,7 +18,7 @@
 
 @implementation SQKTestCoreDataOperation
 
-- (void)performWorkPrivateContext:(NSManagedObjectContext *)context {
+- (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context {
     [self completeOperationBySavingContext:context];
 }
 
@@ -37,6 +37,7 @@
     NSManagedObjectModel *model= [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:model
+                                        orderedManagedObjectModelNames:nil
                                                               storeURL:nil];
     self.mainContext = [self.contextManager mainContext];
     [self.mainContext reset];
