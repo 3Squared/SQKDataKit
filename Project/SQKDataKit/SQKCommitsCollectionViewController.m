@@ -138,6 +138,7 @@
     if (self.editing)
     {
         [commit sqk_deleteObject];
+        [commit.managedObjectContext save:nil];
     }
     else
     {
