@@ -25,9 +25,11 @@
 {
     [super setUp];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-    SQKContextManager *contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
-                                                                  managedObjectModel:model
-                                                                            storeURL:nil];
+    SQKContextManager *contextManager =
+        [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
+                                  managedObjectModel:model
+                      orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+                                            storeURL:nil];
     self.privateContext = [contextManager newPrivateContext];
     self.mainContext = [contextManager mainContext];
 }
@@ -188,14 +190,16 @@
         @
         { @"sha": @"789" }
     ];
-    NSError *error = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:propertySetterBlock
-                privateContext:self.privateContext
-                         error:&error];
-
+    __block NSError *error = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"sha"
+               propertySetterBlock:propertySetterBlock
+                    privateContext:self.privateContext
+                             error:&error];
+    }];
+    
     XCTAssertNil(error, @"");
     XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
 }
@@ -213,13 +217,15 @@
     { @"sha": @"123" };
     NSArray *dictArray = @[propertyDictionary];
 
-    NSError *error = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:propertySetterBlock
-                privateContext:self.privateContext
-                         error:&error];
+    __block NSError *error = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"sha"
+               propertySetterBlock:propertySetterBlock
+                    privateContext:self.privateContext
+                             error:&error];
+    }];
 
     XCTAssertNil(error, @"");
     XCTAssertEqual(capturedDictionary, propertyDictionary, @"");
@@ -236,23 +242,27 @@
         @
         { @"sha": @"789" }
     ];
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:nil
-                privateContext:self.privateContext
-                         error:&insertOrUpdateError];
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"sha"
+               propertySetterBlock:nil
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
 
     XCTAssertNil(insertOrUpdateError, @"");
 
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Commit"
                                    inManagedObjectContext:self.mainContext]];
-    NSError *fetchError;
-    NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
-    XCTAssertNil(fetchError, @"");
-    XCTAssertTrue(objects.count == 3, @"");
+    [self.privateContext performBlockAndWait:^{
+        NSError *fetchError = nil;
+        NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
+        XCTAssertNil(fetchError, @"");
+        XCTAssertTrue(objects.count == 3, @"");
+    }];
 }
 
 - (void)testInsertsWithCorrectUniqueKeySet
@@ -265,33 +275,37 @@
         @
         { @"sha": @"789" }
     ];
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:nil
-                privateContext:self.privateContext
-                         error:&insertOrUpdateError];
-
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"sha"
+               propertySetterBlock:nil
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
+    
     XCTAssertNil(insertOrUpdateError, @"");
 
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Commit"
                                    inManagedObjectContext:self.mainContext]];
 
-    NSArray *objects = nil;
-
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"123"]];
-    objects = [self.privateContext executeFetchRequest:request error:nil];
-    XCTAssertEqual((NSInteger)objects.count, 1, @"");
-
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"456"]];
-    objects = [self.privateContext executeFetchRequest:request error:nil];
-    XCTAssertEqual((NSInteger)objects.count, 1, @"");
-
-    [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"789"]];
-    objects = [self.privateContext executeFetchRequest:request error:nil];
-    XCTAssertEqual((NSInteger)objects.count, 1, @"");
+    [self.privateContext performBlockAndWait:^{
+        NSArray *objects = nil;
+        
+        [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"123"]];
+        objects = [self.privateContext executeFetchRequest:request error:nil];
+        XCTAssertEqual((NSInteger)objects.count, 1, @"");
+        
+        [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"456"]];
+        objects = [self.privateContext executeFetchRequest:request error:nil];
+        XCTAssertEqual((NSInteger)objects.count, 1, @"");
+        
+        [request setPredicate:[NSPredicate predicateWithFormat:@"sha == %@", @"789"]];
+        objects = [self.privateContext executeFetchRequest:request error:nil];
+        XCTAssertEqual((NSInteger)objects.count, 1, @"");
+    }];
 }
 
 - (void)testInsertsNewObjectsInInsertOrUpdateWithDifferingLocalAndRemoteUniqueKeys
@@ -304,31 +318,39 @@
         @
         { @"remote-sha": @"789" }
     ];
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"remote-sha"
-           propertySetterBlock:nil
-                privateContext:self.privateContext
-                         error:&insertOrUpdateError];
-
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"remote-sha"
+               propertySetterBlock:nil
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
+    
     XCTAssertNil(insertOrUpdateError, @"");
 
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Commit"
                                    inManagedObjectContext:self.mainContext]];
-    NSError *fetchError;
-    NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
-    XCTAssertNil(fetchError, @"");
-    XCTAssertTrue(objects.count == 3, @"");
+    [self.privateContext performBlockAndWait:^{
+        NSError *fetchError;
+        NSArray *objects = [self.privateContext executeFetchRequest:request error:&fetchError];
+        XCTAssertNil(fetchError, @"");
+        XCTAssertTrue(objects.count == 3, @"");
+    }];
 }
 
 - (void)testUpdatesExistingObjectsWithSameLocalAndRemoteKeys
 {
-    Commit *existingCommit = [Commit sqk_insertInContext:self.privateContext];
-    existingCommit.sha = @"123";
-    existingCommit.message = @"existing";
-
+    __block Commit *existingCommit = nil;
+    [self.privateContext performBlockAndWait:^{
+        existingCommit = [Commit sqk_insertInContext:self.privateContext];
+        existingCommit.sha = @"123";
+        existingCommit.message = @"existing";
+        [self.privateContext save:nil];
+    }];
+    
     SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, Commit *entity) {
         entity.message = dictionary[@"message"];
     };
@@ -338,26 +360,33 @@
         { @"sha": @"123",
           @"message": @"updated" },
     ];
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"sha"
-           propertySetterBlock:propertySetterBlock
-                privateContext:self.privateContext
-                         error:&insertOrUpdateError];
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"sha"
+               propertySetterBlock:propertySetterBlock
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
 
     XCTAssertNil(insertOrUpdateError, @"");
 
-    [self.privateContext refreshObject:existingCommit mergeChanges:YES];
-    XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
+    [self.privateContext performBlockAndWait:^{
+        [self.privateContext refreshObject:existingCommit mergeChanges:YES];
+        XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
+    }];
 }
 
 - (void)testUpdatesObjectsWithDifferingLocalAndRemoteKeys
 {
-    Commit *existingCommit = [Commit sqk_insertInContext:self.privateContext];
-    existingCommit.sha = @"123";
-    existingCommit.message = @"existing";
-
+    __block Commit *existingCommit = nil;
+    [self.privateContext performBlockAndWait:^{
+         existingCommit = [Commit sqk_insertInContext:self.privateContext];
+        existingCommit.sha = @"123";
+        existingCommit.message = @"existing";
+    }];
+    
     SQKPropertySetterBlock propertySetterBlock = ^void(NSDictionary *dictionary, Commit *entity) {
         entity.message = dictionary[@"message"];
     };
@@ -367,18 +396,22 @@
         { @"remote-sha": @"123",
           @"message": @"updated" }
     ];
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:dictArray
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"remote-sha"
-           propertySetterBlock:propertySetterBlock
-                privateContext:self.privateContext
-                         error:&insertOrUpdateError];
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"remote-sha"
+               propertySetterBlock:propertySetterBlock
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
 
     XCTAssertNil(insertOrUpdateError, @"");
 
-    [self.privateContext refreshObject:existingCommit mergeChanges:YES];
-    XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
+    [self.privateContext performBlockAndWait:^{
+        [self.privateContext refreshObject:existingCommit mergeChanges:YES];
+        XCTAssertEqualObjects(existingCommit.message, @"updated", @"");
+    }];
 }
 
 - (void)testInsertsStubObjectsWhenOnlyUniqueModelKeyValuesAreSpecified {
@@ -388,13 +421,15 @@
     
     NSArray *commitHashes = @[@"sha-abc", @"sha-def", @"sha-ghi"];
     
-    NSError *error = nil;
-    [Commit sqk_insertOrUpdate:commitHashes
-                uniqueModelKey:@"sha"
-               uniqueRemoteKey:@"self"
-           propertySetterBlock:propertySetterBlock
-                privateContext:self.privateContext
-                         error:&error];
+    __block NSError *error = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:commitHashes
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"self"
+               propertySetterBlock:propertySetterBlock
+                    privateContext:self.privateContext
+                             error:&error];
+    }];
     
     XCTAssertNil(error, @"");
     XCTAssertEqual(blockCallCount, (NSInteger)3, @"");
@@ -404,13 +439,15 @@
 
 - (void)testInsertOrUpdateFailsWithUnsupportedConcurencyTypeError
 {
-    NSError *insertOrUpdateError = nil;
-    [Commit sqk_insertOrUpdate:@[]
-                uniqueModelKey:@"unusedKey"
-               uniqueRemoteKey:@"unusedKey"
-           propertySetterBlock:nil
-                privateContext:self.mainContext
-                         error:&insertOrUpdateError];
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:@[]
+                    uniqueModelKey:@"unusedKey"
+                   uniqueRemoteKey:@"unusedKey"
+               propertySetterBlock:nil
+                    privateContext:self.mainContext
+                             error:&insertOrUpdateError];
+    }];
 
     XCTAssertNotNil(insertOrUpdateError, @"");
     XCTAssertEqualObjects(insertOrUpdateError.domain, SQKDataKitErrorDomain, @"");
@@ -423,12 +460,14 @@
      *  Necessary as there was a bug where not passing an error pointer caused a exc_bad_access
      * crash.
      */
-    [Commit sqk_insertOrUpdate:@[]
-                uniqueModelKey:@"unusedKey"
-               uniqueRemoteKey:@"unusedKey"
-           propertySetterBlock:nil
-                privateContext:self.mainContext
-                         error:nil];
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:@[]
+                    uniqueModelKey:@"unusedKey"
+                   uniqueRemoteKey:@"unusedKey"
+               propertySetterBlock:nil
+                    privateContext:self.mainContext
+                             error:nil];
+    }];
 }
 
 @end

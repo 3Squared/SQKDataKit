@@ -10,6 +10,7 @@
 #import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "SQKManagedObjectController.h"
 #import "Commit.h"
+#import "User.h"
 #import "SQKContextManager.h"
 #import "NSManagedObject+SQKAdditions.h"
 
@@ -32,6 +33,7 @@
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
 
     self.commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
@@ -268,7 +270,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
+    AGWW_WAIT_WHILE(!blockUpdateDone, 1.0);
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
                           @"");
@@ -279,8 +281,9 @@
  */
 - (void)testInitialisingWithObjectAsync
 {
-    [self.controller performFetch:nil];
     self.controller.delegate = nil;
+    [self.controller performFetch:nil];
+    
     SQKManagedObjectController *objectsController =
         [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
@@ -299,7 +302,7 @@
         }];
     });
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+    AGWW_WAIT_WHILE(!blockUpdateDone, 100.0);
     XCTAssertEqual([[objectsController managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
@@ -350,6 +353,40 @@
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
 }
+
+/**
+ *  Test that only objects that match the entity type specified by the request are fetched.
+ */
+- (void)testFetchedEntitiesAreOfCorrectType
+{
+    User *user = [User sqk_insertInContext:[self.contextManager mainContext]];
+    user.name = @"Sam";
+
+    Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
+    commit.sha = @"Insert 1";
+    commit.date = [NSDate date];
+    
+    User *user1 = [User sqk_insertInContext:[self.contextManager mainContext]];
+    user1.name = @"Luke";
+
+
+    [[self.contextManager mainContext] save:NULL];
+
+    __block bool blockUpdateDone = NO;
+    self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
+        blockUpdateDone = YES;
+    };
+
+
+    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+    
+    XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
+    
+    NSManagedObject *fetchedObject = [[self.controller managedObjects] firstObject];
+    
+    XCTAssertTrue([fetchedObject isKindOfClass:[Commit class]], @"");
+}
+
 
 
 @end

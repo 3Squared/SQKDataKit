@@ -40,7 +40,10 @@
 		A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */; };
 		A3F9AD72198697E200058B79 /* CDOUserImportOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */; };
 		A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */; };
-		CBC1182619F6AC56006BAF51 /* CDODataSynchroniser.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1182519F6AC56006BAF51 /* CDODataSynchroniser.m */; };
+		CBC1182619F6AC56006BAF51 /* CDOSynchronisationCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1182519F6AC56006BAF51 /* CDOSynchronisationCoordinator.m */; };
+		CBC1182D19F6B8C5006BAF51 /* CDONotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1182C19F6B8C5006BAF51 /* CDONotificationManager.m */; };
+		CBC1183219F7AE8F006BAF51 /* CDONotificationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */; };
+		CBC1183419F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */; };
 		EA710AD8199E4B4D9173C99E /* libPods-SQKCoreDataOperation Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */; };
 /* End PBXBuildFile section */
 
@@ -105,8 +108,12 @@
 		A3F9AD71198697E200058B79 /* CDOUserImportOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperation.m; sourceTree = "<group>"; };
 		A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOUserImportOperationTests.m; sourceTree = "<group>"; };
 		CBC1182119F6A503006BAF51 /* GithubToken.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = GithubToken.plist; path = "SQKCoreDataOperation Example/Web Client/GithubToken.plist"; sourceTree = SOURCE_ROOT; };
-		CBC1182419F6AC56006BAF51 /* CDODataSynchroniser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDODataSynchroniser.h; sourceTree = "<group>"; };
-		CBC1182519F6AC56006BAF51 /* CDODataSynchroniser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDODataSynchroniser.m; sourceTree = "<group>"; };
+		CBC1182419F6AC56006BAF51 /* CDOSynchronisationCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDOSynchronisationCoordinator.h; sourceTree = "<group>"; };
+		CBC1182519F6AC56006BAF51 /* CDOSynchronisationCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOSynchronisationCoordinator.m; sourceTree = "<group>"; };
+		CBC1182B19F6B8C5006BAF51 /* CDONotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDONotificationManager.h; sourceTree = "<group>"; };
+		CBC1182C19F6B8C5006BAF51 /* CDONotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDONotificationManager.m; sourceTree = "<group>"; };
+		CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDONotificationManagerTests.m; sourceTree = "<group>"; };
+		CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDOSynchronisationCoordinatorTests.m; sourceTree = "<group>"; };
 		D2283314E98B4621806285B1 /* libPods-SQKCoreDataOperation Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF5D3C94F2249E2AFBB5E82 /* libPods-SQKCoreDataOperation ExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKCoreDataOperation ExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -280,6 +287,8 @@
 				A3F9AD68198662E200058B79 /* CDOUserImporterTests.m */,
 				A3F9AD6E1986885100058B79 /* CDOCommitImportOperationTests.m */,
 				A3F9AD731986982800058B79 /* CDOUserImportOperationTests.m */,
+				CBC1183119F7AE8F006BAF51 /* CDONotificationManagerTests.m */,
+				CBC1183319F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -329,8 +338,10 @@
 		CBC1182319F6AC56006BAF51 /* Data Synchronisation */ = {
 			isa = PBXGroup;
 			children = (
-				CBC1182419F6AC56006BAF51 /* CDODataSynchroniser.h */,
-				CBC1182519F6AC56006BAF51 /* CDODataSynchroniser.m */,
+				CBC1182419F6AC56006BAF51 /* CDOSynchronisationCoordinator.h */,
+				CBC1182519F6AC56006BAF51 /* CDOSynchronisationCoordinator.m */,
+				CBC1182B19F6B8C5006BAF51 /* CDONotificationManager.h */,
+				CBC1182C19F6B8C5006BAF51 /* CDONotificationManager.m */,
 			);
 			path = "Data Synchronisation";
 			sourceTree = "<group>";
@@ -504,10 +515,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBC1182D19F6B8C5006BAF51 /* CDONotificationManager.m in Sources */,
 				A3256C811985676D0063B939 /* User.m in Sources */,
 				A3256C4B19852D630063B939 /* SQKCoreDataOperation_Example.xcdatamodeld in Sources */,
 				A3256C72198535C20063B939 /* CDOGithubAPIClient.m in Sources */,
-				CBC1182619F6AC56006BAF51 /* CDODataSynchroniser.m in Sources */,
+				CBC1182619F6AC56006BAF51 /* CDOSynchronisationCoordinator.m in Sources */,
 				A3256C7E1985676C0063B939 /* Commit.m in Sources */,
 				A3256C8A198591870063B939 /* CDOCommitImporter.m in Sources */,
 				A3F9AD65198660EA00058B79 /* CDODataImporter.m in Sources */,
@@ -524,6 +536,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3F9AD6F1986885100058B79 /* CDOCommitImportOperationTests.m in Sources */,
+				CBC1183419F7B5D1006BAF51 /* CDOSynchronisationCoordinatorTests.m in Sources */,
+				CBC1183219F7AE8F006BAF51 /* CDONotificationManagerTests.m in Sources */,
 				A3256C8719858EEF0063B939 /* CDOCommitImporterTests.m in Sources */,
 				A3256C92198599000063B939 /* CDOJSONFixtureLoader.m in Sources */,
 				A3F9AD741986982800058B79 /* CDOUserImportOperationTests.m in Sources */,

@@ -11,6 +11,7 @@
 #import "SQKCommitsCollectionViewController.h"
 #import "SQKCollectionViewFlowLayout.h"
 #import "SQKMetricsViewController.h"
+#import "SQKAlternateCommitsViewController.h"
 
 #import <SQKDataKit/SQKContextManager.h>
 
@@ -57,9 +58,15 @@ static BOOL isRunningTests(void)
     UINavigationController *metricsNavController =
         [[UINavigationController alloc] initWithRootViewController:metricsViewController];
 
+    
+    SQKAlternateCommitsViewController *altCommitsViewController = [[SQKAlternateCommitsViewController alloc]
+                                                                   initWithContextManager:self.contextManager];
+    UINavigationController *altCommitsNavController =
+    [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
+
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[metricsNavController, commitsNavController, commitsCollectionNavController];
+    tabBarController.viewControllers = @[metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
@@ -75,6 +82,7 @@ static BOOL isRunningTests(void)
         NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
         _contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
                                                     managedObjectModel:model
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
         [_contextManager.mainContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
     }

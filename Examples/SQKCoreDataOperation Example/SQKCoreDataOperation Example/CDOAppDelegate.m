@@ -8,12 +8,13 @@
 
 #import "CDOAppDelegate.h"
 #import "CDOGithubAPIClient.h"
-#import "CDODataSynchroniser.h"
+#import "CDOSynchronisationCoordinator.h"
 #import "SQKContextManager.h"
 #import "CDORunningTestsHelper.h"
+#import "CDONotificationManager.h"
 
 @interface CDOAppDelegate ()
-@property (nonatomic, strong) CDODataSynchroniser *dataSynchroniser;
+@property (nonatomic, strong) CDOSynchronisationCoordinator *syncCoordinator;
 @property (nonatomic, strong) SQKContextManager *contextManager;
 @end
 
@@ -25,20 +26,37 @@
 	// Set your Github API access token for the CDOGithubAPIClient
 	// See: https://github.com/settings/applications#personal-access-tokens
 	// I'm loading mine from a .plist (ignored in the git repo)
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
-	NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
-	NSString *accessToken = plistDict[@"token"];
-	[CDOGithubAPIClient sharedInstance].accessToken = accessToken;
 
 	NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
 	self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSSQLiteStoreType
 	                                                managedObjectModel:model
+                           orderedManagedObjectModelNames:@[@"SQKCoreDataOperation_Example"]
 	                                                          storeURL:nil];
 
-	self.dataSynchroniser = [[CDODataSynchroniser alloc] initWithContextManager:self.contextManager];
-	[self.dataSynchroniser synchronise];
+    
+    [CDONotificationManager addObserverForSynchronisationRequestNotification:self selector:@selector(didRequestSynchronisation:)];
+    [CDONotificationManager addObserverForSynchronisationResponseNotification:self selector:@selector(didCompleteSynchronisation:)];
 
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"GithubToken" ofType:@"plist"];
+    NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:path];
+    NSString *accessToken = plistDict[@"token"];
+
+    CDOGithubAPIClient *APIClient = [[CDOGithubAPIClient alloc] initWithAccessToken:accessToken];
+    self.syncCoordinator = [[CDOSynchronisationCoordinator alloc] initWithContextManager:self.contextManager APIClient:APIClient];
+
+    [CDOSynchronisationCoordinator synchronise];
+    
 	return YES;
+}
+
+- (void) didRequestSynchronisation:(NSNotification*)notification
+{
+    NSLog(@"didRequestSynchronisation: %@", notification);
+}
+
+- (void) didCompleteSynchronisation:(NSNotification*)notification
+{
+    NSLog(@"didCompleteSynchronisation: %@", notification);
 }
 
 @end

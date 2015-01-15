@@ -8,11 +8,13 @@
 
 #import "NSPersistentStoreCoordinator+SQKAdditions.h"
 #import "SQKBundle.h"
+#import "SQKModelMigrator.h"
 
 @implementation NSPersistentStoreCoordinator (SQKAdditions)
 
 + (instancetype)sqk_storeCoordinatorWithStoreType:(NSString *)storeType
                                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+                   orderedManagedObjectModelNames:(NSArray *)modelNames
                                          storeURL:(NSURL *)storeURL
 {
     if (!storeURL)
@@ -23,20 +25,33 @@
     NSPersistentStoreCoordinator *persistentStoreCoordinator =
         [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
-    NSDictionary *options = @
+
+    NSError *migrationError = nil;
+    [SQKModelMigrator iterativeMigrateURL:storeURL
+                                   ofType:storeType
+                                  toModel:managedObjectModel
+           orderedManagedObjectModelNames:modelNames
+                                    error:&migrationError];
+
+    if (migrationError)
     {
+        [self abortWithError:migrationError];
+    }
+
+    NSDictionary *options = @{
         NSMigratePersistentStoresAutomaticallyOption: @(YES),
         NSInferMappingModelAutomaticallyOption: @(YES)
     };
-    NSError *error = nil;
+
+    NSError *addPersistentStoreError = nil;
     [persistentStoreCoordinator addPersistentStoreWithType:storeType
                                              configuration:nil
                                                        URL:storeURL
                                                    options:options
-                                                     error:&error];
-    if (error && isRunningFromProductionBundle())
+                                                     error:&addPersistentStoreError];
+    if (addPersistentStoreError && isRunningFromProductionBundle())
     {
-        [self abortWithError:error];
+        [self abortWithError:addPersistentStoreError];
     }
     return persistentStoreCoordinator;
 }
@@ -61,6 +76,8 @@
 
     return [documentsURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", applicationName]];
 }
+
+#pragma mark - Private methods
 
 + (void)abortWithError:(NSError *)error
 {

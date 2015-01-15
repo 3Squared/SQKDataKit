@@ -90,6 +90,11 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 
 - (BOOL)performFetch:(NSError **)error
 {
+    return [self performFetch:error notify:YES];
+}
+
+- (BOOL)performFetch:(NSError **)error notify:(BOOL)shouldNotify
+{
     if (!self.fetchRequest)
     {
         *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
@@ -108,15 +113,18 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }];
     self.managedObjects = [fetchedObjects objectsAtIndexes:indexes];
 
-    NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
-    if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
-    {
-        [self.delegate controller:self fetchedObjects:allIndexes error:error];
+    if (shouldNotify) {
+        NSIndexSet *allIndexes = [self.managedObjects sqk_indexesOfObjects];
+        if ([self.delegate respondsToSelector:@selector(controller:fetchedObjects:error:)])
+        {
+            [self.delegate controller:self fetchedObjects:allIndexes error:error];
+        }
+        if (self.fetchedObjectsBlock)
+        {
+            self.fetchedObjectsBlock(self, allIndexes, *error);
+        }
     }
-    if (self.fetchedObjectsBlock)
-    {
-        self.fetchedObjectsBlock(self, allIndexes, *error);
-    }
+    
     return error ? NO : YES;
 }
 
@@ -175,26 +183,35 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
     {
         NSArray *insertedObjects = [[notification userInfo] objectForKey:NSInsertedObjectsKey];
 
-        if (insertedObjects)
+        if (insertedObjects.count > 0)
         {
             NSMutableArray *array = [NSMutableArray arrayWithArray:self.managedObjects];
             for (NSManagedObject *insertedObject in insertedObjects)
             {
-                if (!self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObjects])
+                BOOL isCorrectEntityType = [insertedObject.entity.name isEqualToString:self.fetchRequest.entityName];
+                if (isCorrectEntityType)
                 {
-                    NSManagedObject *localObject =
-                        [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
-                                                                  error:nil];
-                    if (localObject && self.filterReturnedObjectsBlock(localObject))
-                    {
-                        [array addObject:localObject];
+                    BOOL matchesPredicate = !self.fetchRequest.predicate || [self.fetchRequest.predicate evaluateWithObject:insertedObject];
+                    if (matchesPredicate) {
+                        __block NSManagedObject *localObject = nil;
+                        [self.managedObjectContext performBlockAndWait:^{
+                            localObject = [self.managedObjectContext existingObjectWithID:[insertedObject objectID]
+                                                                                    error:nil];
+                        }];
+                        
+                        if (localObject && self.filterReturnedObjectsBlock(localObject))
+                        {
+                            [array addObject:localObject];
+                        }
                     }
                 }
             }
 
             if (self.fetchRequest.sortDescriptors)
             {
-                [array sortUsingDescriptors:self.fetchRequest.sortDescriptors];
+                [self.managedObjectContext performBlockAndWait:^{
+                    [array sortUsingDescriptors:self.fetchRequest.sortDescriptors]; 
+                }];
             }
 
             self.managedObjects = [NSArray arrayWithArray:array];
@@ -227,7 +244,7 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
         }
     }
 
-    if (!self.managedObjects)
+    if (!self.managedObjects || self.managedObjects.count == 0)
     {
         return;
     }
@@ -244,7 +261,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 {
                     if ([updatedObject.objectID isEqual:existingObject.objectID])
                     {
-                        [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        [self.managedObjectContext performBlockAndWait:^{
+                            [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        }];
                         return YES;
                     }
                 }
@@ -275,7 +294,9 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
                 {
                     if ([deletedObject.objectID isEqual:existingObject.objectID])
                     {
-                        [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        [self.managedObjectContext performBlockAndWait:^{
+                            [self.managedObjectContext refreshObject:existingObject mergeChanges:NO];
+                        }];
                         return YES;
                     }
                 }

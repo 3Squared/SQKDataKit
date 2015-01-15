@@ -20,32 +20,31 @@
 @implementation SQKContextManager
 
 - (instancetype)initWithStoreType:(NSString *)storeType
-               managedObjectModel:(NSManagedObjectModel *)managedObjectModel
-                         storeURL:(NSURL *)storeURL
+                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+    orderedManagedObjectModelNames:(NSArray *)modelNames
+                          storeURL:(NSURL *)storeURL
 {
-    if (!storeType || !managedObjectModel)
+    if (!storeType || !managedObjectModel || ![[SQKContextManager validStoreTypes] containsObject:storeType])
     {
         return nil;
     }
 
-    if (![[SQKContextManager validStoreTypes] containsObject:storeType])
-    {
-        return nil;
-    }
+	return [self initWithPersistentStoreCoordinator:[NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
+																								 managedObjectModel:managedObjectModel
+                                                                                     orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
+																										   storeURL:storeURL]];
+}
 
-
-    self = [super init];
-    if (self)
-    {
-        _storeType = storeType;
-        _managedObjectModel = managedObjectModel;
-        _persistentStoreCoordinator =
-            [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
-                                                         managedObjectModel:managedObjectModel
-                                                                   storeURL:storeURL];
-        [self observeForSavedNotification];
-    }
-    return self;
+- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+	if (!persistentStoreCoordinator) {
+		return nil;
+	}
+	if (self = [super init]) {
+		_persistentStoreCoordinator = persistentStoreCoordinator;
+		[self observeForSavedNotification];
+	}
+	
+	return self;
 }
 
 + (NSArray *)validStoreTypes

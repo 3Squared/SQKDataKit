@@ -24,6 +24,7 @@
     self.persitentStoreCoordinator =
         [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:NSSQLiteStoreType
                                                      managedObjectModel:self.managedObjectModel
+                                         orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                                storeURL:nil];
 }
 

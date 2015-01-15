@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
 #import <AGAsyncTestHelper/AGAsyncTestHelper.h>
-#import "SQKContextManager.h"
+#import <SQKDataKit/SQKContextManager.h>
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
 
@@ -35,6 +35,7 @@
         [NSManagedObjectModel mergedModelFromBundles:@[[NSBundle mainBundle]]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
 }
 
@@ -59,16 +60,29 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
+	
+	NSPersistentStore *store = [self.contextManager.persistentStoreCoordinator.persistentStores firstObject];
     XCTAssertNotNil(self.contextManager, @"");
-    XCTAssertEqualObjects(self.contextManager.storeType, NSInMemoryStoreType, @"");
-    XCTAssertEqualObjects(self.contextManager.managedObjectModel, self.managedObjectModel, @"");
+    XCTAssertEqualObjects(store.type, NSInMemoryStoreType, @"");
+    XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator.managedObjectModel, self.managedObjectModel, @"");
+}
+
+- (void)testInitialisesWithSPersistentStoreCoordinator
+{
+	id storeCoordinator = [OCMockObject mockForClass:[NSPersistentStoreCoordinator class]];
+	
+	self.contextManager = [[SQKContextManager alloc] initWithPersistentStoreCoordinator:storeCoordinator];
+	XCTAssertNotNil(self.contextManager, @"");
+	XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator, storeCoordinator, @"");
 }
 
 - (void)testReturnsNilWithNoStoreType
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:nil
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -77,6 +91,7 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:nil
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
@@ -85,9 +100,11 @@
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:@"unsupported"
                                                     managedObjectModel:self.managedObjectModel
+                                        orderedManagedObjectModelNames:@[@"SQKDataKitModel"]
                                                               storeURL:nil];
     XCTAssertNil(self.contextManager, @"");
 }
+
 
 #pragma mark - Contexts
 
