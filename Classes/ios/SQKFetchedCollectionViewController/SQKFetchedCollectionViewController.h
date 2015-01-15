@@ -18,6 +18,11 @@
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 /**
+ *  Read only property that allows access to the fetched objects.
+ */
+@property (strong, nonatomic, readonly) NSFetchedResultsController *fetchedResultsController;
+
+/**
  *  BOOL that when set to YES sets a search bar is added to the top of the collection view.
  *  Default is set to YES
  */
@@ -50,9 +55,8 @@
  */
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled;
 
-/**---------------------------------------------------------------------------------------
+/**
  * @name Methods to be overridden in subclass
- *  ---------------------------------------------------------------------------------------
  */
 /**
  Configure a item cell for display.

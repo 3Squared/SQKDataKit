@@ -16,7 +16,7 @@
 
 @interface SQKFetchedCollectionViewController ()
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic, readwrite) NSFetchedResultsController *fetchedResultsController;
 
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (nonatomic, assign, readwrite) BOOL searchIsActive;
