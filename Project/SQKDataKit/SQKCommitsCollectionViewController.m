@@ -70,12 +70,6 @@
     [self.collectionView addSubview:self.refreshControl];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.collectionView reloadData];
-}
-
 - (void)refresh:(id)sender
 {
     [self.refreshControl beginRefreshing];
@@ -177,20 +171,12 @@
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
     [super setEditing:editing animated:animated];
-    
     [self.collectionView reloadData];
 }
 
 - (void)toggleEditing
 {
-    if(self.editing)
-    {
-        self.editing = NO;
-    }
-    else
-    {
-        self.editing = YES;
-    }
+    self.editing = !self.editing;
 }
 
 @end
