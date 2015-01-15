@@ -9,12 +9,14 @@
 #import "SQKCoreDataOperation.h"
 #import "SQKContextManager.h"
 #import "NSManagedObjectContext+SQKAdditions.h"
+#import <SQKDataKit/SQKDataKitErrors.h>
 
 @interface SQKCoreDataOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContextToMerge;
 @property (nonatomic, assign) BOOL sqk_executing;
 @property (nonatomic, assign) BOOL sqk_finished;
+@property (nonatomic, assign) NSMutableArray *errors;
 @end
 
 @implementation SQKCoreDataOperation
@@ -27,18 +29,12 @@
         _contextManager = contextManager;
         _sqk_executing = NO;
         _sqk_finished = NO;
+        _errors = [NSMutableArray array];
     }
     return self;
 }
 
 #pragma mark - To overrride
-
-- (NSError *)error
-{
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                                 userInfo:nil];
-}
 
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
@@ -103,7 +99,9 @@
                                                      name:NSManagedObjectContextDidSaveNotification
                                                    object:nil];
 
-        [managedObjectContext save:NULL];
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        [self addError:error];
     }
 }
 
@@ -117,6 +115,32 @@
 
     [self didChangeValueForKey:@"isExecuting"];
     [self didChangeValueForKey:@"isFinished"];
+}
+
+#pragma mark - Errors
+
+- (NSError *)error
+{
+    if (!self.errors) {
+        return nil;
+    }
+    
+    if ([self.errors count] == 1) {
+        return [self.errors firstObject];
+    }
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    
+    [userInfo setObject:[NSArray arrayWithArray:self.errors] forKey:NSDetailedErrorsKey];
+    
+    return [NSError errorWithDomain:SQKDataKitErrorDomain code:SQKDataKitOperationMultipleErrorsError userInfo:userInfo];
+}
+
+- (void)addError:(NSError *)error
+{
+    if (error) {
+        [self.errors addObject:error];
+    }
 }
 
 #pragma mark - Merging
