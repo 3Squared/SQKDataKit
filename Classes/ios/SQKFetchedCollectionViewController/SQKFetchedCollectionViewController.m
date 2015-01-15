@@ -140,6 +140,61 @@
     return numberOfItems;
 }
 
+- (BOOL)shouldReloadCollectionViewToPreventKnownIssue
+{
+    __block BOOL shouldReload = NO;
+    [self.itemChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
+        [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+            NSIndexPath *indexPath = obj;
+            
+            switch (type)
+            {
+                case NSFetchedResultsChangeInsert:
+                {
+                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 0)
+                    {
+                        shouldReload = YES;
+                    }
+                    else
+                    {
+                        shouldReload = NO;
+                    }
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeDelete:
+                {
+                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 1)
+                    {
+                        shouldReload = YES;
+                    }
+                    else
+                    {
+                        shouldReload = NO;
+                    }
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeUpdate:
+                {
+                    shouldReload = NO;
+                    break;
+                }
+                    
+                case NSFetchedResultsChangeMove:
+                {
+                    shouldReload = NO;
+                    break;
+                }
+            }
+        }];
+        
+    }];
+    
+    return shouldReload;
+}
+
 - (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController
                    configureItemCell:(UICollectionViewCell *)theItemCell
                      atIndexPath:(NSIndexPath *)indexPath
@@ -283,61 +338,6 @@
     }
 }
 
-- (BOOL)shouldReloadCollectionViewToPreventKnownIssue
-{
-    __block BOOL shouldReload = NO;
-    [self.itemChanges enumerateObjectsUsingBlock:^(NSDictionary *change, NSUInteger idx, BOOL *stop) {
-        [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            NSFetchedResultsChangeType type = [key unsignedIntegerValue];
-            NSIndexPath *indexPath = obj;
-            
-            switch (type)
-            {
-                case NSFetchedResultsChangeInsert:
-                {
-                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 0)
-                    {
-                        shouldReload = YES;
-                    }
-                    else
-                    {
-                        shouldReload = NO;
-                    }
-                    break;
-                }
-                    
-                case NSFetchedResultsChangeDelete:
-                {
-                    if ([self.collectionView numberOfItemsInSection:indexPath.section] == 1)
-                    {
-                        shouldReload = YES;
-                    }
-                    else
-                    {
-                        shouldReload = NO;
-                    }
-                    break;
-                }
-                    
-                case NSFetchedResultsChangeUpdate:
-                {
-                    shouldReload = NO;
-                    break;
-                }
-                    
-                case NSFetchedResultsChangeMove:
-                {
-                    shouldReload = NO;
-                    break;
-                }
-            }
-        }];
-
-    }];
-    
-    return shouldReload;
-}
-
 #pragma mark - FetchedResultsController
 
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
@@ -364,7 +364,6 @@
 }
 
 #pragma mark - Search bar
-
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
