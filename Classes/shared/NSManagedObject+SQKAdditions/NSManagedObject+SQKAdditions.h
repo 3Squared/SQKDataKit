@@ -9,22 +9,6 @@
 @import CoreData;
 
 /**
- *  Domain for errors from SQKDataKit.
- */
-extern NSString *const SQKDataKitErrorDomain;
-
-/**
- *  SQKDataKit related errors.
- */
-typedef NS_ENUM(NSInteger, SQKDataKitError)
-{
-    /**
-     *  Returned by the insert-or-update method when a non-private managed object context is used.
-     */
-    SQKDataKitErrorUnsupportedQueueConcurencyType
-};
-
-/**
  *  Additions to NSManagedObject to reduce boilerplate and simplify common operations.
  *  @warning These methods never should __never__ be called directly on NSManagedObject (e.g.
  * [NSManagedObject entityName]), but instead only on subclasses.

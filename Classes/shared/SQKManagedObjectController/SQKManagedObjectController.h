@@ -11,8 +11,6 @@
 
 @class SQKManagedObjectController;
 
-extern NSString *const SQKManagedObjectControllerErrorDomain;
-
 typedef void (^SQKManagedObjectControllerObjectsChangedBlock)(SQKManagedObjectController *controller,
                                                               NSIndexSet *changedObjectIndexes);
 typedef void (^SQKManagedObjectControllerObjectsFetchedBlock)(SQKManagedObjectController *controller,

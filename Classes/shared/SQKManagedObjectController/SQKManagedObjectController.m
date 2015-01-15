@@ -8,8 +8,7 @@
 
 #import "SQKManagedObjectController.h"
 #import "NSArray+SQKAdditions.h"
-
-NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectControllerErrorDomain";
+#import <SQKDataKit/SQKDataKitErrors.h>
 
 @interface SQKManagedObjectController ()
 @property (nonatomic, strong) NSFetchRequest *fetchRequest;
@@ -96,8 +95,8 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 {
     if (!self.fetchRequest)
     {
-        *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
-                                     code:1
+        *error = [NSError errorWithDomain:SQKDataKitErrorDomain
+                                     code:SQKManagedObjectControllerError
                                  userInfo:@{
                                      NSLocalizedDescriptionKey : @"No fetch request set!"
                                  }];
@@ -134,8 +133,8 @@ NSString *const SQKManagedObjectControllerErrorDomain = @"SQKManagedObjectContro
 {
     if (!self.managedObjects && error)
     {
-        *error = [NSError errorWithDomain:SQKManagedObjectControllerErrorDomain
-                                     code:2
+        *error = [NSError errorWithDomain:SQKDataKitErrorDomain
+                                     code:SQKManagedObjectControllerError
                                  userInfo:@{
                                      NSLocalizedDescriptionKey : @"No objects to delete! You must call performFetch: first."
                                  }];
