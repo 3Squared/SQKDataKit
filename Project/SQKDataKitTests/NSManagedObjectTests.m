@@ -11,6 +11,7 @@
 #import "NSManagedObject+SQKAdditions.h"
 #import "Commit.h"
 #import "SQKContextManager.h"
+#import "SQKDataKitErrors.h"
 
 @interface NSManagedObjectTests : XCTestCase
 @property (nonatomic, strong) NSManagedObjectContext *mainContext;

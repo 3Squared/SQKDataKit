@@ -60,7 +60,14 @@
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context;
 
 /**
- *  Override to return any error that occurred during the operation.
+ *  Pass any errors encountered in your subclass so that they may be combined and returned by the error method.
+ *
+ *  @param error An error encountered while running your operation.
+ */
+- (void)addError:(NSError *)error;
+
+/**
+ *  Returns any error that occurred during the operation, including those added with addError:.
  */
 - (NSError *)error;
 

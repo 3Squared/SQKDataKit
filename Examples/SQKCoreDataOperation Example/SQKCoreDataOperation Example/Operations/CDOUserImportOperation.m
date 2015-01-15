@@ -13,7 +13,6 @@
 #import "User.h"
 
 @interface CDOUserImportOperation ()
-@property (nonatomic, strong) NSError *operationError;
 @property (nonatomic, strong) CDOGithubAPIClient *APIClient;
 @end
 
@@ -53,11 +52,6 @@
     {
         [self completeOperationBySavingContext:context];
     }
-}
-
-- (NSError *)error
-{
-    return self.operationError;
 }
 
 @end

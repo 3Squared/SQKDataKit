@@ -7,8 +7,7 @@
 //
 
 #import "NSManagedObject+SQKAdditions.h"
-
-NSString *const SQKDataKitErrorDomain = @"SQKDataKitErrorDomain";
+#import <SQKDataKit/SQKDataKitErrors.h>
 
 @implementation NSManagedObject (SQKAdditions)
 

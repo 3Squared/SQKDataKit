@@ -96,7 +96,7 @@ NSString *const CDOSynchronisationResponseNotification = @"CDOSynchronisationRes
 		 *  errored or were also cancelled. By cancelling the next operation we will also
 		 *  also ensure that any of it's dependencies will also be canclled.
 		 */
-        if (dependentOperation.error || [dependentOperation isCancelled])
+        if ([dependentOperation error] || [dependentOperation isCancelled])
         {
             NSString *dependentOperationName = NSStringFromClass([dependentOperation class]);
             if (dependentOperation.error)
