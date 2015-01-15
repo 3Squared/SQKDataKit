@@ -16,7 +16,7 @@
 @property (nonatomic, strong, readwrite) NSManagedObjectContext *managedObjectContextToMerge;
 @property (nonatomic, assign) BOOL sqk_executing;
 @property (nonatomic, assign) BOOL sqk_finished;
-@property (nonatomic, assign) NSMutableArray *errors;
+@property (nonatomic, strong) NSMutableArray *errors;
 @end
 
 @implementation SQKCoreDataOperation
