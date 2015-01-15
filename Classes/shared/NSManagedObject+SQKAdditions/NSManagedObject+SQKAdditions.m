@@ -75,21 +75,23 @@
 
 + (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context error:(NSError **)error
 {
-    NSError *localError = nil;
-    NSFetchRequest *fetchRequest = [self sqk_fetchRequest];
-    fetchRequest.includesPropertyValues = NO;
-    fetchRequest.returnsObjectsAsFaults = NO;
-    NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
-    if (localError)
-    {
-        if (error)
+    [context performBlockAndWait:^{
+        NSError *localError = nil;
+        NSFetchRequest *fetchRequest = [self sqk_fetchRequest];
+        fetchRequest.includesPropertyValues = NO;
+        fetchRequest.returnsObjectsAsFaults = NO;
+        NSArray *objects = [context executeFetchRequest:fetchRequest error:&localError];
+        if (localError)
         {
-            *error = localError;
+            if (error)
+            {
+                *error = localError;
+            }
+            return;
         }
-        return;
-    }
-
-    [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
+        
+        [objects makeObjectsPerformSelector:@selector(sqk_deleteObject)];
+    }];
 }
 
 + (void)sqk_deleteAllObjectsInContext:(NSManagedObjectContext *)context withPredicate:(NSPredicate *)predicate error:(NSError **)error
