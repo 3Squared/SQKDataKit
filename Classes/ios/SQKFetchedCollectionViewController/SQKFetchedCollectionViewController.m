@@ -349,11 +349,28 @@
     mustOverride();
 }
 
+- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedCollectionViewController *)controller
+{
+    return nil;
+}
+
 - (NSFetchedResultsController *)fetchedResultsControllerWithSearch:(NSString *)searchString
 {
+    NSString *sectionKeyPath;
+    /**
+	 *  Only use a sectionKeyPath when not searching becuase:
+	 *		- A a section index should not be shown while searching, and
+	 *		- B executed fetch requests take longer when sections are used. When searching this is
+	 * especially noticable as a new fetch request is executed upon each key stroke during search.
+	 */
+    if (!self.searchIsActive)
+    {
+        sectionKeyPath = [self sectionKeyPathForSearchableFetchedResultsController:self];
+    }
+
     self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:[self fetchRequestForSearch:searchString]
                                                                         managedObjectContext:self.managedObjectContext
-                                                                          sectionNameKeyPath:nil
+                                                                          sectionNameKeyPath:sectionKeyPath
                                                                                    cacheName:nil];
     self.fetchedResultsController.delegate = self;
 
