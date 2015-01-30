@@ -97,13 +97,19 @@ typedef void (^SQKPropertySetterBlock)(NSDictionary *dictionary, id managedObjec
 
 /**
  *  Perform a batch insert-or-update.
- *   This method codifies the pattern found in the Apple guide to [Implementing Find-or-Create Efficiently](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CoreData/Articles/cdImporting.html#//apple_ref/doc/uid/TP40003174-SW4).
- *  You should call this method from inside a `performBlockAndWait` to avoid threading issues. [See for more info](https://developer.apple.com/library/ios/documentation/cocoa/Reference/CoreDataFramework/Classes/NSManagedObjectContext_Class/NSManagedObjectContext.html#//apple_ref/doc/uid/TP30001182-SW39).
- *  @param remoteData          Array of KVO compliant objects you wish to use for insert/update. This is most likely data from a remote source, i.e. a web service.
- *  @param modelKey            The KVO keypath of the primary key property of the managed object being inserted/updated.
- *  @param remoteDataKey       The KVO keypath of the objects in `remoteData` to map to the primary key for the managed object.
- *  @param propertySetterBlock A block called to facilitate setting properties of the managed object. You should not initiate any other fetch requests here, you should only apply the logic necessary to set the properties of the managed object.
- *  @param privateContext      A managed object context that must have the concurrency type NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain one.
+ *  This method codifies the pattern found in Apple's Core Data Programming Guide under "Implementing Find-or-Create Efficiently".
+ *
+ *  In order to be fast this method only executes only one fetch request. Therefore you must be careful what you do inside the propertySetterBlock.
+ *  For example, if you insert an object in the propertySetterBlock with the same ID as one in your remote data, this method will not know that 
+ *  it already exists and will insert it again, leading to duplicates.
+ *
+ *  You should call this method from inside performBlockAndWait.
+ *
+ *  @param remoteData          Array of kvc-compliant objects you wish to use for insert/update. This is most likely data from a remote source, i.e. a web service.
+ *  @param modelKey            The key path of the primary key property of the managed object being inserted/updated. Must be a kvc-compliant property of the model.
+ *  @param remoteDataKey       The key path of the objects in `remoteData` to map to the primary key for the managed object. Must be a kvc-compliant property of the objects in remoteData.
+ *  @param propertySetterBlock A block called to facilitate setting properties of the managed object. You should avoid initiating any Core Data operations here - you should only apply the logic necessary to set the properties of the managed object.
+ *  @param privateContext      A managed object context with the concurrency type NSPrivateQueueConcurrencyType. Use the `newPrivateContext` method of `SQKContextManager` to obtain one.
  *  @param error               If there is a problem executing the fetch, upon return contains an instance of NSError that describes the problem.
  */
 + (void)sqk_insertOrUpdate:(NSArray *)remoteData
