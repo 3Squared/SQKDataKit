@@ -113,17 +113,19 @@ NSArray *dictArray = @[
 self.privateContext = [self.contextManager newPrivateContext];
 
 NSError *error = nil;
-[User SQK_insertOrUpdate:dictArray
-          uniqueModelKey:@"userID" // property name for the primary key of User model
-         uniqueRemoteKey:@"UserID"
-     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
-         User *user = (User *)managedObject;
-         user.name = dictionary[@"Name"];
-         user.age = dictionary[@"Age"];
-     }
-          privateContext:self.privateContext
-                   error:&error];
-	                     
+[self.privateContext performBlockAndWait:^{
+	[User SQK_insertOrUpdate:dictArray
+	          uniqueModelKey:@"userID" // property name for the primary key of User model
+	         uniqueRemoteKey:@"UserID"
+	     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+	         User *user = (User *)managedObject;
+	         user.name = dictionary[@"Name"];
+	         user.age = dictionary[@"Age"];
+	     }
+	          privateContext:self.privateContext
+	                   error:&error];
+	[self.privateContext save:nil];	 
+}];
 ```
 
 It is often the case that you only know the GUIDs of objects when working with data from a web service. Say for example a user has a number of posts, but the JSON object for the user only specifies an array of GUIDs of those posts rather than the full commit objects themselves. e.g.:
@@ -138,20 +140,27 @@ NSArray *postIDs = @[
                      ];
 
 NSError *error = nil;
-[Post sqk_insertOrUpdate:postIDs
-          uniqueModelKey:@"postID" // property name for the primary key of Post model
-         uniqueRemoteKey:@"self"
-     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
-         Post *post = (Post *)managedObject;
-         post.user = user;
-     }
-          privateContext:self.privateContext
-                   error:&error];
+[self.privateContext performBlockAndWait:^{
+	[Post sqk_insertOrUpdate:postIDs
+	          uniqueModelKey:@"postID" // property name for the primary key of Post model
+	         uniqueRemoteKey:@"self"
+	     propertySetterBlock:^(NSDictionary *dictionary, id managedObject) {
+	         Post *post = (Post *)managedObject;
+	         post.user = user;
+	     }
+	          privateContext:self.privateContext
+	                   error:&error];
+	[self.privateContext save:nil];	 
+}];
 
 	                     
 ```
-	                     
 
+### Warning	                     
+In order to be fast this method only executes only one fetch request. Therefore you must be careful what you do inside the propertySetterBlock.
+For example, if you insert an object in the propertySetterBlock with the same ID as one in your remote data, this method will not know that it already exists and will insert it again, leading to duplicates.
+In general you should avoid initiating any Core Data operations in the propertySetterBlock - you should only apply the logic necessary to set the properties of the managed object.
+	                    
 ## `SQKManagedObjectController`
 
 It is important to keep track of any `NSManagedObjects` you have fetched. If you hold a reference to an object but it is deleted elsewhere (possibly as part of a background sync operation) then when you try to access it an exception will be raised and the app will probably crash. Maybe it is just edited in the background - but your detail view doesn't know, so you're showing out of date information.
@@ -159,6 +168,8 @@ It is important to keep track of any `NSManagedObjects` you have fetched. If you
 `NSFetchedResultsController` avoids these issues as it listens to Core Data notifications and keeps itself updated. If you need a Core Data backed tableview, always use an `NSFetchedResultsController` if you can.
 
 In other situations an `NSFetchedResultsController` is a bit of a heavy solution.  An `SQKManagedObjectController` is like an FRC, but simpler - it manages the fetch request, holds onto the objects, and refreshes them on demand.
+
+
 
 ### Initialisation
 
