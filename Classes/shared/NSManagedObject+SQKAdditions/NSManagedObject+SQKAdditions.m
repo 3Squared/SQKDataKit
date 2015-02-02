@@ -132,13 +132,30 @@
 
     @autoreleasepool
     {
-        NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:remoteDataKey ascending:YES];
-        NSArray *sortedDictArray = [remoteData sortedArrayUsingDescriptors:@[ remoteDataSortDescriptor ]];
-        NSArray *fetchedRemoteIDs = [sortedDictArray valueForKeyPath:remoteDataKey];
+        // Remove any duplicates from remote data
+        NSArray *fetchedRemoteIDs = [[NSSet setWithArray:[remoteData valueForKeyPath:remoteDataKey]] allObjects];
+
+        // Sort the remote data IDs using their natural ordering
+        NSSortDescriptor *remoteDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES];
+        NSArray *sortedFetchedRemoteIDs = [fetchedRemoteIDs sortedArrayUsingDescriptors:@[ remoteDataSortDescriptor ]];
+
+        // Reconstuct the remote data array of dictionaries - but ordered, and without duplicates
+        NSMutableArray *sortedDictArray = [NSMutableArray array];
+        for (id remoteId in sortedFetchedRemoteIDs)
+        {
+            for (id datum in remoteData)
+            {
+                if ([remoteId isEqual:[datum valueForKey:remoteDataKey]])
+                {
+                    [sortedDictArray addObject:datum];
+                    break;
+                }
+            }
+        }
 
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         [fetchRequest setEntity:[self sqk_entityDescriptionInContext:context]];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, fetchedRemoteIDs]];
+        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(%K IN %@)", modelKey, sortedFetchedRemoteIDs]];
 
         NSSortDescriptor *localDataSortDescriptor = [[NSSortDescriptor alloc] initWithKey:modelKey ascending:YES];
         [fetchRequest setSortDescriptors:@[ localDataSortDescriptor ]];

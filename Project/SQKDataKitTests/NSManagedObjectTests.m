@@ -453,4 +453,34 @@
     }];
 }
 
+- (void)testDuplicateValuesInRemoteDataDoesNotCreateDuplicateObjects
+{
+    /**
+     *  3 objects with same GUID should all be resolved to same managed object
+     */
+    NSArray *dictArray = @[
+        @{ @"remote-sha" : @"123" },
+        @{ @"remote-sha" : @"123" },
+        @{ @"remote-sha" : @"123" }
+    ];
+    __block NSError *insertOrUpdateError = nil;
+    [self.privateContext performBlockAndWait:^{
+        [Commit sqk_insertOrUpdate:dictArray
+                    uniqueModelKey:@"sha"
+                   uniqueRemoteKey:@"remote-sha"
+               propertySetterBlock:nil
+                    privateContext:self.privateContext
+                             error:&insertOrUpdateError];
+    }];
+
+    XCTAssertNil(insertOrUpdateError, @"");
+
+    [self.privateContext performBlockAndWait:^{
+        NSError *fetchError;
+        NSArray *objects = [self.privateContext executeFetchRequest:[Commit sqk_fetchRequest] error:&fetchError];
+        XCTAssertNil(fetchError, @"");
+        XCTAssertTrue(objects.count == 1, @"");
+    }];
+}
+
 @end
