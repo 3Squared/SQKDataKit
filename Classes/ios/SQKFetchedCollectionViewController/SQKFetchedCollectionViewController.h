@@ -13,27 +13,6 @@
 @interface SQKFetchedCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate, UISearchBarDelegate>
 
 /**
- *  Initialises a Core Data-backed UICollectionViewController with a search bar.
- *
- *  @param layout  A required UIColelctionViewLayout instance.
- *  @param context The managed object context to use when query Core Data.
- *
- *  @return An initialized SQKFetchedCollectionViewController object or nil if the object couldn’t be created.
- */
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context;
-
-/**
- *  Initialises a Core Data-backed UICollectionViewController with the option to remove searching.
- *
- *  @param layout           A required UIColelctionViewLayout instance.
- *  @param context          The managed object context to use when query Core Data.
- *  @param searchingEnabled BOOL that when set to YES sets a search bar is added to the top of the collection view.
- *
- *  @return An initialized SQKFetchedCollectionViewController object or nil if the object couldn’t be created.
- */
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled;
-
-/**
  *  The managed object context backing the fetched results controller.
  */
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -59,6 +38,27 @@
  *  Returns NO after the user has cancelled the search.
  */
 @property (nonatomic, assign, readonly) BOOL searchIsActive;
+
+/**
+ *  Initialises a Core Data-backed UICollectionViewController with a search bar.
+ *
+ *  @param layout  A required UIColelctionViewLayout instance.
+ *  @param context The managed object context to use when query Core Data.
+ *
+ *  @return An initialized SQKFetchedCollectionViewController object or nil if the object couldn’t be created.
+ */
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context;
+
+/**
+ *  Initialises a Core Data-backed UICollectionViewController with the option to remove searching.
+ *
+ *  @param layout           A required UIColelctionViewLayout instance.
+ *  @param context          The managed object context to use when query Core Data.
+ *  @param searchingEnabled BOOL that when set to YES sets a search bar is added to the top of the collection view.
+ *
+ *  @return An initialized SQKFetchedCollectionViewController object or nil if the object couldn’t be created.
+ */
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled;
 
 /**
  * @name Methods to be overridden in subclass
@@ -92,11 +92,6 @@
  */
 - (void)reloadFetchedResultsControllerForSearch:(NSString *)search;
 
-/**---------------------------------------------------------------------------------------
- * @name Methods that can overridden in subclass, but defaults are used otherwise.
- *  ---------------------------------------------------------------------------------------
- */
-
 /**
  *  Returns the section key path string to use when constructing new NSFetchedResultsControllers.
  *  nil by default, so without overriding NSFetchedResultsControllers will have no sections. NOTE: if
@@ -105,7 +100,7 @@
  *  longer when sections are used. When searching this is especially noticable as a new fetch request
  *  is executed upon each key stroke during search.
  *
- *  @param controller The SQKFetchedTableViewController creating the NSFetchedResultsController for
+ *  @param controller The SQKFetchedCollectionViewController creating the NSFetchedResultsController for
  *  which a sectionKeyPath is needed.
  *
  *  @return The sectionKeyPath to use in constructing a NSFetchedResultsController, or nil for no sections.
