@@ -26,38 +26,49 @@ Pod::Spec.new do |s|
 
 	s.source_files = 'Classes/shared/SQKDataKit.h'
 
+	s.subspec 'Core' do |ss|
+		ss.source_files = ['Classes/shared/SQKDataKitErrors.{h,m}']
+		ss.public_header_files = ['Classes/shared/SQKDataKitErrors.h']
+	end
+
 	s.subspec 'ContextManager' do |ss|
-		ss.source_files = ['Classes/shared/ContextManager/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
+		ss.dependency 'SQKDataKit/Core'
+		ss.source_files = ['Classes/shared/ContextManager/**/*{h,m}']
 		ss.public_header_files = ['Classes/shared/SQKDataKitErrors.h', 'Classes/shared/ContextManager/SQKContextManager.h', 'Classes/shared/ContextManager/NSManagedObjectContext+SQKAdditions.h', 'Classes/shared/ContextManager/NSPersistentStoreCoordinator+SQKAdditions.h']
 	end
 
 	s.subspec 'ManagedObjectExtensions' do |ss|
-		ss.source_files = ['Classes/shared/NSManagedObject+SQKAdditions/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
-		ss.public_header_files = ['Classes/shared/NSManagedObject+SQKAdditions/NSManagedObject+SQKAdditions.h', 'Classes/shared/SQKDataKitErrors.h']
+		ss.source_files = ['Classes/shared/NSManagedObject+SQKAdditions/**/*{h,m}']
+		ss.public_header_files = ['Classes/shared/NSManagedObject+SQKAdditions/NSManagedObject+SQKAdditions.h']
+		ss.dependency 'SQKDataKit/Core'
 	end
 
 	s.subspec 'ManagedObjectController' do |ss|
-		ss.source_files = ['Classes/shared/SQKManagedObjectController/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
-		ss.public_header_files = ['Classes/shared/SQKManagedObjectController/SQKManagedObjectController.h', 'Classes/shared/SQKDataKitErrors.h']
+		ss.source_files = ['Classes/shared/SQKManagedObjectController/**/*{h,m}']
+		ss.public_header_files = ['Classes/shared/SQKManagedObjectController/SQKManagedObjectController.h']
+		ss.dependency 'SQKDataKit/Core'
 	end
 
 	s.subspec 'FetchedTableViewController' do |ss|
 		ss.platform    = :ios, '6.0'
-		ss.source_files = ['Classes/ios/SQKFetchedTableViewController/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
-		ss.public_header_files = ['Classes/ios/SQKFetchedTableViewController/SQKFetchedTableViewController.h', 'Classes/shared/SQKDataKitErrors.h']
+		ss.source_files = ['Classes/ios/SQKFetchedTableViewController/**/*{h,m}']
+		ss.public_header_files = ['Classes/ios/SQKFetchedTableViewController/SQKFetchedTableViewController.h']
 		ss.frameworks  = 'CoreData', 'UIKit'
+		ss.dependency 'SQKDataKit/Core'
 	end
 
 	s.subspec 'FetchedCollectionViewController' do |ss|
 		ss.platform    = :ios, '6.0'
-		ss.source_files = ['Classes/ios/SQKFetchedCollectionViewController/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
-		ss.public_header_files = ['Classes/ios/SQKFetchedCollectionViewController/SQKFetchedCollectionViewController.h', 'Classes/shared/SQKDataKitErrors.h']
+		ss.source_files = ['Classes/ios/SQKFetchedCollectionViewController/**/*{h,m}']
+		ss.public_header_files = ['Classes/ios/SQKFetchedCollectionViewController/SQKFetchedCollectionViewController.h']
 		ss.frameworks  = 'CoreData', 'UIKit'
+		ss.dependency 'SQKDataKit/Core'
 	end
 
 	s.subspec 'CoreDataOperation' do |ss|
-		ss.source_files = ['Classes/shared/SQKCoreDataOperation/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.{h,m}']
-		ss.public_header_files = ['Classes/shared/SQKCoreDataOperation/SQKCoreDataOperation.h', 'Classes/shared/SQKDataKitErrors.h']
+		ss.source_files = ['Classes/shared/SQKCoreDataOperation/**/*{h,m}']
+		ss.public_header_files = ['Classes/shared/SQKCoreDataOperation/SQKCoreDataOperation.h']
+		ss.dependency 'SQKDataKit/Core'
     ss.dependency 'SQKDataKit/ContextManager'
     ss.dependency 'SQKDataKit/ManagedObjectExtensions'
 	end
