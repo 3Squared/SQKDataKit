@@ -31,7 +31,7 @@
 
     return [self initWithPersistentStoreCoordinator:[NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
                                                                                                  managedObjectModel:managedObjectModel
-                                                                                     orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
+                                                                                     orderedManagedObjectModelNames:modelNames
                                                                                                            storeURL:storeURL]];
 }
 
