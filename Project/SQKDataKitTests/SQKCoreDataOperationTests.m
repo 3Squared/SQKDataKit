@@ -88,6 +88,16 @@
     [dataImportOperationPartialMock verify];
 }
 
+- (void)testErrorIsNilIfSucceeded
+{
+    ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
+    [dataImportOperation start];
+    
+    NSError *error = [dataImportOperation error];
+    XCTAssertNil(error);
+}
+
+
 - (void)testCombinesErrors
 {
     ConcreteDataImportOperationWithErrors *dataImportOperation = [[ConcreteDataImportOperationWithErrors alloc] initWithContextManager:self.contextManager];

@@ -121,24 +121,27 @@
 
 - (NSError *)error
 {
-    if (!self.errors) {
+    if (!self.errors || self.errors.count == 0)
+    {
         return nil;
     }
-    
-    if ([self.errors count] == 1) {
+
+    if ([self.errors count] == 1)
+    {
         return [self.errors firstObject];
     }
-    
+
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    
+
     [userInfo setObject:[NSArray arrayWithArray:self.errors] forKey:NSDetailedErrorsKey];
-    
+
     return [NSError errorWithDomain:SQKDataKitErrorDomain code:SQKDataKitOperationMultipleErrorsError userInfo:userInfo];
 }
 
 - (void)addError:(NSError *)error
 {
-    if (error) {
+    if (error)
+    {
         [self.errors addObject:error];
     }
 }
