@@ -44,7 +44,6 @@
         self.controller =
             [[SQKManagedObjectController alloc] initWithFetchRequest:request
                                                 managedObjectContext:[self.contextManager mainContext]];
-        self.controller.delegate = self;
     }
     return self;
 }
@@ -59,7 +58,8 @@
     [self.refreshControl addTarget:self
                             action:@selector(refresh:)
                   forControlEvents:UIControlEventValueChanged];
-
+    
+    self.controller.delegate = self;
     [self.controller performFetch:nil];
 }
 
