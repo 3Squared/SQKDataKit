@@ -7,7 +7,7 @@
 //
 
 #import "NSManagedObject+SQKAdditions.h"
-#import <SQKDataKit/SQKDataKitErrors.h>
+#import "SQKDataKitErrors.h"
 
 @implementation NSManagedObject (SQKAdditions)
 

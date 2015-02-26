@@ -8,7 +8,7 @@
 
 #import "SQKManagedObjectController.h"
 #import "NSArray+SQKAdditions.h"
-#import <SQKDataKit/SQKDataKitErrors.h>
+#import "SQKDataKitErrors.h"
 
 @interface SQKManagedObjectController ()
 @property (nonatomic, strong) NSFetchRequest *fetchRequest;

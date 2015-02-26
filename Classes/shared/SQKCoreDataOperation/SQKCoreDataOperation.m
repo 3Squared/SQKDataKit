@@ -9,7 +9,7 @@
 #import "SQKCoreDataOperation.h"
 #import "SQKContextManager.h"
 #import "NSManagedObjectContext+SQKAdditions.h"
-#import <SQKDataKit/SQKDataKitErrors.h>
+#import "SQKDataKitErrors.h"
 
 @interface SQKCoreDataOperation ()
 @property (nonatomic, strong, readwrite) SQKContextManager *contextManager;
