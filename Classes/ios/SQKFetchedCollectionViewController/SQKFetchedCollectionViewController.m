@@ -427,17 +427,20 @@
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
+    /**
+     *  Do this scroll enable/disable hack as the searchBar insists on scrolling the collection view when it becomes active.
+     *  FUTURE PERSON: PLEASE REPLACE THIS IF YOU KNOW A BETTER WAY.
+     */
+    self.collectionView.scrollEnabled = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.collectionView.scrollEnabled = YES;
+    });
+
     self.searchIsActive = YES;
 
     [searchBar sizeToFit];
     [searchBar setShowsCancelButton:YES animated:YES];
 
-    /**
-     *  The search bar insists on scrolling the collectionview unless we reset the offset.
-     */
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.collectionView setContentOffset:CGPointMake(0, -44) animated:YES];
-    });
     return YES;
 }
 
