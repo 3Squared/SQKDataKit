@@ -423,6 +423,13 @@
     self.fetchedResultsController = [self fetchedResultsControllerWithSearch:search];
 }
 
+- (void)resetSearch
+{
+    self.searchBar.text = @"";
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+    [self.searchBar resignFirstResponder];
+}
+
 #pragma mark - Search bar
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar

@@ -107,6 +107,11 @@
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString;
 
 /**
+ *  Cancel the search and reset the UI;
+ */
+- (void)resetSearch;
+
+/**
  *  Forces the fetched results controller to be recreated, causing performFetch to be fired again.
  *
  *  @param search Search text for the request to be filtered by.
