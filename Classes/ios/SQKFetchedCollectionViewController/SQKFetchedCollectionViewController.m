@@ -70,12 +70,11 @@
 
 - (void)loadView
 {
-    self.view = [[UIView alloc] init];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self.collectionViewLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.collectionViewLayout];
     self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.view addSubview:self.collectionView];
+    self.view = self.collectionView;
 
     if (self.searchingEnabled)
     {
