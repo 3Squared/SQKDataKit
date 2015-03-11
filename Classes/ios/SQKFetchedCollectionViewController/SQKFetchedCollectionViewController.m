@@ -92,9 +92,6 @@
 {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [UIColor redColor];
-    self.collectionView.backgroundColor = [UIColor greenColor];
-    self.searchBar.backgroundColor = [UIColor orangeColor];
     self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
 
     if (self.refreshControl)
