@@ -22,18 +22,22 @@
 
 @property (strong, nonatomic) NSMutableArray *sectionChanges;
 @property (strong, nonatomic) NSMutableArray *itemChanges;
+
+@property (strong, nonatomic, readwrite) UICollectionView *collectionView;
+@property (strong, nonatomic, readwrite) UICollectionViewLayout *collectionViewLayout;
+
 @end
 
 @implementation SQKFetchedCollectionViewController
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context
 {
-    self = [super initWithCollectionViewLayout:layout];
-
+    self = [super init];
     if (self)
     {
         self.managedObjectContext = context;
         self.searchingEnabled = YES;
+        self.collectionViewLayout = layout;
     }
 
     return self;
@@ -41,12 +45,13 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled
 {
-    self = [super initWithCollectionViewLayout:layout];
+    self = [super init];
 
     if (self)
     {
         self.managedObjectContext = context;
         self.searchingEnabled = searchingEnabled;
+        self.collectionViewLayout = layout;
     }
 
     return self;
@@ -63,21 +68,39 @@
     return self;
 }
 
-- (void)viewDidLoad
+- (void)loadView
 {
-    [super viewDidLoad];
-
-    self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
+    self.view = [[UIView alloc] init];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self.collectionViewLayout];
+    self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    [self.view addSubview:self.collectionView];
 
     if (self.searchingEnabled)
     {
         self.edgesForExtendedLayout = UIRectEdgeNone;
 
-        self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.collectionView.frame), 44)];
+        self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(self.collectionView.frame), 44)];
         self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
         self.searchBar.delegate = self;
         [self.collectionView addSubview:self.searchBar];
+    }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.view.backgroundColor = [UIColor redColor];
+    self.collectionView.backgroundColor = [UIColor greenColor];
+    self.searchBar.backgroundColor = [UIColor orangeColor];
+    self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
+
+    if (self.refreshControl)
+    {
+        [self setRefreshControl:self.refreshControl];
     }
 }
 
@@ -93,7 +116,8 @@
         }
         else
         {
-            [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
+            [self.collectionView setContentInset:UIEdgeInsetsMake(self.searchBar.frame.size.height, 0, 0, 0)];
+            [self.collectionView setContentOffset:CGPointMake(0, 0)];
         }
     }
 }
@@ -112,6 +136,20 @@
 - (void)dealloc
 {
     _fetchedResultsController.delegate = nil;
+}
+
+#pragma mark - Refreshing
+
+- (void)setRefreshControl:(UIRefreshControl *)refreshControl
+{
+    [_refreshControl removeFromSuperview];
+    _refreshControl = refreshControl;
+    if (_refreshControl && self.collectionView)
+    {
+        [self.collectionView addSubview:_refreshControl];
+        _refreshControl.bounds = CGRectOffset(_refreshControl.bounds, 0, 44);
+        [self.collectionView sendSubviewToBack:_refreshControl];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -190,6 +228,11 @@
     }];
 
     return shouldReload;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    mustOverride();
 }
 
 - (void)fetchedResultsController:(NSFetchedResultsController *)fetchedResultsController
@@ -357,13 +400,8 @@
 - (NSFetchedResultsController *)fetchedResultsControllerWithSearch:(NSString *)searchString
 {
     NSString *sectionKeyPath;
-    /**
-	 *  Only use a sectionKeyPath when not searching becuase:
-	 *		- A a section index should not be shown while searching, and
-	 *		- B executed fetch requests take longer when sections are used. When searching this is
-	 * especially noticable as a new fetch request is executed upon each key stroke during search.
-	 */
-    if (!self.searchIsActive)
+
+    if (!self.searchIsActive || self.showsSectionsWhenSearching)
     {
         sectionKeyPath = [self sectionKeyPathForSearchableFetchedResultsController:self];
     }
@@ -394,30 +432,36 @@
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
     self.searchIsActive = YES;
+
     [searchBar sizeToFit];
     [searchBar setShowsCancelButton:YES animated:YES];
+
+    /**
+     *  The search bar insists on scrolling the collectionview unless we reset the offset.
+     */
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView setContentOffset:CGPointMake(0, -44) animated:YES];
+    });
     return YES;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     self.fetchedResultsController = [self fetchedResultsControllerWithSearch:nil];
-    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
 
     self.searchIsActive = NO;
     self.searchBar.text = nil;
+    [self fetchedResultsControllerWithSearch:nil];
+    [self.collectionView reloadData];
+
     [searchBar setShowsCancelButton:NO animated:YES];
     [searchBar resignFirstResponder];
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         [self.collectionView setContentOffset:CGPointMake(0, self.searchBar.frame.size.height)];
-                     }];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [self fetchedResultsControllerWithSearch:searchText];
-    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+    [self.collectionView reloadData];
     [self.searchBar becomeFirstResponder];
 }
 

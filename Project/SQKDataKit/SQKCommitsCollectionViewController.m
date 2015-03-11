@@ -18,7 +18,6 @@
 #import <SQKDataKit/NSManagedObject+SQKAdditions.h>
 
 @interface SQKCommitsCollectionViewController ()
-@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @property (nonatomic, strong) NSOperationQueue *queue;
@@ -33,10 +32,10 @@
 
     if (self)
     {
+        self.showsSectionsWhenSearching = YES;
+        
         self.queue = [[NSOperationQueue alloc] init];
         self.json = [SQKJSONLoader loadJSONFileName:@"data_1500"];
-
-        [self.collectionView registerClass:[SQKCommitItemCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
 
         self.contextManager = contextManager;
         self.title = @"Collection";
@@ -54,6 +53,10 @@
 {
     [super viewDidLoad];
 
+    [self.collectionView registerClass:[SQKCommitItemCell class] forCellWithReuseIdentifier:@"cellIdentifier"];
+
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"identifier"];
+
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     self.collectionView.backgroundColor = [UIColor groupTableViewBackgroundColor];
@@ -67,7 +70,6 @@
     [self.refreshControl addTarget:self
                             action:@selector(refresh:)
                   forControlEvents:UIControlEventValueChanged];
-    [self.collectionView addSubview:self.refreshControl];
 }
 
 - (void)refresh:(id)sender
@@ -90,7 +92,7 @@
 - (NSFetchRequest *)fetchRequestForSearch:(NSString *)searchString
 {
     NSFetchRequest *request = [Commit sqk_fetchRequest];
-    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ];
+    request.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"authorName" ascending:YES] ];
 
     NSPredicate *filterPredicate = nil;
     if (searchString.length)
@@ -144,7 +146,35 @@
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(self.searchingEnabled ? 54 : 10, 26, 10, 26);
+    return UIEdgeInsetsMake(10, 26, 10, 26);
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader)
+    {
+        UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"identifier" forIndexPath:indexPath];
+        [[view subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+        label.font = [UIFont boldSystemFontOfSize:18.0];
+        label.textAlignment = NSTextAlignmentCenter;
+        id<NSFetchedResultsSectionInfo> section = self.fetchedResultsController.sections[indexPath.section];
+        label.text = [section name];
+        [view addSubview:label];
+        return view;
+    }
+    return nil;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    CGSize referenceSizeForHeaderInSection = CGSizeMake(CGRectGetWidth(collectionView.frame), 44.0);
+    return referenceSizeForHeaderInSection;
+}
+
+- (NSString *)sectionKeyPathForSearchableFetchedResultsController:(SQKFetchedCollectionViewController *)controller
+{
+    return @"authorName";
 }
 
 - (NSString *)firstCharactersForString:(NSString *)string

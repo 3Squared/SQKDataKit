@@ -10,7 +10,7 @@
 @import CoreData;
 @import UIKit;
 
-@interface SQKFetchedCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate, UISearchBarDelegate>
+@interface SQKFetchedCollectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate, UISearchBarDelegate>
 
 /**
  *  Initialises a Core Data-backed UICollectionViewController with a search bar.
@@ -32,6 +32,27 @@
  *  @return An initialized SQKFetchedCollectionViewController object or nil if the object couldn’t be created.
  */
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled;
+
+/**
+ *  The collection view shown by the view controller.
+ */
+@property (strong, nonatomic, readonly) UICollectionView *collectionView;
+@property (strong, nonatomic, readonly) UICollectionViewLayout *collectionViewLayout;
+
+/**
+ *  An optional refresh control shown when pulling down the collectionview.
+ *  Set this in your subclass.
+ */
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+
+/**
+ *  Show sections when searching. Defaults to NO.
+ *
+ *  Using a sectionKeyPath when searching is usually not desired, plus
+ *  executed fetch requests take longer when sections are used. When searching this is
+ *  especially noticable as a new fetch request is executed upon each key stroke during search.
+ */
+@property (nonatomic, assign) BOOL showsSectionsWhenSearching;
 
 /**
  *  The managed object context backing the fetched results controller.
