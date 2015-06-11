@@ -99,10 +99,14 @@
                                                      name:NSManagedObjectContextDidSaveNotification
                                                    object:nil];
 
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        [self addError:error];
-    }
+		NSError *error = nil;
+		[managedObjectContext save:&error];
+		if (error)
+		{
+			[self addError:error];
+			[self finishOperation];
+		}
+	}
 }
 
 - (void)finishOperation
