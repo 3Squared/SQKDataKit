@@ -101,6 +101,9 @@
 
         NSError *error = nil;
         [managedObjectContext save:&error];
+        
+        NSAssert(error == nil, @"Save errored");
+        
         [self addError:error];
     }
 }
