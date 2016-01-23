@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import <OCMock/OCMock.h>
-#import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import <SQKDataKit/SQKContextManager.h>
 #import "Commit.h"
 #import "NSManagedObject+SQKAdditions.h"
@@ -155,27 +154,28 @@
 
 - (void)testAccessingMainContextOffMainThreadThrowsException
 {
-    __block BOOL exceptionThrown = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @try
         {
             [self.contextManager.mainContext save:nil];
+			XCTFail(@"Should throw exception when accessing main context off main thread");
         }
         @catch (NSException *exception)
         {
-            exceptionThrown = YES;
+			[expectation fulfill];
         }
     });
 
-    AGWW_WAIT_WHILE(!exceptionThrown, 2.0);
-    XCTAssertTrue(exceptionThrown, @"");
+	[self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 #pragma mark - Saving
 
 - (void)testInsertsAreMergedIntoMainContextWhenPrivateContextIsSaved
 {
-    __block BOOL inserted = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 
     NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
     [privateQueue addOperationWithBlock:^{
@@ -189,11 +189,11 @@
             {
                 XCTFail(@"There was an error saving! %@", [error localizedDescription]);
             }
-            inserted = YES;
+			[expectation fulfill];
         }];
     }];
 
-    AGWW_WAIT_WHILE(!inserted, 2.0);
+	[self waitForExpectationsWithTimeout:2.0 handler:nil];
 
     NSArray *fetchedObjects =
         [self.contextManager.mainContext executeFetchRequest:[Commit sqk_fetchRequest] error:nil];
@@ -209,7 +209,8 @@
     [self.contextManager.mainContext save:nil];
     NSManagedObjectID *objectID = commit.objectID;
 
-    __block BOOL edited = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	
     NSOperationQueue *privateQueue = [[NSOperationQueue alloc] init];
     [privateQueue addOperationWithBlock:^{
         NSManagedObjectContext *privateContext = [self.contextManager newPrivateContext];
@@ -222,11 +223,11 @@
             {
                 XCTFail(@"There was an error saving! %@", [error localizedDescription]);
             }
-            edited = YES;
+			[expectation fulfill];
         }];
     }];
 
-    AGWW_WAIT_WHILE(!edited, 2.0);
+	[self waitForExpectationsWithTimeout:2.0 handler:nil];
     XCTAssertEqualObjects([commit sha], @"Edited in a private context", @"");
 }
 
