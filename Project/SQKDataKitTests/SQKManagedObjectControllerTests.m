@@ -140,6 +140,10 @@
  */
 - (void)testDeletion
 {
+	// iOS 9 no longer throws an exception when it is unable to fullfill a fault
+	// Set shouldDeleteInaccessibleFaults = NO to get back old behaviour
+	self.controller.managedObjectContext.shouldDeleteInaccessibleFaults = NO;
+	
     [self.controller performFetch:nil];
 
     XCTAssertEqualObjects([[self.controller managedObjects] firstObject], self.commit, @"");
