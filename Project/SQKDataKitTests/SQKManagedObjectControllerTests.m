@@ -7,7 +7,6 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <AGAsyncTestHelper/AGAsyncTestHelper.h>
 #import "SQKManagedObjectController.h"
 #import "Commit.h"
 #import "User.h"
@@ -78,12 +77,13 @@
  */
 - (void)testUpdating
 {
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	
     NSError *error = nil;
 
-    __block bool blockUpdateDone = NO;
     self.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
     [self.controller performFetch:&error];
@@ -99,7 +99,7 @@
         }];
     });
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 20.0);
+	[self waitForExpectationsWithTimeout:20 handler:nil];
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[self.controller managedObjects] firstObject] sha], @"dcba", @"");
 }
@@ -111,10 +111,11 @@
 {
     [self.controller performFetch:nil];
 
-    __block bool blockUpdateDone = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	
     self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
     Commit *commit = [Commit sqk_insertInContext:[self.contextManager mainContext]];
@@ -127,7 +128,7 @@
 
     [[self.contextManager mainContext] save:NULL];
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+	[self waitForExpectationsWithTimeout:2 handler:nil];
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)3, @"");
     XCTAssertTrue([self.controller.managedObjects containsObject:self.commit], @"");
     XCTAssertTrue([self.controller.managedObjects containsObject:commit], @"");
@@ -237,10 +238,10 @@
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObjects:[self.controller managedObjects]];
 
-    __block bool blockUpdateDone = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
     XCTAssertNotNil(objectsController, @"");
@@ -248,7 +249,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+	[self waitForExpectationsWithTimeout:2 handler:nil];
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
                           @"");
@@ -263,10 +264,10 @@
     self.controller.delegate = nil;
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
-    __block bool blockUpdateDone = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
     XCTAssertNotNil(objectsController, @"");
@@ -274,7 +275,7 @@
     self.commit.sha = @"Can you see me?";
     [[self.contextManager mainContext] save:nil];
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 1.0);
+	[self waitForExpectationsWithTimeout:1 handler:nil];
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
                           @"");
@@ -290,10 +291,10 @@
 
     SQKManagedObjectController *objectsController = [[SQKManagedObjectController alloc] initWithManagedObject:[[self.controller managedObjects] firstObject]];
 
-    __block bool blockUpdateDone = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     objectsController.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -305,7 +306,7 @@
         }];
     });
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 100.0);
+	[self waitForExpectationsWithTimeout:100 handler:nil];
     XCTAssertEqual([[objectsController managedObjects] count], (NSUInteger)1, @"");
     XCTAssertEqualObjects([[[objectsController managedObjects] firstObject] sha],
                           @"Can you see me?",
@@ -371,12 +372,12 @@
 
     [[self.contextManager mainContext] save:NULL];
 
-    __block bool blockUpdateDone = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
-        blockUpdateDone = YES;
+		[expectation fulfill];
     };
 
-    AGWW_WAIT_WHILE(!blockUpdateDone, 2.0);
+	[self waitForExpectationsWithTimeout:2 handler:nil];
 
     XCTAssertEqual([[self.controller managedObjects] count], (NSUInteger)1, @"");
 
