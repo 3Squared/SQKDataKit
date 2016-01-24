@@ -9,13 +9,7 @@ target "SQKDataKit" do
     pod 'SQKDataKit/CoreDataOperation', :path => '../SQKDataKit.podspec'
 end
 
-target "SQKDataKitTests" do
-	pod 'SQKDataKit/ContextManager', :path => '../SQKDataKit.podspec'
-	pod 'SQKDataKit/ManagedObjectExtensions', :path => '../SQKDataKit.podspec'
-	pod 'SQKDataKit/ManagedObjectController', :path => '../SQKDataKit.podspec'
-	pod 'SQKDataKit/FetchedTableViewController', :path => '../SQKDataKit.podspec'
-	pod 'SQKDataKit/CoreDataOperation', :path => '../SQKDataKit.podspec'
-	
+target "SQKDataKitTests" do	
 	# Test helpers
 	pod 'OCMock', '~> 2.2.1'
 end
