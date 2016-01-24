@@ -35,11 +35,14 @@
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:0 userInfo:nil]];
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:1 userInfo:nil]];
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:2 userInfo:@{ @"test" : @"hello world" }]];
+	
+	[self completeOperationBySavingContext:context];
 }
 @end
 
 @interface SQKCoreDataOperationTests : XCTestCase
 @property (nonatomic, strong) SQKContextManager *contextManager;
+@property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
 @implementation SQKCoreDataOperationTests
@@ -47,11 +50,14 @@
 - (void)setUp
 {
     [super setUp];
+	
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle mainBundle] ]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
                                         orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
+	
+	self.queue = [NSOperationQueue new];
 }
 
 - (void)stubErroringManagedObjectContextForContextManager:(SQKContextManager *)contextManager
@@ -101,8 +107,15 @@
 - (void)testErrorIsNilIfSucceeded
 {
     ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
-    [dataImportOperation start];
-    
+	
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	[dataImportOperation setCompletionBlock:^{
+		[expectation fulfill];
+	}];
+	
+	[self.queue addOperation:dataImportOperation];
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
+	
     NSError *error = [dataImportOperation error];
     XCTAssertNil(error);
 }
@@ -111,7 +124,14 @@
 - (void)testCombinesErrors
 {
     ConcreteDataImportOperationWithErrors *dataImportOperation = [[ConcreteDataImportOperationWithErrors alloc] initWithContextManager:self.contextManager];
-    [dataImportOperation start];
+	
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	[dataImportOperation setCompletionBlock:^{
+		[expectation fulfill];
+	}];
+	
+	[self.queue addOperation:dataImportOperation];
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
 
     NSError *error = [dataImportOperation error];
     XCTAssertNotNil(error);
@@ -140,9 +160,9 @@
 		}];
 	}];
 	
-	[dataImportOperation start];
+	[self.queue addOperation:dataImportOperation];
 	
-	[self waitForExpectationsWithTimeout:1.0 handler:nil];
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 @end
