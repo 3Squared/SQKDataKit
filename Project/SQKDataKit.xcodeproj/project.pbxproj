@@ -326,6 +326,7 @@
 				A34BF394184F41D300F2E3B4 /* Frameworks */,
 				A34BF395184F41D300F2E3B4 /* Resources */,
 				AE31651C244C4AE6BF8866D7 /* Copy Pods Resources */,
+				E0419F3B1891DFA5E8198947 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -345,6 +346,7 @@
 				A34BF3B8184F41D400F2E3B4 /* Frameworks */,
 				A34BF3B9184F41D400F2E3B4 /* Resources */,
 				0D49442BB775486BAD86A584 /* Copy Pods Resources */,
+				F0C9761A783A6171C3779E6B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -470,6 +472,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SQKDataKit/Pods-SQKDataKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E0419F3B1891DFA5E8198947 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SQKDataKit/Pods-SQKDataKit-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0C9761A783A6171C3779E6B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SQKDataKitTests/Pods-SQKDataKitTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
