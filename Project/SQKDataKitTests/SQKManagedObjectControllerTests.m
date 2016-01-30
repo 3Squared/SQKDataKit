@@ -81,7 +81,9 @@
 
 	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
 	
-    self.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
+	
+	__weak typeof(self) weakSelf = self;
+    weakSelf.controller.insertedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
 		[expectation fulfill];
     };
@@ -366,7 +368,8 @@
 
     NSError *error = nil;
 
-    self.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
+	__weak typeof(self) weakSelf = self;
+    weakSelf.controller.savedObjectsBlock = ^void(SQKManagedObjectController *controller, NSIndexSet *indexes) {
         XCTAssertTrue([NSThread isMainThread], @"");
 		[expectation fulfill];
     };
