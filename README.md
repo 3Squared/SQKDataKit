@@ -12,7 +12,7 @@ Collection of classes to make working with Core Data easier and help DRY-up your
 
 # Installation
 
-* Using [Cocoapods](http://cocoapods.org), add `pod 'SQKDataKit'` to your Podfile.
+* Using [CocoaPods](http://cocoapods.org), add `pod 'SQKDataKit'` to your Podfile.
 * `#import <SQKDataKit/SQKDataKit.h>` as necessary.
 
 
