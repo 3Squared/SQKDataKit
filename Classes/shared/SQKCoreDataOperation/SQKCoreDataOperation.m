@@ -99,10 +99,14 @@
                                                      name:NSManagedObjectContextDidSaveNotification
                                                    object:nil];
 
-        NSError *error = nil;
-        [managedObjectContext save:&error];
-        [self addError:error];
-    }
+		NSError *error = nil;
+		[managedObjectContext save:&error];
+		if (error)
+		{
+			[self addError:error];
+			[self finishOperation];
+		}
+	}
 }
 
 - (void)finishOperation
@@ -150,48 +154,67 @@
 
 - (void)contextSaveNotificationReceived:(NSNotification *)notification
 {
-    /**
-     *  Ensure mainContext is accessed on the main thread.
-     */
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSManagedObjectContext *mainContext = self.contextManager.mainContext;
-        [mainContext performBlock:^{
-            NSManagedObjectContext *managedObjectContext = [notification object];
-            if (managedObjectContext == self.managedObjectContextToMerge)
-            {
-                /*  If NSManagedObjectContext from the notitification is a private context
-                 *	then merge the changes into the main context.
-                 */
-                [mainContext mergeChangesFromContextDidSaveNotification:notification];
-
-                /**
-                 * This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
-                 *
-                 * NSManagedObjectContext doesn't event fire
-                 * NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge,
-                 * only inserted.
-                 *
-                 * SEE:
-                 * http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
-                 *  May also have memory implications.
-                 */
-                for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey])
-                {
-                    [[mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
-                }
-
-                [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                                name:NSManagedObjectContextDidSaveNotification
-                                                              object:nil];
-
-                // Operation is finished only when changes from private context are merged into the
-                // main
-                // context
-                [self finishOperation];
-            }
-        }];
-    });
+	/**
+	 *  Usually core data operartions do not happen on the main thread.
+	 *  But as we are saving into the main context that must happen on the main thread.
+	 *
+	 *  This is done using GCD to ensure the block is performed on the main thread.
+	 *  The issue is that once the private context has been merged into the main context, the core data
+	 *  operation needs to call `finish` on the context for the operation.
+	 *
+	 *  To solve this semaphores can be used to halt the method until a notification is posted
+	 *  to the semaphore.
+	 */
+	dispatch_semaphore_t mainContextSavedSemaphore = dispatch_semaphore_create(0);
+	
+	//Ensure mainContext is accessed on the main thread.
+	dispatch_async(dispatch_get_main_queue(), ^{
+		
+		NSManagedObjectContext *mainContext = self.contextManager.mainContext;
+		[mainContext performBlock:^{
+			
+			NSManagedObjectContext *managedObjectContext = [notification object];
+			
+			/**
+			 *  If NSManagedObjectContext from the notitification is a private context
+			 *	then merge the changes into the main context.
+			 */
+			if (managedObjectContext == self.managedObjectContextToMerge)
+			{
+				[mainContext mergeChangesFromContextDidSaveNotification:notification];
+				
+				/**
+				 * This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
+				 *
+				 * NSManagedObjectContext doesn't event fire
+				 * NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge,
+				 * only inserted.
+				 *
+				 * SEE:
+				 * http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
+				 *  May also have memory implications.
+				 */
+				for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey])
+				{
+					[[mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+				}
+				
+				[[NSNotificationCenter defaultCenter] removeObserver:self
+																name:NSManagedObjectContextDidSaveNotification
+															  object:nil];
+				
+				dispatch_semaphore_signal(mainContextSavedSemaphore);
+			}
+		}];
+	});
+	
+	dispatch_semaphore_wait(mainContextSavedSemaphore, DISPATCH_TIME_FOREVER);
+	
+	/**
+	 *  Finished is called on the same thread that the operation is on
+	 *  once the semaphore has recived it's notification.
+	 */
+	[self finishOperation];
 }
 
 - (void)dealloc

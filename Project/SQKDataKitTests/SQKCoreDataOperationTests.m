@@ -11,6 +11,7 @@
 #import "SQKCoreDataOperation.h"
 #import "SQKContextManager.h"
 #import "SQKDataKitErrors.h"
+#import "SQKErroringManagedObjectContext.h"
 
 @interface ConcreteDataImportOperationWithoutOverride : SQKCoreDataOperation
 @end
@@ -22,6 +23,7 @@
 @implementation ConcreteDataImportOperation
 - (void)performWorkWithPrivateContext:(NSManagedObjectContext *)context
 {
+	[self completeOperationBySavingContext:context];
 }
 @end
 
@@ -33,12 +35,14 @@
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:0 userInfo:nil]];
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:1 userInfo:nil]];
     [self addError:[NSError errorWithDomain:@"SQKCoreDataOperationTestsDomain" code:2 userInfo:@{ @"test" : @"hello world" }]];
+	
+	[self completeOperationBySavingContext:context];
 }
 @end
 
 @interface SQKCoreDataOperationTests : XCTestCase
 @property (nonatomic, strong) SQKContextManager *contextManager;
-@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) NSOperationQueue *queue;
 @end
 
 @implementation SQKCoreDataOperationTests
@@ -46,13 +50,25 @@
 - (void)setUp
 {
     [super setUp];
+	
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle mainBundle] ]];
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:NSInMemoryStoreType
                                                     managedObjectModel:managedObjectModel
                                         orderedManagedObjectModelNames:@[ @"SQKDataKitModel" ]
                                                               storeURL:nil];
-    self.context = [self.contextManager newPrivateContext];
+	
+	self.queue = [NSOperationQueue new];
 }
+
+- (void)stubErroringManagedObjectContextForContextManager:(SQKContextManager *)contextManager
+{
+	SQKErroringManagedObjectContext *erroingManagedObjectContext = [[SQKErroringManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+	
+	id contextManagerMock = [OCMockObject partialMockForObject:contextManager];
+	[[[contextManagerMock stub] andReturn:erroingManagedObjectContext] newPrivateContext];
+}
+
+#pragma mark - Tests
 
 - (void)testInitialisesWithContextAndJSON
 {
@@ -91,8 +107,15 @@
 - (void)testErrorIsNilIfSucceeded
 {
     ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
-    [dataImportOperation start];
-    
+	
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	[dataImportOperation setCompletionBlock:^{
+		[expectation fulfill];
+	}];
+	
+	[self.queue addOperation:dataImportOperation];
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
+	
     NSError *error = [dataImportOperation error];
     XCTAssertNil(error);
 }
@@ -101,7 +124,14 @@
 - (void)testCombinesErrors
 {
     ConcreteDataImportOperationWithErrors *dataImportOperation = [[ConcreteDataImportOperationWithErrors alloc] initWithContextManager:self.contextManager];
-    [dataImportOperation start];
+	
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	[dataImportOperation setCompletionBlock:^{
+		[expectation fulfill];
+	}];
+	
+	[self.queue addOperation:dataImportOperation];
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
 
     NSError *error = [dataImportOperation error];
     XCTAssertNotNil(error);
@@ -113,6 +143,26 @@
     XCTAssertEqual(subErrors.count, 3);
     
     XCTAssertEqualObjects([[[subErrors lastObject] userInfo] objectForKey:@"test"], @"hello world");
+}
+
+- (void)testFinishesWhenSavingErrors {
+	[self stubErroringManagedObjectContextForContextManager:self.contextManager];
+	
+	XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+	
+	ConcreteDataImportOperation *dataImportOperation = [[ConcreteDataImportOperation alloc] initWithContextManager:self.contextManager];
+
+	__weak typeof(ConcreteDataImportOperation) *weakDataImportOperation = dataImportOperation;
+	[dataImportOperation setCompletionBlock:^{
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+			XCTAssertNotNil(weakDataImportOperation.error);
+			[expectation fulfill];
+		}];
+	}];
+	
+	[self.queue addOperation:dataImportOperation];
+	
+	[self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 @end
