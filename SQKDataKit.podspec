@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 	s.name         = 'SQKDataKit'
-	s.version      = '0.6.0'
+	s.version      = '1.0.0'
 	s.summary      = 'Lightweight Core Data helper to reduce boilerplate code.'
 
 	s.license = { :type => 'Custom', :file => 'LICENCE' }
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
 
 	s.homepage     = 'https://github.com/3squared/SQKDataKit'
-	s.authors      = { 'Luke Stringer' => 'luke.stringer@3squared.com', 'Sam Oakley' => 'sam.oakley@3squared.com', 'Zack Brown' => 'zack.brown@3squared.com', 'Ken Boucher' => 'ken.boucher@3squared.com', 'Ste Prescott' => 'ste.prescott@3squared.com', 'Ben Walker' => 'ben.walker@3squared.com'}
+	s.authors      = { 'Luke Stringer' => 'luke.stringer@3squared.com', 'Sam Oakley' => 'sam.oakley@3squared.com', 'Zack Brown' => 'zack.brown@3squared.com', 'Ken Boucher' => 'info@3squared.com', 'Ste Prescott' => 'info@3squared.com', 'Ben Walker' => 'ben.walker@3squared.com', 'David Yates' => 'david.yates@3squared.com'}
 
 
 	s.source       = { :git => 'https://github.com/3squared/SQKDataKit.git', :tag => "#{s.version}" }
