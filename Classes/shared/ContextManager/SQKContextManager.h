@@ -42,14 +42,6 @@
                 managedObjectModel:(NSManagedObjectModel *)managedObjectModel
     orderedManagedObjectModelNames:(NSArray *)modelNames
                           storeURL:(NSURL *)storeURL;
-/**
- *  Initialises a context manager with a persistent store coordinator.
- *
- *  @param persistentStoreCoordinator A configured persistent store coordinator.
- *
- *  @return A context manager.
- */
-- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 
 /**
  *  The main managed object context to be used for UI based Core Data work (on the main thread). A
