@@ -65,4 +65,11 @@
  */
 - (NSManagedObjectContext *)newPrivateContext;
 
+/**
+ *  Tear down persistent store backed by coordinator.
+ *
+ *  @return boolean value to indicate success of persistent store tear down.
+ */
+- (bool)resetPersistentStore;
+
 @end

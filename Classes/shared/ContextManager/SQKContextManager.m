@@ -132,6 +132,46 @@
     return context;
 }
 
+- (bool)resetPersistentStore
+{
+    NSPersistentStore *persistentStore = self.persistentStoreCoordinator.persistentStores.firstObject;
+    
+    if(persistentStore)
+    {
+        NSError *error = nil;
+        
+        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
+        
+        if(!error)
+        {
+            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:&error];
+            
+            if(!error)
+            {
+                _mainContext = nil;
+                
+                self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:self.storeType managedObjectModel:self.managedObjectModel orderedManagedObjectModelNames:self.modelNames storeURL:self.storeURL];
+                
+                return YES;
+            }
+            else
+            {
+                NSLog(@"Error removing persistent store at url: %@", self.storeURL);
+            }
+        }
+        else
+        {
+            NSLog(@"Error gathering persistent store for removal.");
+        }
+    }
+    else
+    {
+        NSLog(@"Persistent store not found.");
+    }
+    
+    return NO;
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
