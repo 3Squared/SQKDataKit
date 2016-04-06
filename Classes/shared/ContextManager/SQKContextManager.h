@@ -24,6 +24,26 @@
 @interface SQKContextManager : NSObject
 
 /**
+ *  The store type used to create the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSString *storeType;
+
+/**
+ *  The managed object model used to create the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
+
+/**
+ *  An array of model names used when performing migration.
+ */
+@property (nonatomic, strong, readonly) NSArray *modelNames;
+
+/**
+ *  A URL to the sqlite file used for the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSURL *storeURL;
+
+/**
  *  The persistent store coordinator used by the context manager.
  */
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
