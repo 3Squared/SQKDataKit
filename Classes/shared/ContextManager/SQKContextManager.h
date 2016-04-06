@@ -86,7 +86,14 @@
 - (NSManagedObjectContext *)newPrivateContext;
 
 /**
- *  Tear down persistent store backed by coordinator.
+ *  Tear down persistent store backed by coordinator. This will attempt to remove 
+ *  the persistent store and delete the local database file.
+ *
+ *  On a successful attempt to delete the store and database, the persistent store
+ *  is rebuilt and the main context is recreated on the next call to `mainContext`.
+ *
+ *  @param error - An NSError used to capture any errors encountered when attempting
+ *  to remove the persistent store or delete the local database file from disk.
  *
  *  @return boolean value to indicate success of persistent store tear down.
  */
