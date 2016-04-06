@@ -232,19 +232,19 @@
     
     NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
     
-    NSInteger count = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
+    NSInteger countForFetchRequest = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
     
-    NSLog(@"Found %li entities", count);
+    NSLog(@"Count for fetch request returned %li entities", countForFetchRequest);
     
     NSError *error = nil;
     
     [self.contextManager destroyAndRebuildPersistentStore:&error];
     
-    count = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
+    countForFetchRequest = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
     
-    NSLog(@"Found %li entities", count);
+    NSLog(@"Count for fetch request returned %li entities", countForFetchRequest);
     
-    XCTAssertEqual(count, 0);
+    XCTAssertEqual(countForFetchRequest, 0);
 }
 
 @end
