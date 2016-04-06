@@ -90,6 +90,6 @@
  *
  *  @return boolean value to indicate success of persistent store tear down.
  */
-- (bool)resetPersistentStore;
+- (BOOL)destroyAndRebuildPersistentStore:(NSError **)error;
 
 @end

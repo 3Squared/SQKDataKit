@@ -38,7 +38,7 @@
     
     if(self)
     {
-        _persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
+        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
                                                                                    managedObjectModel:managedObjectModel
                                                                        orderedManagedObjectModelNames:modelNames
                                                                                              storeURL:storeURL];
@@ -132,19 +132,17 @@
     return context;
 }
 
-- (bool)resetPersistentStore
+- (BOOL)destroyAndRebuildPersistentStore:(NSError **)error
 {
     NSPersistentStore *persistentStore = self.persistentStoreCoordinator.persistentStores.firstObject;
     
     if(persistentStore)
     {
-        NSError *error = nil;
-        
-        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:&error];
+        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:error];
         
         if(!error)
         {
-            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:&error];
+            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:error];
             
             if(!error)
             {
@@ -154,19 +152,7 @@
                 
                 return YES;
             }
-            else
-            {
-                NSLog(@"Error removing persistent store at url: %@", self.storeURL);
-            }
         }
-        else
-        {
-            NSLog(@"Error gathering persistent store for removal.");
-        }
-    }
-    else
-    {
-        NSLog(@"Persistent store not found.");
     }
     
     return NO;
