@@ -67,15 +67,6 @@
     XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator.managedObjectModel, self.managedObjectModel, @"");
 }
 
-- (void)testInitialisesWithSPersistentStoreCoordinator
-{
-    id storeCoordinator = [OCMockObject mockForClass:[NSPersistentStoreCoordinator class]];
-
-    self.contextManager = [[SQKContextManager alloc] initWithPersistentStoreCoordinator:storeCoordinator];
-    XCTAssertNotNil(self.contextManager, @"");
-    XCTAssertEqualObjects(self.contextManager.persistentStoreCoordinator, storeCoordinator, @"");
-}
-
 - (void)testReturnsNilWithNoStoreType
 {
     self.contextManager = [[SQKContextManager alloc] initWithStoreType:nil
@@ -229,6 +220,31 @@
 
 	[self waitForExpectationsWithTimeout:2.0 handler:nil];
     XCTAssertEqualObjects([commit sha], @"Edited in a private context", @"");
+}
+
+- (void)testPersistentStoreIsTornDown
+{
+    Commit *commit = [Commit sqk_insertInContext:self.contextManager.mainContext];
+    
+    commit.message = @"Persistent Store Tear Down";
+    
+    [self.contextManager.mainContext save:nil];
+    
+    NSFetchRequest *fetchRequest = [Commit sqk_fetchRequest];
+    
+    NSInteger countForFetchRequest = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
+    
+    NSLog(@"Count for fetch request returned %li entities", countForFetchRequest);
+    
+    NSError *error = nil;
+    
+    [self.contextManager destroyAndRebuildPersistentStore:&error];
+    
+    countForFetchRequest = [self.contextManager.mainContext countForFetchRequest:fetchRequest error:nil];
+    
+    NSLog(@"Count for fetch request returned %li entities", countForFetchRequest);
+    
+    XCTAssertEqual(countForFetchRequest, 0);
 }
 
 @end

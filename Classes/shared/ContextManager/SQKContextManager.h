@@ -24,6 +24,26 @@
 @interface SQKContextManager : NSObject
 
 /**
+ *  The store type used to create the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSString *storeType;
+
+/**
+ *  The managed object model used to create the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
+
+/**
+ *  An array of model names used when performing migration.
+ */
+@property (nonatomic, strong, readonly) NSArray *modelNames;
+
+/**
+ *  A URL to the sqlite file used for the persistent store.
+ */
+@property (nonatomic, strong, readonly) NSURL *storeURL;
+
+/**
  *  The persistent store coordinator used by the context manager.
  */
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -42,14 +62,6 @@
                 managedObjectModel:(NSManagedObjectModel *)managedObjectModel
     orderedManagedObjectModelNames:(NSArray *)modelNames
                           storeURL:(NSURL *)storeURL;
-/**
- *  Initialises a context manager with a persistent store coordinator.
- *
- *  @param persistentStoreCoordinator A configured persistent store coordinator.
- *
- *  @return A context manager.
- */
-- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 
 /**
  *  The main managed object context to be used for UI based Core Data work (on the main thread). A
@@ -72,5 +84,19 @@
  *  @return A new private context (concurrency type NSPrivateQueueConcurrencyType) Core Data work on background threads.
  */
 - (NSManagedObjectContext *)newPrivateContext;
+
+/**
+ *  Tear down persistent store backed by coordinator. This will attempt to remove 
+ *  the persistent store and delete the local database file.
+ *
+ *  On a successful attempt to delete the store and database, the persistent store
+ *  is rebuilt and the main context is recreated on the next call to `mainContext`.
+ *
+ *  @param error - An NSError used to capture any errors encountered when attempting
+ *  to remove the persistent store or delete the local database file from disk.
+ *
+ *  @return boolean value to indicate success of persistent store tear down.
+ */
+- (BOOL)destroyAndRebuildPersistentStore:(NSError **)error;
 
 @end

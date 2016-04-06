@@ -11,43 +11,48 @@
 #import "NSManagedObjectContext+SQKAdditions.h"
 
 @interface SQKContextManager ()
+
 @property (nonatomic, strong, readwrite) NSString *storeType;
 @property (nonatomic, strong, readwrite) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
+@property (nonatomic, strong, readwrite) NSArray *modelNames;
+@property (nonatomic, strong, readwrite) NSURL *storeURL;
+
 @property (nonatomic, strong, readwrite) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong, readwrite) NSManagedObjectContext *mainContext;
+
 @end
 
 @implementation SQKContextManager
 
 - (instancetype)initWithStoreType:(NSString *)storeType
-                managedObjectModel:(NSManagedObjectModel *)managedObjectModel
-    orderedManagedObjectModelNames:(NSArray *)modelNames
-                          storeURL:(NSURL *)storeURL
+               managedObjectModel:(NSManagedObjectModel *)managedObjectModel
+   orderedManagedObjectModelNames:(NSArray *)modelNames
+                         storeURL:(NSURL *)storeURL
 {
     if (!storeType || !managedObjectModel || ![[SQKContextManager validStoreTypes] containsObject:storeType])
     {
         return nil;
     }
-
-    return [self initWithPersistentStoreCoordinator:[NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
-                                                                                                 managedObjectModel:managedObjectModel
-                                                                                     orderedManagedObjectModelNames:modelNames
-                                                                                                           storeURL:storeURL]];
-}
-
-- (instancetype)initWithPersistentStoreCoordinator:(NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
-    if (!persistentStoreCoordinator)
+    
+    self = [super init];
+    
+    if(self)
     {
-        return nil;
-    }
-    if (self = [super init])
-    {
-        _persistentStoreCoordinator = persistentStoreCoordinator;
+        self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:storeType
+                                                                                   managedObjectModel:managedObjectModel
+                                                                       orderedManagedObjectModelNames:modelNames
+                                                                                             storeURL:storeURL];
+        
+        self.storeType = storeType;
+        self.managedObjectModel = managedObjectModel;
+        self.modelNames = modelNames;
+        self.storeURL = storeURL;
+        
         [self observeForSavedNotification];
     }
-
+    
     return self;
+    
 }
 
 + (NSArray *)validStoreTypes
@@ -125,6 +130,32 @@
     NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     context.persistentStoreCoordinator = self.persistentStoreCoordinator;
     return context;
+}
+
+- (BOOL)destroyAndRebuildPersistentStore:(NSError **)error
+{
+    NSPersistentStore *persistentStore = self.persistentStoreCoordinator.persistentStores.firstObject;
+    
+    if(persistentStore)
+    {
+        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:error];
+        
+        if(!error)
+        {
+            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:error];
+            
+            if(!error)
+            {
+                _mainContext = nil;
+                
+                self.persistentStoreCoordinator = [NSPersistentStoreCoordinator sqk_storeCoordinatorWithStoreType:self.storeType managedObjectModel:self.managedObjectModel orderedManagedObjectModelNames:self.modelNames storeURL:self.storeURL];
+                
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
 }
 
 - (void)dealloc
