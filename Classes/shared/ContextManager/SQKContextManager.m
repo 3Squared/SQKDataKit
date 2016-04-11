@@ -132,19 +132,23 @@
     return context;
 }
 
-- (BOOL)destroyAndRebuildPersistentStore:(NSError **)error
+- (BOOL)destroyAndRebuildPersistentStore:(NSError **)errorPointer
 {
     NSPersistentStore *persistentStore = self.persistentStoreCoordinator.persistentStores.firstObject;
     
     if(persistentStore)
     {
-        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:error];
+        NSError *storeRemovalError = nil;
         
-        if(!error)
+        [self.persistentStoreCoordinator removePersistentStore:persistentStore error:&storeRemovalError];
+        
+        if(!storeRemovalError)
         {
-            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:error];
+            NSError *fileRemovalError = nil;
             
-            if(!error)
+            [[NSFileManager defaultManager] removeItemAtURL:self.storeURL error:&fileRemovalError];
+            
+            if(!fileRemovalError)
             {
                 _mainContext = nil;
                 
@@ -152,6 +156,14 @@
                 
                 return YES;
             }
+            else if (errorPointer != NULL)
+            {
+                *errorPointer = fileRemovalError;
+            }
+        }
+        else if (errorPointer != NULL)
+        {
+            *errorPointer = storeRemovalError;
         }
     }
     
