@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 	s.name         = 'SQKDataKit'
-	s.version      = '1.0.0'
+	s.version      = '1.1.0'
 	s.summary      = 'Lightweight Core Data helper to reduce boilerplate code.'
 
 	s.license = { :type => 'Custom', :file => 'LICENCE' }
