@@ -67,6 +67,24 @@
     return self;
 }
 
+- (void)loadView
+{
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+
+    if (self.searchingEnabled)
+    {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+
+        self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(self.collectionView.frame), 44)];
+        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+        self.searchBar.delegate = self;
+        [self.collectionView addSubview:self.searchBar];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
