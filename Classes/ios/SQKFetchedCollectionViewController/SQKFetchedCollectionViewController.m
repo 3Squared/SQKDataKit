@@ -34,7 +34,7 @@
     {
         self.managedObjectContext = context;
         self.searchingEnabled = YES;
-        self.collectionView.collectionViewLayout = layout;
+        self.layout = layout;
     }
 
     return self;
@@ -48,7 +48,7 @@
     {
         self.managedObjectContext = context;
         self.searchingEnabled = searchingEnabled;
-        self.collectionView.collectionViewLayout = layout;
+        self.layout = layout;
     }
 
     return self;
@@ -61,6 +61,8 @@
     if (self)
     {
         self.searchingEnabled = YES;
+
+        self.layout = [[UICollectionViewFlowLayout alloc] init];
     }
     return self;
 }
@@ -68,6 +70,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.collectionView.collectionViewLayout = self.layout;
 
     if (self.searchingEnabled)
     {
