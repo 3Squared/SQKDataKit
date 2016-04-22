@@ -10,7 +10,7 @@
 @import CoreData;
 @import UIKit;
 
-@interface SQKFetchedCollectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate, UISearchBarDelegate>
+@interface SQKFetchedCollectionViewController : UICollectionViewController <NSFetchedResultsControllerDelegate, UISearchBarDelegate>
 
 /**
  *  Initialises a Core Data-backed UICollectionViewController with a search bar.
@@ -36,8 +36,7 @@
 /**
  *  The collection view shown by the view controller.
  */
-@property (strong, nonatomic, readonly) UICollectionView *collectionView;
-@property (strong, nonatomic, readonly) UICollectionViewLayout *collectionViewLayout;
+@property (strong, nonatomic) UICollectionViewLayout *collectionViewLayout;
 
 /**
  *  An optional refresh control shown when pulling down the collectionview.
