@@ -34,7 +34,7 @@
     {
         self.managedObjectContext = context;
         self.searchingEnabled = YES;
-        self.collectionViewLayout = layout;
+        self.collectionView.collectionViewLayout = layout;
     }
 
     return self;
@@ -48,7 +48,7 @@
     {
         self.managedObjectContext = context;
         self.searchingEnabled = searchingEnabled;
-        self.collectionViewLayout = layout;
+        self.collectionView.collectionViewLayout = layout;
     }
 
     return self;

@@ -34,11 +34,6 @@
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled;
 
 /**
- *  The collection view shown by the view controller.
- */
-@property (strong, nonatomic) UICollectionViewLayout *collectionViewLayout;
-
-/**
  *  An optional refresh control shown when pulling down the collectionview.
  *  Set this in your subclass.
  */
