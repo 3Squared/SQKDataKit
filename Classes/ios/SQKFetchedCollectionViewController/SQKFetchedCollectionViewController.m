@@ -29,7 +29,7 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context
 {
-    self = [super init];
+    self = [super initWithCollectionViewLayout:layout];
     if (self)
     {
         self.managedObjectContext = context;
@@ -42,7 +42,7 @@
 
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled
 {
-    self = [super init];
+    self = [super initWithCollectionViewLayout:layout];
 
     if (self)
     {
