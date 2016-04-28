@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKAppDelegate.h"
-#import "SQKCommitsViewController.h"
-#import "SQKCommitsCollectionViewController.h"
-#import "SQKCollectionViewFlowLayout.h"
-#import "SQKMetricsViewController.h"
 #import "SQKAlternateCommitsViewController.h"
+#import "SQKAppDelegate.h"
+#import "SQKCollectionViewFlowLayout.h"
+#import "SQKCommitsCollectionViewController.h"
+#import "SQKCommitsViewController.h"
+#import "SQKMetricsViewController.h"
 #import <SQKDataKit/SQKContextManager.h>
 
 @interface SQKAppDelegate ()
@@ -57,8 +57,11 @@ static BOOL isRunningTests(void)
     UINavigationController *altCommitsNavController =
         [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
 
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:nil];
+    UIViewController *storyboardViewController = [storyboard instantiateInitialViewController];
+
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[ metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController ];
+    tabBarController.viewControllers = @[ metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController, storyboardViewController ];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];

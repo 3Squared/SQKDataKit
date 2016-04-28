@@ -43,6 +43,9 @@
 		AFFC25DF40274C52A419927E /* libPods-SQKDataKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2868235566F44D78765833F /* libPods-SQKDataKit.a */; };
 		C8CFF472097F4E5BBA949BDB /* libPods-SQKDataKitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB52E80206042BCB848D249 /* libPods-SQKDataKitTests.a */; };
 		CB40EDD41A65633900181627 /* SQKAlternateCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */; };
+		CBFC91CB1CD206DB00444C39 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBFC91CA1CD206DB00444C39 /* Launch Screen.storyboard */; };
+		CBFC91CD1CD2076500444C39 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */; };
+		CBFC91D01CD20C9100444C39 /* SQKStoryboardCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,10 @@
 		B2868235566F44D78765833F /* libPods-SQKDataKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SQKDataKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB40EDD21A65633900181627 /* SQKAlternateCommitsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKAlternateCommitsViewController.h; sourceTree = "<group>"; };
 		CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKAlternateCommitsViewController.m; sourceTree = "<group>"; };
+		CBFC91CA1CD206DB00444C39 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../Launch Screen.storyboard"; sourceTree = "<group>"; };
+		CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		CBFC91CE1CD20C9100444C39 /* SQKStoryboardCommitsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKStoryboardCommitsViewController.h; sourceTree = "<group>"; };
+		CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKStoryboardCommitsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +208,7 @@
 				A3DC7C9A1868731100C45DB0 /* SQKJSONLoader.m */,
 				CB40EDD21A65633900181627 /* SQKAlternateCommitsViewController.h */,
 				CB40EDD31A65633900181627 /* SQKAlternateCommitsViewController.m */,
+				CBFC91D11CD2119C00444C39 /* Storyboard Example */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -266,6 +274,7 @@
 		A34BF3A1184F41D300F2E3B4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CBFC91CA1CD206DB00444C39 /* Launch Screen.storyboard */,
 				A34BF3A2184F41D300F2E3B4 /* SQKDataKit-Info.plist */,
 				A34BF3A3184F41D300F2E3B4 /* InfoPlist.strings */,
 				A34BF3A6184F41D300F2E3B4 /* main.m */,
@@ -312,6 +321,16 @@
 				A37F4E431B29A95A0087D344 /* SQKErroringManagedObjectContext.m */,
 			);
 			name = Mocks;
+			sourceTree = "<group>";
+		};
+		CBFC91D11CD2119C00444C39 /* Storyboard Example */ = {
+			isa = PBXGroup;
+			children = (
+				CBFC91CE1CD20C9100444C39 /* SQKStoryboardCommitsViewController.h */,
+				CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */,
+				CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */,
+			);
+			name = "Storyboard Example";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -399,7 +418,9 @@
 			files = (
 				A34BF3B6184F41D400F2E3B4 /* Images.xcassets in Resources */,
 				A3DC7CA018687E2E00C45DB0 /* data_1500.json in Resources */,
+				CBFC91CB1CD206DB00444C39 /* Launch Screen.storyboard in Resources */,
 				A34BF3A5184F41D300F2E3B4 /* InfoPlist.strings in Resources */,
+				CBFC91CD1CD2076500444C39 /* Storyboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,6 +534,7 @@
 			files = (
 				2289468119BF27F900289506 /* User.m in Sources */,
 				4AD576CA1A5DA58C00EA277A /* SQKCommitsCollectionViewController.m in Sources */,
+				CBFC91D01CD20C9100444C39 /* SQKStoryboardCommitsViewController.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
 				4AD576CD1A5DAB2D00EA277A /* SQKCommitItemCell.m in Sources */,
@@ -652,7 +674,6 @@
 			baseConfigurationReference = 13CD1E4097C4550C3CDE9FF2 /* Pods-SQKDataKit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SQKDataKit/SQKDataKit-Prefix.pch";
@@ -671,7 +692,6 @@
 			baseConfigurationReference = 36C20EE916F9895AE5B1716D /* Pods-SQKDataKit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SQKDataKit/SQKDataKit-Prefix.pch";
