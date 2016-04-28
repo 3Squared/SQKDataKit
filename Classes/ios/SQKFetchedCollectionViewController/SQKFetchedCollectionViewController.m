@@ -27,22 +27,9 @@
 
 @implementation SQKFetchedCollectionViewController
 
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context
-{
-    self = [super initWithCollectionViewLayout:layout];
-    if (self)
-    {
-        self.managedObjectContext = context;
-        self.searchingEnabled = YES;
-        self.layout = layout;
-    }
-
-    return self;
-}
-
 - (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context searchingEnabled:(BOOL)searchingEnabled
 {
-    self = [super initWithCollectionViewLayout:layout];
+    self = [super init];
 
     if (self)
     {
@@ -54,42 +41,27 @@
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout context:(NSManagedObjectContext *)context
 {
-    self = [super initWithCoder:coder];
-
-    if (self)
-    {
-        self.searchingEnabled = YES;
-
-        self.layout = [[UICollectionViewFlowLayout alloc] init];
-    }
-    return self;
+    return [self initWithCollectionViewLayout:layout context:context searchingEnabled:YES];
 }
-
-//- (void)loadView
-//{
-//    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
-//    self.collectionView.delegate = self;
-//    self.collectionView.dataSource = self;
-//
-//    if (self.searchingEnabled)
-//    {
-//        self.edgesForExtendedLayout = UIRectEdgeNone;
-//
-//        self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(self.collectionView.frame), 44)];
-//        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//        self.searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
-//        self.searchBar.delegate = self;
-//        [self.collectionView addSubview:self.searchBar];
-//    }
-//}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.collectionView.collectionViewLayout = self.layout;
+    if (!self.collectionView)
+    {
+        self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
+        self.collectionView.delegate = self;
+        self.collectionView.dataSource = self;
+        self.collectionView.collectionViewLayout = self.layout;
+        self.view = self.collectionView;
+    }
+    else
+    {
+        self.layout = self.collectionView.collectionViewLayout;
+    }
 
     if (self.searchingEnabled)
     {
