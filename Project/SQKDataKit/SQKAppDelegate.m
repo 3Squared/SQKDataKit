@@ -58,10 +58,11 @@ static BOOL isRunningTests(void)
         [[UINavigationController alloc] initWithRootViewController:altCommitsViewController];
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:nil];
-    UIViewController *storyboardViewController = [storyboard instantiateInitialViewController];
+    UIViewController *storyboardTableViewController = [storyboard instantiateViewControllerWithIdentifier:@"Table"];
+    UIViewController *storyboardCollectionViewController = [storyboard instantiateViewControllerWithIdentifier:@"Collection"];
 
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = @[ metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController, storyboardViewController ];
+    tabBarController.viewControllers = @[ metricsNavController, commitsNavController, altCommitsNavController, commitsCollectionNavController, storyboardTableViewController, storyboardCollectionViewController ];
 
     self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];

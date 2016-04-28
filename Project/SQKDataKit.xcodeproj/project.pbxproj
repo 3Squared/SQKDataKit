@@ -46,6 +46,9 @@
 		CBFC91CB1CD206DB00444C39 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBFC91CA1CD206DB00444C39 /* Launch Screen.storyboard */; };
 		CBFC91CD1CD2076500444C39 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */; };
 		CBFC91D01CD20C9100444C39 /* SQKStoryboardCommitsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */; };
+		CBFC91D41CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC91D31CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.m */; };
+		CBFC91D71CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC91D61CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.m */; };
+		CBFC91DA1CD221C900444C39 /* SQKStoryboardCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFC91D91CD221C900444C39 /* SQKStoryboardCollectionHeaderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +125,12 @@
 		CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		CBFC91CE1CD20C9100444C39 /* SQKStoryboardCommitsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKStoryboardCommitsViewController.h; sourceTree = "<group>"; };
 		CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKStoryboardCommitsViewController.m; sourceTree = "<group>"; };
+		CBFC91D21CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKStoryboardCommitsCollectionViewController.h; sourceTree = "<group>"; };
+		CBFC91D31CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKStoryboardCommitsCollectionViewController.m; sourceTree = "<group>"; };
+		CBFC91D51CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKStoryboardCollectionViewCell.h; sourceTree = "<group>"; };
+		CBFC91D61CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKStoryboardCollectionViewCell.m; sourceTree = "<group>"; };
+		CBFC91D81CD221C900444C39 /* SQKStoryboardCollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQKStoryboardCollectionHeaderView.h; sourceTree = "<group>"; };
+		CBFC91D91CD221C900444C39 /* SQKStoryboardCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQKStoryboardCollectionHeaderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +337,12 @@
 			children = (
 				CBFC91CE1CD20C9100444C39 /* SQKStoryboardCommitsViewController.h */,
 				CBFC91CF1CD20C9100444C39 /* SQKStoryboardCommitsViewController.m */,
+				CBFC91D21CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.h */,
+				CBFC91D31CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.m */,
+				CBFC91D51CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.h */,
+				CBFC91D61CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.m */,
+				CBFC91D81CD221C900444C39 /* SQKStoryboardCollectionHeaderView.h */,
+				CBFC91D91CD221C900444C39 /* SQKStoryboardCollectionHeaderView.m */,
 				CBFC91CC1CD2076500444C39 /* Storyboard.storyboard */,
 			);
 			name = "Storyboard Example";
@@ -537,11 +552,14 @@
 				CBFC91D01CD20C9100444C39 /* SQKStoryboardCommitsViewController.m in Sources */,
 				A3F70A8D1859D80C00C0A389 /* SQKCommitCell.m in Sources */,
 				A3C66D06185A20CE007AE9B5 /* NaiveImportOperation.m in Sources */,
+				CBFC91D71CD21F2E00444C39 /* SQKStoryboardCollectionViewCell.m in Sources */,
 				4AD576CD1A5DAB2D00EA277A /* SQKCommitItemCell.m in Sources */,
 				CB40EDD41A65633900181627 /* SQKAlternateCommitsViewController.m in Sources */,
+				CBFC91D41CD21CD400444C39 /* SQKStoryboardCommitsCollectionViewController.m in Sources */,
 				A34BF3B4184F41D400F2E3B4 /* SQKCommitsViewController.m in Sources */,
 				22780673196AB3DE00F8DED4 /* SQKCommitDetailViewController.m in Sources */,
 				A31AB0E71857769D00B240AB /* Commit.m in Sources */,
+				CBFC91DA1CD221C900444C39 /* SQKStoryboardCollectionHeaderView.m in Sources */,
 				A328BAC71850986A00267F2E /* SQKDataKitModel.xcdatamodeld in Sources */,
 				A34BF3AB184F41D300F2E3B4 /* SQKAppDelegate.m in Sources */,
 				A31AB0EC185776AE00B240AB /* OptimisedImportOperation.m in Sources */,

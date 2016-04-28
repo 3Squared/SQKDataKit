@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5qJ-PB-hV0">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Storyboard-->
@@ -79,10 +80,10 @@
             </objects>
             <point key="canvasLocation" x="1151" y="520"/>
         </scene>
-        <!--Storyboard-->
+        <!--Storyboard Table-->
         <scene sceneID="ueL-lS-zvs">
             <objects>
-                <navigationController title="Storyboard" automaticallyAdjustsScrollViewInsets="NO" id="5qJ-PB-hV0" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Table" title="Storyboard Table" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5qJ-PB-hV0" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TSz-oj-MJe">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -96,6 +97,122 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tfL-mr-WTg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="339" y="520"/>
+        </scene>
+        <!--Storyboard Commits Collection View Controller-->
+        <scene sceneID="zya-W1-d0F">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="kTz-5R-0P4" customClass="SQKStoryboardCommitsCollectionViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Xyj-ss-2Fb"/>
+                        <viewControllerLayoutGuide type="bottom" id="hQc-MJ-jkL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ArP-rP-ll4">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hR7-39-cpZ">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="scrollIndicatorInsets" minX="26" minY="10" maxX="16" maxY="10"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ZMo-p5-GnG">
+                                    <size key="itemSize" width="120" height="120"/>
+                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="pNG-H4-Acw" customClass="SQKStoryboardCollectionViewCell">
+                                        <rect key="frame" x="0.0" y="50" width="120" height="120"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AV" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qf6-cK-BE3">
+                                                    <rect key="frame" x="8" y="8" width="104" height="104"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Qf6-cK-BE3" secondAttribute="trailing" id="H7u-K5-W4m"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="Qf6-cK-BE3" secondAttribute="bottom" id="KvC-xy-GXp"/>
+                                            <constraint firstItem="Qf6-cK-BE3" firstAttribute="leading" secondItem="pNG-H4-Acw" secondAttribute="leadingMargin" id="hnu-UD-ZP9"/>
+                                            <constraint firstItem="Qf6-cK-BE3" firstAttribute="top" secondItem="pNG-H4-Acw" secondAttribute="topMargin" id="wM9-Ob-QpA"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="textLabel" destination="Qf6-cK-BE3" id="ayN-1T-6uQ"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Header" id="ktz-IB-jWq" customClass="SQKStoryboardCollectionHeaderView">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SmS-EW-08V">
+                                            <rect key="frame" x="8" y="8" width="584" height="34"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="SmS-EW-08V" secondAttribute="bottom" id="0QC-km-RGM"/>
+                                        <constraint firstItem="SmS-EW-08V" firstAttribute="leading" secondItem="ktz-IB-jWq" secondAttribute="leadingMargin" id="ImQ-c5-Zv3"/>
+                                        <constraint firstItem="SmS-EW-08V" firstAttribute="top" secondItem="ktz-IB-jWq" secondAttribute="topMargin" id="l2a-zZ-7dG"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="SmS-EW-08V" secondAttribute="trailing" id="uDS-Vu-rUj"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="textLabel" destination="SmS-EW-08V" id="CtZ-Ap-6DG"/>
+                                    </connections>
+                                </collectionReusableView>
+                                <connections>
+                                    <outlet property="dataSource" destination="kTz-5R-0P4" id="mkc-J2-FCC"/>
+                                    <outlet property="delegate" destination="kTz-5R-0P4" id="Q7r-PZ-FqP"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="hR7-39-cpZ" secondAttribute="trailing" id="972-0A-ifN"/>
+                            <constraint firstItem="hR7-39-cpZ" firstAttribute="leading" secondItem="ArP-rP-ll4" secondAttribute="leading" id="XSh-fs-pwB"/>
+                            <constraint firstItem="hR7-39-cpZ" firstAttribute="top" secondItem="Xyj-ss-2Fb" secondAttribute="bottom" id="fSK-yg-93D"/>
+                            <constraint firstItem="hQc-MJ-jkL" firstAttribute="top" secondItem="hR7-39-cpZ" secondAttribute="bottom" id="rgk-O1-JLh"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="eJo-EP-FLY"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="searchingEnabled" value="YES"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="showsSectionsWhenSearching" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="collectionView" destination="hR7-39-cpZ" id="WJf-kL-xjO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IfT-pv-l3p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1151" y="1255"/>
+        </scene>
+        <!--Storyboard Collection-->
+        <scene sceneID="V2R-xj-UUu">
+            <objects>
+                <navigationController storyboardIdentifier="Collection" title="Storyboard Collection" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kuS-CX-iVQ" userLabel="Storyboard Collection" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v6r-4y-ds3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="kTz-5R-0P4" kind="relationship" relationship="rootViewController" id="2VZ-aY-cPk"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VHJ-O4-FwE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="339" y="1255"/>
         </scene>
     </scenes>
 </document>

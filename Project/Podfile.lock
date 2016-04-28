@@ -1,19 +1,19 @@
 PODS:
   - OCMock (2.2.4)
-  - SQKDataKit/ContextManager (0.6.0):
+  - SQKDataKit/ContextManager (1.1.1):
     - SQKDataKit/Core
-  - SQKDataKit/Core (0.6.0)
-  - SQKDataKit/CoreDataOperation (0.6.0):
+  - SQKDataKit/Core (1.1.1)
+  - SQKDataKit/CoreDataOperation (1.1.1):
     - SQKDataKit/ContextManager
     - SQKDataKit/Core
     - SQKDataKit/ManagedObjectExtensions
-  - SQKDataKit/FetchedCollectionViewController (0.6.0):
+  - SQKDataKit/FetchedCollectionViewController (1.1.1):
     - SQKDataKit/Core
-  - SQKDataKit/FetchedTableViewController (0.6.0):
+  - SQKDataKit/FetchedTableViewController (1.1.1):
     - SQKDataKit/Core
-  - SQKDataKit/ManagedObjectController (0.6.0):
+  - SQKDataKit/ManagedObjectController (1.1.1):
     - SQKDataKit/Core
-  - SQKDataKit/ManagedObjectExtensions (0.6.0):
+  - SQKDataKit/ManagedObjectExtensions (1.1.1):
     - SQKDataKit/Core
 
 DEPENDENCIES:
@@ -31,6 +31,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   OCMock: a6a7dc0e3997fb9f35d99f72528698ebf60d64f2
-  SQKDataKit: c3e7196e712ed7ab2997b64ff11bdedb5b0eaf51
+  SQKDataKit: b906fc7ca22c35a3b54f487e218d1544a0509169
 
 COCOAPODS: 0.39.0
