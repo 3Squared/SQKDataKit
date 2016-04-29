@@ -50,7 +50,11 @@
 {
     [super viewDidLoad];
 
-    if (!self.tableView)
+    if ([self.view isKindOfClass:[UITableView class]])
+    {
+        self.tableView = self.view;
+    }
+    else if (!self.tableView)
     {
         self.tableView = [[UITableView alloc] init];
         self.tableView.delegate = self;
