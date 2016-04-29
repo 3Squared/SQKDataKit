@@ -21,7 +21,6 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSFetchedResultsController *searchFetchedResultsController;
 @property (nonatomic, assign, readwrite) BOOL searchIsActive;
-@property (nonatomic, assign) UITableViewStyle style;
 @end
 
 @implementation SQKFetchedTableViewController
@@ -38,7 +37,7 @@
                searchingEnabled:(BOOL)searchingEnabled
                           style:(UITableViewStyle)style
 {
-    if (self = [super init])
+    if (self = [super initWithStyle:style])
     {
         self.managedObjectContext = managedObjectContext;
         self.searchingEnabled = searchingEnabled;
@@ -46,26 +45,20 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+
+    if (self)
+    {
+        self.searchingEnabled = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    if ([self.view isKindOfClass:[UITableView class]])
-    {
-        self.tableView = self.view;
-    }
-    else if (!self.tableView)
-    {
-        self.tableView = [[UITableView alloc] init];
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        self.view = self.tableView;
-    }
-
-    if (self.refreshControl)
-    {
-        [self.tableView addSubview:self.refreshControl];
-    }
 
     if (self.searchingEnabled)
     {
@@ -84,7 +77,7 @@
 {
     [super viewWillAppear:animated];
     [[self activeTableView] reloadData];
-    [self showEmptyView:([[[self activeFetchedResultsController] fetchedObjects] count] == 0)];
+    self.emptyView.hidden = !([[[self activeFetchedResultsController] fetchedObjects] count] == 0);
 }
 
 - (void)didReceiveMemoryWarning
@@ -112,15 +105,6 @@
 
 #pragma mark -
 #pragma mark Fetched results controller data source
-
-- (void)setRefreshControl:(UIRefreshControl *)refreshControl
-{
-    _refreshControl = refreshControl;
-    if (self.isViewLoaded)
-    {
-        [self.tableView addSubview:self.refreshControl];
-    }
-}
 
 - (UITableView *)activeTableView
 {
@@ -232,7 +216,7 @@
 
       UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
 
-      [self showEmptyView:([[controller fetchedObjects] count] == 0)];
+      self.emptyView.hidden = !([[controller fetchedObjects] count] == 0);
 
       switch (type)
       {
@@ -413,15 +397,6 @@
 
     // Return YES to cause the search result table view to be reloaded.
     return YES;
-}
-
-- (void)showEmptyView:(BOOL)show
-{
-    if (self.emptyView)
-    {
-        self.emptyView.hidden = !show;
-        self.tableView.scrollEnabled = !show;
-    }
 }
 
 @end

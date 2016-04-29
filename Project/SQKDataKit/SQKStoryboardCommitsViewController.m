@@ -33,7 +33,7 @@
     NSPredicate *filterPredicate = nil;
     if (searchString.length)
     {
-        filterPredicate = [NSPredicate predicateWithFormat:@"authorName CONTAINS[cd] %@", searchString];
+        filterPredicate = [NSPredicate predicateWithFormat:@"message CONTAINS[cd] %@", searchString];
     }
 
     [request setPredicate:filterPredicate];

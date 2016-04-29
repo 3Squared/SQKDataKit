@@ -16,7 +16,7 @@
  */
 IB_DESIGNABLE
 @interface SQKFetchedTableViewController
-    : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+    : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
 /**
  *  Initialises a Core Data-backed UITableViewController with a configured with a
@@ -71,13 +71,6 @@ IB_DESIGNABLE
 @property (strong, nonatomic, readonly) UISearchDisplayController *searchController;
 
 @property (strong, nonatomic) IBOutlet UIView *emptyView;
-
-/**
- *  The base UITableView, for regular results.
- */
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 /**
  *  Returns the currently active UITableView (i.e. regular or search).
