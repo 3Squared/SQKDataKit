@@ -16,7 +16,7 @@
  */
 IB_DESIGNABLE
 @interface SQKFetchedTableViewController
-    : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
+    : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 /**
  *  Initialises a Core Data-backed UITableViewController with a configured with a
