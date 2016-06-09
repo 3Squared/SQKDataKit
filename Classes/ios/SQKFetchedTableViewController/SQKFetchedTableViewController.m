@@ -77,7 +77,7 @@
 {
     [super viewWillAppear:animated];
     [[self activeTableView] reloadData];
-    self.emptyView.hidden = !([[[self activeFetchedResultsController] fetchedObjects] count] == 0);
+    [self showEmptyView:([[[self activeFetchedResultsController] fetchedObjects] count] == 0)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -216,7 +216,7 @@
 
       UITableView *tableView = controller == self.fetchedResultsController ? self.tableView : self.searchController.searchResultsTableView;
 
-      self.emptyView.hidden = !([[controller fetchedObjects] count] == 0);
+      [self showEmptyView:([[[self activeFetchedResultsController] fetchedObjects] count] == 0)];
 
       switch (type)
       {
@@ -283,6 +283,8 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
+
+    [self showEmptyView:([fetchedResultsController.fetchedObjects count] == 0)];
 
     return fetchedResultsController;
 }
@@ -397,6 +399,45 @@
 
     // Return YES to cause the search result table view to be reloaded.
     return YES;
+}
+
+- (void)showEmptyView:(BOOL)show
+{
+    if (_emptyView)
+    {
+        BOOL isSearching = (self.searchController && self.searchController.active);
+        UITableView *tableView = isSearching ? self.searchController.searchResultsTableView : self.tableView;
+
+        if (show)
+        {
+            if (!isSearching)
+            {
+                self.tableView.tableHeaderView = nil;
+            }
+
+            NSInteger emptyViewYPosition = 44 * 5 - (22);
+            _emptyView.center = CGPointMake(self.view.center.x, emptyViewYPosition);
+
+            [tableView addSubview:_emptyView];
+
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+              for (UIView *v in self.searchDisplayController.searchResultsTableView.subviews)
+              {
+                  if ([v isKindOfClass:[UILabel class]] &&
+                      [[(UILabel *)v text] isEqualToString:@"No Results"])
+                  {
+                      [(UILabel *)v setText:@""];
+                      break;
+                  }
+              }
+            });
+        }
+        else
+        {
+            self.tableView.tableHeaderView = self.searchController.searchBar;
+            [_emptyView removeFromSuperview];
+        }
+    }
 }
 
 @end
