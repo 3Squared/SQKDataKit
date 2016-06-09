@@ -10,7 +10,8 @@
 @import CoreData;
 @import UIKit;
 
-@interface SQKFetchedCollectionViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate, UISearchBarDelegate>
+IB_DESIGNABLE
+@interface SQKFetchedCollectionViewController : UIViewController <NSFetchedResultsControllerDelegate, UISearchBarDelegate>
 
 /**
  *  Initialises a Core Data-backed UICollectionViewController with a search bar.
@@ -36,8 +37,12 @@
 /**
  *  The collection view shown by the view controller.
  */
-@property (strong, nonatomic, readonly) UICollectionView *collectionView;
-@property (strong, nonatomic, readonly) UICollectionViewLayout *collectionViewLayout;
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+
+/**
+ *  The collection view layout used by the view controller.
+ */
+@property (strong, nonatomic) UICollectionViewLayout *layout;
 
 /**
  *  An optional refresh control shown when pulling down the collectionview.
@@ -52,7 +57,7 @@
  *  executed fetch requests take longer when sections are used. When searching this is
  *  especially noticable as a new fetch request is executed upon each key stroke during search.
  */
-@property (nonatomic, assign) BOOL showsSectionsWhenSearching;
+@property (nonatomic, assign) IBInspectable BOOL showsSectionsWhenSearching;
 
 /**
  *  The managed object context backing the fetched results controller.
@@ -68,7 +73,7 @@
  *  BOOL that when set to YES sets a search bar is added to the top of the collection view.
  *  Default is set to YES
  */
-@property (nonatomic, assign) BOOL searchingEnabled;
+@property (nonatomic, assign) IBInspectable BOOL searchingEnabled;
 
 /**
  *  Exposing the search bar so it can be customised.

@@ -14,6 +14,7 @@
  *  This class provides a simpler way to replicate the often-used pattern of a searchable Core
  *  Data-backed table view. Must be used as a subclass.
  */
+IB_DESIGNABLE
 @interface SQKFetchedTableViewController
     : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate, NSFetchedResultsControllerDelegate>
 
@@ -55,7 +56,7 @@
  *  BOOL that when set to YES sets the table view controller's header view to a search view controller.
  *  Default is set to YES
  */
-@property (nonatomic, assign) BOOL searchingEnabled;
+@property (nonatomic, assign) IBInspectable BOOL searchingEnabled;
 
 /**
  *  Returns YES if the user is actively searching, i.e. the search bar has begun editing. Returns NO
@@ -69,7 +70,7 @@
  */
 @property (strong, nonatomic, readonly) UISearchDisplayController *searchController;
 
-@property (strong, nonatomic) UIView *emptyView;
+@property (strong, nonatomic) IBOutlet UIView *emptyView;
 
 /**
  *  Returns the currently active UITableView (i.e. regular or search).

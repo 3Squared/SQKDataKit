@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 3Squared. All rights reserved.
 //
 
-#import "SQKCoreDataOperation.h"
-#import "SQKContextManager.h"
 #import "NSManagedObjectContext+SQKAdditions.h"
+#import "SQKContextManager.h"
+#import "SQKCoreDataOperation.h"
 #import "SQKDataKitErrors.h"
 
 @interface SQKCoreDataOperation ()
@@ -64,7 +64,7 @@
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
     self.managedObjectContextToMerge.shouldMergeOnSave = NO;
     [self.managedObjectContextToMerge performBlockAndWait:^{
-        [self performWorkWithPrivateContext:self.managedObjectContextToMerge];
+      [self performWorkWithPrivateContext:self.managedObjectContextToMerge];
     }];
 }
 
@@ -99,14 +99,14 @@
                                                      name:NSManagedObjectContextDidSaveNotification
                                                    object:nil];
 
-		NSError *error = nil;
-		[managedObjectContext save:&error];
-		if (error)
-		{
-			[self addError:error];
-			[self finishOperation];
-		}
-	}
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        if (error)
+        {
+            [self addError:error];
+            [self finishOperation];
+        }
+    }
 }
 
 - (void)finishOperation
@@ -154,67 +154,82 @@
 
 - (void)contextSaveNotificationReceived:(NSNotification *)notification
 {
-	/**
-	 *  Usually core data operartions do not happen on the main thread.
-	 *  But as we are saving into the main context that must happen on the main thread.
-	 *
-	 *  This is done using GCD to ensure the block is performed on the main thread.
-	 *  The issue is that once the private context has been merged into the main context, the core data
-	 *  operation needs to call `finish` on the context for the operation.
-	 *
-	 *  To solve this semaphores can be used to halt the method until a notification is posted
-	 *  to the semaphore.
-	 */
-	dispatch_semaphore_t mainContextSavedSemaphore = dispatch_semaphore_create(0);
-	
-	//Ensure mainContext is accessed on the main thread.
-	dispatch_async(dispatch_get_main_queue(), ^{
-		
-		NSManagedObjectContext *mainContext = self.contextManager.mainContext;
-		[mainContext performBlock:^{
-			
-			NSManagedObjectContext *managedObjectContext = [notification object];
-			
-			/**
-			 *  If NSManagedObjectContext from the notitification is a private context
-			 *	then merge the changes into the main context.
-			 */
-			if (managedObjectContext == self.managedObjectContextToMerge)
-			{
-				[mainContext mergeChangesFromContextDidSaveNotification:notification];
-				
-				/**
-				 * This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
-				 *
-				 * NSManagedObjectContext doesn't event fire
-				 * NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge,
-				 * only inserted.
-				 *
-				 * SEE:
-				 * http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
-				 *  May also have memory implications.
-				 */
-				for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey])
-				{
-					[[mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
-				}
-				
-				[[NSNotificationCenter defaultCenter] removeObserver:self
-																name:NSManagedObjectContextDidSaveNotification
-															  object:nil];
-				
-				dispatch_semaphore_signal(mainContextSavedSemaphore);
-			}
-		}];
-	});
-	
-	dispatch_semaphore_wait(mainContextSavedSemaphore, DISPATCH_TIME_FOREVER);
-	
-	/**
+    /**
+     *  Usually core data operartions do not happen on the main thread.
+     *  But as we are saving into the main context that must happen on the main thread.
+     *
+     *  This is done using GCD to ensure the block is performed on the main thread.
+     *  The issue is that once the private context has been merged into the main context, the core data
+     *  operation needs to call `finish` on the context for the operation.
+     *
+     *  To solve this semaphores can be used to halt the method until a notification is posted
+     *  to the semaphore.
+     */
+    dispatch_semaphore_t mainContextSavedSemaphore = dispatch_semaphore_create(0);
+
+    void (^mergeBlock)() = ^{
+
+      NSManagedObjectContext *mainContext = self.contextManager.mainContext;
+      [mainContext performBlock:^{
+
+        NSManagedObjectContext *managedObjectContext = [notification object];
+
+        /**
+             *  If NSManagedObjectContext from the notitification is a private context
+             *	then merge the changes into the main context.
+             */
+        if (managedObjectContext == self.managedObjectContextToMerge)
+        {
+            [mainContext mergeChangesFromContextDidSaveNotification:notification];
+
+            /**
+                 * This loop is needed for 'correct' behaviour of NSFetchedResultsControllers.
+                 *
+                 * NSManagedObjectContext doesn't event fire
+                 * NSManagedObjectContextObjectsDidChangeNotification for updated objects on merge,
+                 * only inserted.
+                 *
+                 * SEE:
+                 * http://stackoverflow.com/questions/3923826/nsfetchedresultscontroller-with-predicate-ignores-changes-merged-from-different
+                 *  May also have memory implications.
+                 */
+            for (NSManagedObject *object in [[notification userInfo] objectForKey:NSUpdatedObjectsKey])
+            {
+                [[mainContext objectWithID:[object objectID]] willAccessValueForKey:nil];
+            }
+
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                            name:NSManagedObjectContextDidSaveNotification
+                                                          object:nil];
+
+            dispatch_semaphore_signal(mainContextSavedSemaphore);
+        }
+      }];
+    };
+
+    /**
+     *  If this operation is being run on the main thread/queue, just merge. 
+     *  Otherwise, stall the current queue until merge is completed.
+     *
+     *  In production code these operations should not be run on the main thread. 
+     *  This situation should only occur when running tests.
+     */
+    if ([NSThread isMainThread] || dispatch_get_main_queue() == dispatch_get_current_queue())
+    {
+        mergeBlock();
+    }
+    else
+    {
+        //Ensure mainContext is accessed on the main thread.
+        dispatch_async(dispatch_get_main_queue(), mergeBlock);
+        dispatch_semaphore_wait(mainContextSavedSemaphore, DISPATCH_TIME_FOREVER);
+    }
+
+    /**
 	 *  Finished is called on the same thread that the operation is on
 	 *  once the semaphore has recived it's notification.
 	 */
-	[self finishOperation];
+    [self finishOperation];
 }
 
 - (void)dealloc

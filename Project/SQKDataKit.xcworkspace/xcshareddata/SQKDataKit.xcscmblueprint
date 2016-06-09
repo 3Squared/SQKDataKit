@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D3BB94670B6CEF9A8A4C6FAA1DBE0D5025BFEF3A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D3BB94670B6CEF9A8A4C6FAA1DBE0D5025BFEF3A" : 0,
+    "EE10C43E6C8BE2BC68765330A89116EDBFE39DB3" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "21432975-63D2-4331-A055-18E9629DE108",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D3BB94670B6CEF9A8A4C6FAA1DBE0D5025BFEF3A" : "SQKDataKit\/",
+    "EE10C43E6C8BE2BC68765330A89116EDBFE39DB3" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SQKDataKit",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Project\/SQKDataKit.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:3squared\/SQKDataKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D3BB94670B6CEF9A8A4C6FAA1DBE0D5025BFEF3A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git.3squared.com:sir-robert-mcalpine\/Site-Companion-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "EE10C43E6C8BE2BC68765330A89116EDBFE39DB3"
+    }
+  ]
+}
