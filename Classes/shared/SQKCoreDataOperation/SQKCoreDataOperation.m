@@ -56,13 +56,13 @@
         [self didChangeValueForKey:@"isFinished"];
         return;
     }
-
+    
     [self willChangeValueForKey:@"isExecuting"];
     self.sqk_executing = YES;
     [self didChangeValueForKey:@"isExecuting"];
-
+    
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
-    self.managedObjectContextToMerge.shouldMergeOnSave = NO;
+    self.managedObjectContextToMerge.shouldMergeOnSave = YES;
     [self.managedObjectContextToMerge performBlockAndWait:^{
         [self performWorkWithPrivateContext:self.managedObjectContextToMerge];
     }];
@@ -94,29 +94,34 @@
     else
     {
         self.managedObjectContextToMerge = managedObjectContext;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(contextSaveNotificationReceived:)
-                                                     name:NSManagedObjectContextDidSaveNotification
-                                                   object:nil];
-
-		NSError *error = nil;
-		[managedObjectContext save:&error];
-		if (error)
-		{
-			[self addError:error];
-			[self finishOperation];
-		}
-	}
+        //        [[NSNotificationCenter defaultCenter] addObserver:self
+        //                                                 selector:@selector(contextSaveNotificationReceived:)
+        //                                                     name:NSManagedObjectContextDidSaveNotification
+        //                                                   object:nil];
+        
+        [managedObjectContext performBlock:^{
+            
+            NSError *error = nil;
+            [managedObjectContext save:&error];
+            
+            if (error)
+            {
+                [self addError:error];
+            }
+            [self finishOperation];
+            
+        }];
+    }
 }
 
 - (void)finishOperation
 {
     [self willChangeValueForKey:@"isFinished"];
     [self willChangeValueForKey:@"isExecuting"];
-
+    
     self.sqk_executing = NO;
     self.sqk_finished = YES;
-
+    
     [self didChangeValueForKey:@"isExecuting"];
     [self didChangeValueForKey:@"isFinished"];
 }
@@ -129,16 +134,16 @@
     {
         return nil;
     }
-
+    
     if ([self.errors count] == 1)
     {
         return [self.errors firstObject];
     }
-
+    
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-
+    
     [userInfo setObject:[NSArray arrayWithArray:self.errors] forKey:NSDetailedErrorsKey];
-
+    
     return [NSError errorWithDomain:SQKDataKitErrorDomain code:SQKDataKitOperationMultipleErrorsError userInfo:userInfo];
 }
 
