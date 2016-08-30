@@ -94,10 +94,6 @@
     else
     {
         self.managedObjectContextToMerge = managedObjectContext;
-        //        [[NSNotificationCenter defaultCenter] addObserver:self
-        //                                                 selector:@selector(contextSaveNotificationReceived:)
-        //                                                     name:NSManagedObjectContextDidSaveNotification
-        //                                                   object:nil];
         
         [managedObjectContext performBlock:^{
             
