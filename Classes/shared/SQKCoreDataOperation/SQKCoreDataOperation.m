@@ -54,6 +54,7 @@
         [self willChangeValueForKey:@"isFinished"];
         self.sqk_finished = YES;
         [self didChangeValueForKey:@"isFinished"];
+        
         return;
     }
     
@@ -63,14 +64,16 @@
     
     self.managedObjectContextToMerge = [self.contextManager newPrivateContext];
     self.managedObjectContextToMerge.shouldMergeOnSave = YES;
-    [self.managedObjectContextToMerge performBlockAndWait:^{
+    
+    [self.managedObjectContextToMerge performBlock:^
+    {
         [self performWorkWithPrivateContext:self.managedObjectContextToMerge];
     }];
 }
 
 - (BOOL)isConcurrent
 {
-    return NO;
+    return YES;
 }
 
 - (BOOL)isExecuting
@@ -85,7 +88,7 @@
 
 #pragma mark - Completion
 
-- (void)completeOperationBySavingContext:(NSManagedObjectContext *)managedObjectContext
+- (void)completeOperationBySavingContext
 {
     if ([self isCancelled])
     {
@@ -93,17 +96,17 @@
     }
     else
     {
-        self.managedObjectContextToMerge = managedObjectContext;
-        
-        [managedObjectContext performBlock:^{
-            
+        [self.managedObjectContextToMerge performBlock:^
+        {
             NSError *error = nil;
-            [managedObjectContext save:&error];
+            
+            [self.managedObjectContextToMerge save:&error];
             
             if (error)
             {
                 [self addError:error];
             }
+            
             [self finishOperation];
             
         }];
