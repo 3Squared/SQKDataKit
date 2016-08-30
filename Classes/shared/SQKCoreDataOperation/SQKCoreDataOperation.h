@@ -46,10 +46,8 @@
  *  You must call this method when you want save the private context and your work is done.
  *  Saves the (private) managed object context, merges the changes into main context, and finishes
  *  operation.
- *
- *  @param managedObjectContext The managed object context save to and merge.
  */
-- (void)completeOperationBySavingContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)completeOperationBySavingContext;
 
 /**
  *  Called from the `start` method when the operation is being executed. You must override this
