@@ -287,7 +287,7 @@ To use a section index in a `SQKFetchedTableViewController` subclass:
 
 Use an SQKCoreDataOperation when you need to perform work with Core Data off of the main thread. 
 
-You need to subclass and must override the `performWorkWithPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use its `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeOperationBySavingContext:` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
+You need to subclass and must override the `performWorkWithPrivateContext:` method, which is where you should perform your work with Core Data. The operation will use its `SQKContextManager` to obtain a private managed object context. This is passed to the `performWorkPrivateContext:` method for you to use. When your work is complete call the `completeAndSave` method passing in the private context you have used. This saves the (private) managed object context, merges the changes into main context, and finishes operation.
 
 Add the operation to an NSOperationQueue that is not the `mainQueue` so that the computation is performed off the main thread. As a private context is used any insertions, updates, deletions etc. **must be done in a background thread**, and using the correct operation queue will ensure that.
 
@@ -318,7 +318,7 @@ How to subclass:
            }
                 privateContext:self.privateContext
                          error:NULL];
-    [self completeOperationBySavingContext:context];
+    [self completeAndSave];
 }
 
 - (id)animalJSONFromWebservice {
