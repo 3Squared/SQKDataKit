@@ -80,7 +80,7 @@
 
 - (BOOL)isConcurrent
 {
-    return YES;
+    return [self isAsynchronous];
 }
 
 - (BOOL)isAsynchronous
