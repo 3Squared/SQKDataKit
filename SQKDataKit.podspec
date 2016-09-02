@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
 
 	s.subspec 'ContextManager' do |ss|
 		ss.dependency 'SQKDataKit/Core'
-		ss.source_files = ['Classes/shared/ContextManager/**/*{h,m}']
+		ss.source_files = ['Classes/shared/ContextManager/**/*{h,m}', 'Classes/shared/SQKDataKitErrors.h']
 		ss.public_header_files = ['Classes/shared/SQKDataKitErrors.h', 'Classes/shared/ContextManager/SQKContextManager.h', 'Classes/shared/ContextManager/NSManagedObjectContext+SQKAdditions.h', 'Classes/shared/ContextManager/NSPersistentStoreCoordinator+SQKAdditions.h']
 	end
 
