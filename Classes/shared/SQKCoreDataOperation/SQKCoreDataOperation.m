@@ -100,7 +100,7 @@
 
 #pragma mark - Completion
 
-- (void)completeOperationBySavingContext:(NSManagedObjectContext *)managedObjectContext
+- (void)completeAndSave
 {
     if ([self isCancelled])
     {
@@ -123,6 +123,9 @@
     }
 }
 
+- (void)completeOperationBySavingContext:(NSManagedObjectContext *)managedObjectContext
+{
+    [self completeAndSave];
 }
 
 - (void)finishOperation
