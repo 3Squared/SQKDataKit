@@ -24,16 +24,19 @@
 
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 
-    NSError *migrationError = nil;
-    [SQKModelMigrator iterativeMigrateURL:storeURL
-                                   ofType:storeType
-                                  toModel:managedObjectModel
-           orderedManagedObjectModelNames:modelNames
-                                    error:&migrationError];
-
-    if (migrationError)
+    if (modelNames != nil && modelNames.count > 1)
     {
-        [self abortWithError:migrationError];
+        NSError *migrationError = nil;
+        [SQKModelMigrator iterativeMigrateURL:storeURL
+                                       ofType:storeType
+                                      toModel:managedObjectModel
+               orderedManagedObjectModelNames:modelNames
+                                        error:&migrationError];
+        
+        if (migrationError)
+        {
+            [self abortWithError:migrationError];
+        }
     }
 
     NSDictionary *options = @{
