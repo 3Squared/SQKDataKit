@@ -18,6 +18,12 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
     orderedManagedObjectModelNames:(NSArray *)modelNames
                              error:(NSError **)error
 {
+    // If no model names are provided, return success immediately.
+    if (modelNames == nil || modelNames.count < 2)
+    {
+        return YES;
+    }
+    
     // If the persistent store does not exist at the given URL, or is a type that isn't persisted to
     // disk, assume that it hasn't yet been created and return success immediately.
     if (![[NSFileManager defaultManager] fileExistsAtPath:[sourceStoreURL path]] || [sourceStoreType isEqualToString:NSInMemoryStoreType])
@@ -40,13 +46,6 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
     if ([finalModel isConfiguration:nil compatibleWithStoreMetadata:sourceMetadata])
     {
         return YES;
-    }
-    else if (!modelNames || modelNames.count <= 1)
-    {
-        // If it's not compatible and we only have fewer than 2 models, back it up
-        NSString *backupPath = [[sourceStoreURL path] stringByAppendingPathExtension:@"_backup"];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        return (![fileManager moveItemAtPath:[sourceStoreURL path] toPath:backupPath error:error]);
     }
 
     // Find the current model used by the store.
