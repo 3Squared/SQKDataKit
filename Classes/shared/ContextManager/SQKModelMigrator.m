@@ -102,38 +102,41 @@ NSString *const SQKDataKitMigrationErrorDomain = @"SQKDataKitMigrationErrorDomai
         relevantModels = [[[relevantModels reverseObjectEnumerator] allObjects] mutableCopy];
     }
 
-    // Migrate through the list
-    for (int i = 0; i < ([relevantModels count] - 1); i++)
+    if(relevantModels.count > 0)
     {
-        NSManagedObjectModel *modelA = [relevantModels objectAtIndex:i];
-        NSManagedObjectModel *modelB = [relevantModels objectAtIndex:(i + 1)];
+      // Migrate through the list
+      for (int i = 0; i < ([relevantModels count] - 1); i++)
+      {
+          NSManagedObjectModel *modelA = [relevantModels objectAtIndex:i];
+          NSManagedObjectModel *modelB = [relevantModels objectAtIndex:(i + 1)];
 
-        // Check whether a custom mapping model exists.
-        NSMappingModel *mappingModel = [NSMappingModel mappingModelFromBundles:nil
-                                                                forSourceModel:modelA
-                                                              destinationModel:modelB];
+          // Check whether a custom mapping model exists.
+          NSMappingModel *mappingModel = [NSMappingModel mappingModelFromBundles:nil
+                                                                  forSourceModel:modelA
+                                                                destinationModel:modelB];
 
-        // If there is no custom mapping model, try to infer one.
-        if (!mappingModel)
-        {
-            mappingModel = [NSMappingModel inferredMappingModelForSourceModel:modelA
-                                                             destinationModel:modelB
-                                                                        error:error];
-            if (!mappingModel)
-            {
-                return NO;
-            }
-        }
+          // If there is no custom mapping model, try to infer one.
+          if (!mappingModel)
+          {
+              mappingModel = [NSMappingModel inferredMappingModelForSourceModel:modelA
+                                                               destinationModel:modelB
+                                                                          error:error];
+              if (!mappingModel)
+              {
+                  return NO;
+              }
+          }
 
-        if (![self migrateURL:sourceStoreURL
-                       ofType:sourceStoreType
-                    fromModel:modelA
-                      toModel:modelB
-                 mappingModel:mappingModel
-                        error:error])
-        {
-            return NO;
-        }
+          if (![self migrateURL:sourceStoreURL
+                         ofType:sourceStoreType
+                      fromModel:modelA
+                        toModel:modelB
+                   mappingModel:mappingModel
+                          error:error])
+          {
+              return NO;
+          }
+       }
     }
 
     return YES;
